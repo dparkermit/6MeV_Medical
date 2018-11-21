@@ -633,7 +633,7 @@ Public Class frmMain
                             End If
                         End If
                     Next
-
+#If (0) Then
                     btnPulseStartMin.Text = "Beam Min Start  " & (Math.Truncate(get_ref_data(REGISTER_PULSE_SYNC_GRID_PULSE_DELAY_HIGH_ENERGY_C_D + offset) / 256) * 20) & "ns"
                     btnPulseStart1_3.Text = "Beam 1/3 Start  " & ((get_ref_data(REGISTER_PULSE_SYNC_GRID_PULSE_DELAY_HIGH_ENERGY_C_D + offset) And &HFF) * 20) & "ns"
                     btnPulseStart2_3.Text = "Beam 2/3 Start  " & (Math.Truncate(get_ref_data(REGISTER_PULSE_SYNC_GRID_PULSE_DELAY_HIGH_ENERGY_A_B + offset) / 256) * 20) & "ns"
@@ -647,6 +647,7 @@ Public Class frmMain
                     btnPfnDelay.Text = "PFN Delay " & (Math.Truncate(get_ref_data(REGISTER_PULSE_SYNC_RF_TRIGGER_AND_THYRATRON_PULSE_DELAY_HIGH_ENERGY + offset) / 256) * 20) & "ns"
                     btnAfcDelay.Text = "AFC Delay " & (Math.Truncate(get_ref_data(REGISTER_PULSE_SYNC_AFC_AND_SPARE_PULSE_DELAY_HIGH_ENERGY + offset) / 256) * 20) & "ns"
                     btnPulseSampleDelay.Text = "MagI Sample Delay " & ((get_ref_data(REGISTER_PULSE_SYNC_AFC_AND_SPARE_PULSE_DELAY_HIGH_ENERGY + offset) And &HFF) * 20) & "ns"
+#End If
 
                     '    Dim control_bits As UInt16 = ServerSettings.ETMEthernetBoardLoggingData(board_index).control_notice_bits
                     Dim fault_bits As UInt16 = ServerSettings.ETMEthernetBoardLoggingData(MODBUS_COMMANDS.MODBUS_WR_PULSE_SYNC).fault_bits
@@ -693,8 +694,8 @@ Public Class frmMain
                     lblHVprePulseVolt.Text = Format(ServerSettings.ETMEthernetBoardLoggingData(MODBUS_COMMANDS.MODBUS_WR_HVLAMBDA).log_data(0) / 1000, "0.000")
                     lblHVcurrent.Text = ServerSettings.ETMEthernetBoardLoggingData(MODBUS_COMMANDS.MODBUS_WR_HVLAMBDA).log_data(5) / 1000
 
-                    btnHVsetCargo.Text = "Cargo V Set  " & Format(get_ref_data(REGISTER_HIGH_ENERGY_SET_POINT) / 1000, "0.000") & " kV"
-                    btnHVsetCab.Text = "Cab V Set  " & Format(get_ref_data(REGISTER_LOW_ENERGY_SET_POINT) / 1000, "0.000") & " kV"
+                    btnHVsetCargo.Text = "Cargo V Set  " & Format(get_ref_data(REGISTER_HVPS_SET_POINT_DOSE_0) / 1000, "0.000") & " kV"
+                    btnHVsetCab.Text = "Cab V Set  " & Format(get_ref_data(REGISTER_HVPS_SET_POINT_DOSE_1) / 1000, "0.000") & " kV"
                     btnHVsetCargo.Enabled = access_level > 0
                     btnHVsetCab.Enabled = access_level > 0
 
@@ -763,9 +764,9 @@ Public Class frmMain
                     lblAfcPreBsample.Text = blank_string
                     lblAfcManualPosition.Text = blank_string
 
-                    btnAfcHomePosSet.Text = "Home Pos Set  " & blank_string
+                    btnAfcHomePosSetDose1.Text = "Home Pos Set  " & blank_string
                     btnAfcCargoCtrlVSet.Text = "Cargo Ctrl V Set  " & blank_string & " V"
-                    btnAfcCabCtrlVSet.Text = "Cab Ctrl V Set  " & blank_string & " V"
+                    btnAfcHomePosSetDose0.Text = "Cab Ctrl V Set  " & blank_string & " V"
                     btnAfcManualMode.Text = "Manual Mode"
                     btnAfcManualPosition.Visible = False
 
@@ -798,9 +799,9 @@ Public Class frmMain
                         End If
                     Next
 
-                    btnAfcHomePosSet.Text = "Home Pos Set  " & get_ref_data(REGISTER_HOME_POSITION)
-                    btnAfcCargoCtrlVSet.Text = "Cargo Ctrl V Set  " & Format(get_ref_data(REGISTER_AFC_AFT_CONTROL_VOLTAGE_HIGH_ENERGY) / 1000, "0.000") & " V"
-                    btnAfcCabCtrlVSet.Text = "Cab Ctrl V Set  " & Format(get_ref_data(REGISTER_AFC_AFT_CONTROL_VOLTAGE_LOW_ENERGY) / 1000, "0.000") & " V"
+                    btnAfcHomePosSetDose1.Text = "Home Pos Set  " & get_ref_data(REGISTER_AFC_HOME_POSITION_DOSE_0)
+                    btnAfcCargoCtrlVSet.Text = "Cargo Ctrl V Set  " & Format(get_ref_data(REGISTER_AFC_AFT_CONTROL_VOLTAGE_DOSE_ALL) / 1000, "0.000") & " V"
+                    btnAfcHomePosSetDose0.Text = "Cab Ctrl V Set  " & Format(get_ref_data(REGISTER_AFC_AFT_CONTROL_VOLTAGE_DOSE_ALL) / 1000, "0.000") & " V"
                     '     btnAfcManualPosition.Text = "Manual Pos  " & ServerSettings.ETMEthernetBoardLoggingData(MODBUS_COMMANDS.MODBUS_WR_AFC).log_data(2)
 
                     '    Dim control_bits As UInt16 = ServerSettings.ETMEthernetBoardLoggingData(board_index).control_notice_bits
@@ -854,9 +855,9 @@ Public Class frmMain
                     btnMagCargoIset.Enabled = access_level > 0
                     btnMagCabIset.Enabled = access_level > 0
                     btnMagIfSet.Enabled = access_level > 0
-                    btnMagCargoIset.Text = "Cargo Mag I Set  " & Format(get_ref_data(REGISTER_ELECTROMAGNET_CURRENT_HIGH_ENERGY) / 1000, "0.00") & " A"
-                    btnMagCabIset.Text = "Cab Mag I Set  " & Format(get_ref_data(REGISTER_ELECTROMAGNET_CURRENT_LOW_ENERGY) / 1000, "0.00") & " A"
-                    btnMagIfSet.Text = "Heater I Set  " & Format(get_ref_data(REGISTER_HEATER_CURRENT_AT_STANDBY) / 1000, "0.00") & " A"
+                    btnMagCargoIset.Text = "Cargo Mag I Set  " & Format(get_ref_data(REGISTER_ELECTROMAGNET_CURRENT_DOSE_0) / 1000, "0.00") & " A"
+                    btnMagCabIset.Text = "Cab Mag I Set  " & Format(get_ref_data(REGISTER_ELECTROMAGNET_CURRENT_DOSE_1) / 1000, "0.00") & " A"
+                    btnMagIfSet.Text = "Heater I Set  " & Format(get_ref_data(REGISTER_MAGNETRON_HEATER_CURRENT_DOSE_ALL) / 1000, "0.00") & " A"
 
                     '    Dim control_bits As UInt16 = ServerSettings.ETMEthernetBoardLoggingData(board_index).control_notice_bits
                     Dim fault_bits As UInt16 = ServerSettings.ETMEthernetBoardLoggingData(MODBUS_COMMANDS.MODBUS_WR_HTR_MAGNET).fault_bits
@@ -1246,8 +1247,8 @@ Public Class frmMain
 
 
     Private Sub LoadLogRegisterText()
-#If 0 Then
 
+#If (0) Then
 
         ServerSettings.EventLogMessages.Add(&H10, "State - Entered State Startup")
         ServerSettings.EventLogMessages.Add(&H10, "	State - Entered State Startup	")
@@ -1462,6 +1463,10 @@ Public Class frmMain
 
 #End If
 
+
+
+
+#If (0) Then
         ServerSettings.EventLogMessages.Add(&H110, "State - Entered State Startup")
         ServerSettings.EventLogMessages.Add(&H112, "State - Entered State Wait for Personality from Pulse Sync")
         ServerSettings.EventLogMessages.Add(&H115, "State - Entered State Waiting for Initialization")
@@ -2266,6 +2271,7 @@ Public Class frmMain
         ServerSettings.EventLogMessages.Add(&HC85E, "Log - Gun Driver Logged E Bit Cleared")
         ServerSettings.EventLogMessages.Add(&HC84F, "Log - Gun Driver Logged F Bit Set")
         ServerSettings.EventLogMessages.Add(&HC85F, "Log - Gun Driver Logged F Bit Cleared")
+#End If
 
     End Sub
 
@@ -2546,7 +2552,7 @@ Public Class frmMain
 
         If data_valid Then
             Dim program_word As UInt16 = input_data * -1000
-            ServerSettings.put_modbus_commands(REGISTER_GUN_DRIVER_CATHODE_VOLTAGE, program_word, 0, 0)
+            ServerSettings.put_modbus_commands(REGISTER_GUN_DRIVER_CATHODE_VOLTAGE_DOSE_0, program_word, 0, 0)
         End If
 
     End Sub
@@ -2586,7 +2592,7 @@ Public Class frmMain
 
         If data_valid Then
             Dim program_word As UInt16 = (input_data + 80) * 100
-            ServerSettings.put_modbus_commands(REGISTER_GUN_DRIVER_HIGH_ENERGY_PULSE_TOP_VOLTAGE, program_word, 0, 0)
+            ServerSettings.put_modbus_commands(REGISTER_GUN_DRIVER_PULSE_TOP_VOLTAGE_DOSE_0, program_word, 0, 0)
         End If
     End Sub
 
@@ -2596,7 +2602,7 @@ Public Class frmMain
 
         If data_valid Then
             Dim program_word As UInt16 = (input_data + 80) * 100
-            ServerSettings.put_modbus_commands(REGISTER_GUN_DRIVER_LOW_ENERGY_PULSE_TOP_VOLTAGE, program_word, 0, 0)
+            ServerSettings.put_modbus_commands(REGISTER_GUN_DRIVER_PULSE_TOP_VOLTAGE_DOSE_1, program_word, 0, 0)
         End If
 
     End Sub
@@ -2607,7 +2613,7 @@ Public Class frmMain
 
         If data_valid Then
             Dim program_word As UInt16 = input_data * 1000
-            ServerSettings.put_modbus_commands(REGISTER_GUN_DRIVER_HEATER_VOLTAGE, program_word, 0, 0)
+            ServerSettings.put_modbus_commands(REGISTER_GUN_DRIVER_HEATER_VOLTAGE_DOSE_ALL, program_word, 0, 0)
         End If
 
     End Sub
@@ -2655,7 +2661,7 @@ Public Class frmMain
         Dim input_data As Double
         Dim data_valid As Boolean
         Dim title As String = IIf(show_cargo_settings, "Cargo Mode Settings", "Cab Mode Settings")
-
+#If (0) Then
         Select Case btn.Tag
             Case 0 To 1 ' start	max
                 data_valid = get_set_data(IIf(btn.Tag = 0, "Set Beam Max Start", "Set Beam 2/3 Start"), title, 0, 255 * 20, "ns", input_data)
@@ -2753,6 +2759,7 @@ Public Class frmMain
 
 
         End Select
+#End If
 
 
     End Sub
@@ -2763,7 +2770,7 @@ Public Class frmMain
 
         If data_valid Then
             Dim program_word As UInt16 = input_data * 1000
-            ServerSettings.put_modbus_commands(REGISTER_HIGH_ENERGY_SET_POINT, program_word, 0, 0)
+            ServerSettings.put_modbus_commands(REGISTER_HVPS_SET_POINT_DOSE_0, program_word, 0, 0)
         End If
 
     End Sub
@@ -2774,21 +2781,11 @@ Public Class frmMain
 
         If data_valid Then
             Dim program_word As UInt16 = input_data * 1000
-            ServerSettings.put_modbus_commands(REGISTER_LOW_ENERGY_SET_POINT, program_word, 0, 0)
+            ServerSettings.put_modbus_commands(REGISTER_HVPS_SET_POINT_DOSE_1, program_word, 0, 0)
         End If
 
     End Sub
 
-    Private Sub btnAfcHomePosSet_Click(sender As Object, e As EventArgs) Handles btnAfcHomePosSet.Click
-        Dim input_data As Double
-        Dim data_valid = get_set_data("Set Home Position", "AFC", 6400, 51200, "", input_data)
-
-        If data_valid Then
-            Dim program_word As UInt16 = input_data
-            ServerSettings.put_modbus_commands(REGISTER_HOME_POSITION, program_word, 0, 0)
-        End If
-
-    End Sub
 
     Private Sub btnAfcCargoCtrlVSet_Click(sender As Object, e As EventArgs) Handles btnAfcCargoCtrlVSet.Click
         Dim input_data As Double
@@ -2796,21 +2793,11 @@ Public Class frmMain
 
         If data_valid Then
             Dim program_word As UInt16 = input_data * 1000
-            ServerSettings.put_modbus_commands(REGISTER_AFC_AFT_CONTROL_VOLTAGE_HIGH_ENERGY, program_word, 0, 0)
+            ServerSettings.put_modbus_commands(REGISTER_AFC_AFT_CONTROL_VOLTAGE_DOSE_ALL, program_word, 0, 0)
         End If
 
     End Sub
 
-    Private Sub btnAfcCabCtrlVSet_Click(sender As Object, e As EventArgs) Handles btnAfcCabCtrlVSet.Click
-        Dim input_data As Double
-        Dim data_valid = get_set_data("Set Control Voltage for Cab Mode", "AFC", 1, 10, "V", input_data)
-
-        If data_valid Then
-            Dim program_word As UInt16 = input_data * 1000
-            ServerSettings.put_modbus_commands(REGISTER_AFC_AFT_CONTROL_VOLTAGE_LOW_ENERGY, program_word, 0, 0)
-        End If
-
-    End Sub
 
     Private Sub btnAfcManualMode_Click(sender As Object, e As EventArgs) Handles btnAfcManualMode.Click
         If (ServerSettings.ETMEthernetBoardLoggingData(MODBUS_COMMANDS.MODBUS_WR_AFC).logged_bits And &H1) > 0 Then
@@ -2838,7 +2825,7 @@ Public Class frmMain
 
         If data_valid Then
             Dim program_word As UInt16 = input_data * 1000
-            ServerSettings.put_modbus_commands(REGISTER_ELECTROMAGNET_CURRENT_HIGH_ENERGY, program_word, 0, 0)
+            ServerSettings.put_modbus_commands(REGISTER_ELECTROMAGNET_CURRENT_DOSE_0, program_word, 0, 0)
         End If
 
     End Sub
@@ -2849,7 +2836,7 @@ Public Class frmMain
 
         If data_valid Then
             Dim program_word As UInt16 = input_data * 1000
-            ServerSettings.put_modbus_commands(REGISTER_ELECTROMAGNET_CURRENT_LOW_ENERGY, program_word, 0, 0)
+            ServerSettings.put_modbus_commands(REGISTER_ELECTROMAGNET_CURRENT_DOSE_1, program_word, 0, 0)
         End If
 
 
@@ -2861,7 +2848,7 @@ Public Class frmMain
 
         If data_valid Then
             Dim program_word As UInt16 = input_data * 1000
-            ServerSettings.put_modbus_commands(REGISTER_HEATER_CURRENT_AT_STANDBY, program_word, 0, 0)
+            ServerSettings.put_modbus_commands(REGISTER_MAGNETRON_HEATER_CURRENT_DOSE_ALL, program_word, 0, 0)
         End If
 
     End Sub
@@ -2942,8 +2929,9 @@ Public Class frmMain
         If (access_level > 0) Then
             reset_access_level()
         Else
-            pwScreen.ShowDialog()
-            access_level = pwScreen.access_level
+            'pwScreen.ShowDialog()
+            ServerSettings.put_modbus_commands(REGISTER_SET_ACCESS_MODE_ETM, 0, 0, 0)
+            access_level = 2
             If (access_level > 0) Then
                 lblIonIi2Title.Visible = True
                 lblIonIi2.Visible = True
@@ -2989,7 +2977,7 @@ Public Class frmMain
         Dim response As MsgBoxResult = MsgBox("Save Factory Default Settings?", MsgBoxStyle.OkCancel)
 
         If (response = MsgBoxResult.Ok) Then
-            ServerSettings.put_modbus_commands(REGISTER_ETM_ECB_SAVE_FACTORY_SETTINGS_TO_EEPROM_MIRROR, 0, 0, 0)
+            ServerSettings.put_modbus_commands(REGISTER_ETM_ECB_LOAD_DEFAULT_SYSTEM_SETTINGS_AND_REBOOT, 0, 0, 0)
         End If
 
     End Sub
@@ -3161,14 +3149,6 @@ Public Class frmMain
 
 
 
-    Private Sub btnMagnetronConditioning_Click(sender As Object, e As EventArgs) Handles btnMagnetronConditioning.Click
-        Dim response As MsgBoxResult = MsgBox("Do Magnetron Conditioning ?", MsgBoxStyle.OkCancel)
-
-        If (response = MsgBoxResult.Ok) Then
-            ServerSettings.put_modbus_commands(REGISTER_SYSTEM_ECB_MAGNETRON_CONDITIONING, 0, 0, 0)
-        End If
-    End Sub
-
     Private Sub btnSaveAllParams_Click(sender As Object, e As EventArgs) Handles btnSaveAllParams.Click
         Dim file_path As String = System.Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments)
         Dim param_path As String = Path.Combine(file_path, Constants.DIR_LOG & "\" & Constants.DIR_PARAM)
@@ -3327,7 +3307,7 @@ Public Class frmMain
                 uRetData = ServerSettings.ETMEthernetBoardLoggingData(MODBUS_COMMANDS.MODBUS_WR_PULSE_SYNC).ecb_local_data(10)
 
 
-
+#If (0) Then
 
             Case REGISTER_PULSE_SYNC_RF_TRIGGER_AND_THYRATRON_PULSE_DELAY_HIGH_ENERGY, REGISTER_PULSE_SYNC_RF_TRIGGER_AND_THYRATRON_PULSE_DELAY_LOW_ENERGY
                 offset = IIf(index = REGISTER_PULSE_SYNC_RF_TRIGGER_AND_THYRATRON_PULSE_DELAY_HIGH_ENERGY, 0, 8)
@@ -3335,19 +3315,20 @@ Public Class frmMain
             Case REGISTER_PULSE_SYNC_AFC_AND_SPARE_PULSE_DELAY_HIGH_ENERGY, REGISTER_PULSE_SYNC_AFC_AND_SPARE_PULSE_DELAY_LOW_ENERGY
                 offset = IIf(index = REGISTER_PULSE_SYNC_AFC_AND_SPARE_PULSE_DELAY_HIGH_ENERGY, 0, 8)
                 uRetData = ServerSettings.ETMEthernetBoardLoggingData(MODBUS_COMMANDS.MODBUS_WR_PULSE_SYNC).ecb_local_data(offset + 6)
+#End If
 
                 ' hv 
-            Case REGISTER_HIGH_ENERGY_SET_POINT
+            Case REGISTER_HVPS_SET_POINT_DOSE_0
                 uRetData = ServerSettings.ETMEthernetBoardLoggingData(MODBUS_COMMANDS.MODBUS_WR_HVLAMBDA).log_data(2)
-            Case REGISTER_LOW_ENERGY_SET_POINT
+            Case REGISTER_HVPS_SET_POINT_DOSE_1
                 uRetData = ServerSettings.ETMEthernetBoardLoggingData(MODBUS_COMMANDS.MODBUS_WR_HVLAMBDA).log_data(1)
 
                 ' afc
-            Case REGISTER_HOME_POSITION
+            Case REGISTER_AFC_HOME_POSITION_DOSE_0
                 uRetData = ServerSettings.ETMEthernetBoardLoggingData(MODBUS_COMMANDS.MODBUS_WR_AFC).ecb_local_data(0)
-            Case REGISTER_AFC_AFT_CONTROL_VOLTAGE_HIGH_ENERGY
+            Case REGISTER_AFC_HOME_POSITION_DOSE_1
                 uRetData = ServerSettings.ETMEthernetBoardLoggingData(MODBUS_COMMANDS.MODBUS_WR_AFC).ecb_local_data(1)
-            Case REGISTER_AFC_AFT_CONTROL_VOLTAGE_LOW_ENERGY
+            Case REGISTER_AFC_AFT_CONTROL_VOLTAGE_DOSE_ALL
                 uRetData = ServerSettings.ETMEthernetBoardLoggingData(MODBUS_COMMANDS.MODBUS_WR_AFC).ecb_local_data(2)
             Case REGISTER_CMD_AFC_SELECT_AFC_MODE
                 uRetData = IIF((ServerSettings.ETMEthernetBoardLoggingData(MODBUS_COMMANDS.MODBUS_WR_AFC).logged_bits And &H1) > 0, 0, 1)
@@ -3357,11 +3338,11 @@ Public Class frmMain
                 uRetData = ServerSettings.ETMEthernetBoardLoggingData(MODBUS_COMMANDS.MODBUS_WR_AFC).log_data(2)
 
                 ' magnet and heater
-            Case REGISTER_ELECTROMAGNET_CURRENT_HIGH_ENERGY
+            Case REGISTER_ELECTROMAGNET_CURRENT_DOSE_0
                 uRetData = ServerSettings.ETMEthernetBoardLoggingData(MODBUS_COMMANDS.MODBUS_WR_HTR_MAGNET).ecb_local_data(2)
-            Case REGISTER_ELECTROMAGNET_CURRENT_LOW_ENERGY
+            Case REGISTER_ELECTROMAGNET_CURRENT_DOSE_1
                 uRetData = ServerSettings.ETMEthernetBoardLoggingData(MODBUS_COMMANDS.MODBUS_WR_HTR_MAGNET).ecb_local_data(3)
-            Case REGISTER_HEATER_CURRENT_AT_STANDBY
+            Case REGISTER_MAGNETRON_HEATER_CURRENT_DOSE_ALL
                 uRetData = ServerSettings.ETMEthernetBoardLoggingData(MODBUS_COMMANDS.MODBUS_WR_HTR_MAGNET).ecb_local_data(0)
 
             Case Else
@@ -3396,10 +3377,12 @@ Public Class frmMain
     End Function
 
     Sub init_set_commands()
-        set_commands(SET_CMDS.SET_GUN_DRIVER_CATHODE_VOLTAGE) = New SET_COMMAND_STRUCTURE(REGISTER_GUN_DRIVER_CATHODE_VOLTAGE, 20000, 6000)
-        set_commands(SET_CMDS.SET_GUN_DRIVER_HEATER_VOLTAGE) = New SET_COMMAND_STRUCTURE(REGISTER_GUN_DRIVER_HEATER_VOLTAGE, 1600, 0)
-        set_commands(SET_CMDS.SET_GUN_DRIVER_HIGH_ENERGY_PULSE_TOP_VOLTAGE) = New SET_COMMAND_STRUCTURE(REGISTER_GUN_DRIVER_HIGH_ENERGY_PULSE_TOP_VOLTAGE, 22000, 0)
-        set_commands(SET_CMDS.SET_GUN_DRIVER_LOW_ENERGY_PULSE_TOP_VOLTAGE) = New SET_COMMAND_STRUCTURE(REGISTER_GUN_DRIVER_LOW_ENERGY_PULSE_TOP_VOLTAGE, 22000, 0)
+        set_commands(SET_CMDS.SET_GUN_DRIVER_CATHODE_VOLTAGE) = New SET_COMMAND_STRUCTURE(REGISTER_GUN_DRIVER_CATHODE_VOLTAGE_DOSE_0, 20000, 6000)
+        set_commands(SET_CMDS.SET_GUN_DRIVER_HEATER_VOLTAGE) = New SET_COMMAND_STRUCTURE(REGISTER_GUN_DRIVER_HEATER_VOLTAGE_DOSE_ALL, 1600, 0)
+        set_commands(SET_CMDS.SET_GUN_DRIVER_HIGH_ENERGY_PULSE_TOP_VOLTAGE) = New SET_COMMAND_STRUCTURE(REGISTER_GUN_DRIVER_PULSE_TOP_VOLTAGE_DOSE_0, 22000, 0)
+        set_commands(SET_CMDS.SET_GUN_DRIVER_LOW_ENERGY_PULSE_TOP_VOLTAGE) = New SET_COMMAND_STRUCTURE(REGISTER_GUN_DRIVER_PULSE_TOP_VOLTAGE_DOSE_1, 22000, 0)
+
+#If (0) Then
 
         set_commands(SET_CMDS.SET_PULSE_SYNC_GRID_PULSE_DELAY_HIGH_ENERGY_A_B) = New SET_COMMAND_STRUCTURE(REGISTER_PULSE_SYNC_GRID_PULSE_DELAY_HIGH_ENERGY_A_B, 65535, 0)
         set_commands(SET_CMDS.SET_PULSE_SYNC_GRID_PULSE_DELAY_LOW_ENERGY_A_B) = New SET_COMMAND_STRUCTURE(REGISTER_PULSE_SYNC_GRID_PULSE_DELAY_LOW_ENERGY_A_B, 65535, 0)
@@ -3414,19 +3397,22 @@ Public Class frmMain
         set_commands(SET_CMDS.SET_PULSE_SYNC_AFC_AND_SPARE_PULSE_DELAY_HIGH_ENERGY) = New SET_COMMAND_STRUCTURE(REGISTER_PULSE_SYNC_AFC_AND_SPARE_PULSE_DELAY_HIGH_ENERGY, 65535, 0)
         set_commands(SET_CMDS.SET_PULSE_SYNC_AFC_AND_SPARE_PULSE_DELAY_LOW_ENERGY) = New SET_COMMAND_STRUCTURE(REGISTER_PULSE_SYNC_AFC_AND_SPARE_PULSE_DELAY_LOW_ENERGY, 65535, 0)
 
-        set_commands(SET_CMDS.SET_HIGH_ENERGY_SET_POINT) = New SET_COMMAND_STRUCTURE(REGISTER_HIGH_ENERGY_SET_POINT, 17000, 6000)
-        set_commands(SET_CMDS.SET_LOW_ENERGY_SET_POINT) = New SET_COMMAND_STRUCTURE(REGISTER_LOW_ENERGY_SET_POINT, 17000, 6000)
+#End If
 
-        set_commands(SET_CMDS.SET_HOME_POSITION) = New SET_COMMAND_STRUCTURE(REGISTER_HOME_POSITION, 51200, 6400)
-        set_commands(SET_CMDS.SET_AFC_AFT_CONTROL_VOLTAGE_HIGH_ENERGY) = New SET_COMMAND_STRUCTURE(REGISTER_AFC_AFT_CONTROL_VOLTAGE_HIGH_ENERGY, 10000, 1000)
-        set_commands(SET_CMDS.SET_AFC_AFT_CONTROL_VOLTAGE_LOW_ENERGY) = New SET_COMMAND_STRUCTURE(REGISTER_AFC_AFT_CONTROL_VOLTAGE_LOW_ENERGY, 10000, 1000)
+
+        set_commands(SET_CMDS.SET_HIGH_ENERGY_SET_POINT) = New SET_COMMAND_STRUCTURE(REGISTER_HVPS_SET_POINT_DOSE_0, 17000, 6000)
+        set_commands(SET_CMDS.SET_LOW_ENERGY_SET_POINT) = New SET_COMMAND_STRUCTURE(REGISTER_HVPS_SET_POINT_DOSE_1, 17000, 6000)
+
+        set_commands(SET_CMDS.SET_HOME_POSITION) = New SET_COMMAND_STRUCTURE(REGISTER_AFC_HOME_POSITION_DOSE_0, 51200, 6400)
+        set_commands(SET_CMDS.SET_AFC_AFT_CONTROL_VOLTAGE_HIGH_ENERGY) = New SET_COMMAND_STRUCTURE(REGISTER_AFC_AFT_CONTROL_VOLTAGE_DOSE_ALL, 10000, 1000)
+        'set_commands(SET_CMDS.SET_AFC_AFT_CONTROL_VOLTAGE_LOW_ENERGY) = New SET_COMMAND_STRUCTURE(REGISTER_AFC_AFT_CONTROL_VOLTAGE_LOW_ENERGY, 10000, 1000)
         set_commands(SET_CMDS.SET_CMD_AFC_SELECT_AFC_MODE) = New SET_COMMAND_STRUCTURE(REGISTER_CMD_AFC_SELECT_AFC_MODE, 1, 0)
         set_commands(SET_CMDS.SET_CMD_AFC_SELECT_MANUAL_MODE) = New SET_COMMAND_STRUCTURE(REGISTER_CMD_AFC_SELECT_MANUAL_MODE, 1, 0)
         set_commands(SET_CMDS.SET_CMD_AFC_MANUAL_TARGET_POSITION) = New SET_COMMAND_STRUCTURE(REGISTER_CMD_AFC_MANUAL_TARGET_POSITION, 64000, 0)
 
-        set_commands(SET_CMDS.SET_ELECTROMAGNET_CURRENT_HIGH_ENERGY) = New SET_COMMAND_STRUCTURE(REGISTER_ELECTROMAGNET_CURRENT_HIGH_ENERGY, 21000, 8000)
-        set_commands(SET_CMDS.SET_ELECTROMAGNET_CURRENT_LOW_ENERGY) = New SET_COMMAND_STRUCTURE(REGISTER_ELECTROMAGNET_CURRENT_LOW_ENERGY, 21000, 8000)
-        set_commands(SET_CMDS.SET_HEATER_CURRENT_AT_STANDBY) = New SET_COMMAND_STRUCTURE(REGISTER_HEATER_CURRENT_AT_STANDBY, 10000, 0)
+        set_commands(SET_CMDS.SET_ELECTROMAGNET_CURRENT_HIGH_ENERGY) = New SET_COMMAND_STRUCTURE(REGISTER_ELECTROMAGNET_CURRENT_DOSE_0, 21000, 8000)
+        set_commands(SET_CMDS.SET_ELECTROMAGNET_CURRENT_LOW_ENERGY) = New SET_COMMAND_STRUCTURE(REGISTER_ELECTROMAGNET_CURRENT_DOSE_1, 21000, 8000)
+        set_commands(SET_CMDS.SET_HEATER_CURRENT_AT_STANDBY) = New SET_COMMAND_STRUCTURE(REGISTER_MAGNETRON_HEATER_CURRENT_DOSE_ALL, 10000, 0)
 
     End Sub
 
@@ -3470,7 +3456,7 @@ Public Class frmMain
 
     End Sub
 
-    
+
 
     Private Sub frmMain_keyup(sender As Object, e As KeyEventArgs) Handles MyBase.KeyUp
         Try
@@ -3486,5 +3472,26 @@ Public Class frmMain
             Me.KeyPreview = True
         End Try
 
+    End Sub
+
+
+    Private Sub btnAfcHomePosSetDose1_Click(sender As Object, e As EventArgs) Handles btnAfcHomePosSetDose1.Click
+        Dim input_data As Double
+        Dim data_valid = get_set_data("Set Home Position", "AFC", 6400, 51200, "", input_data)
+
+        If data_valid Then
+            Dim program_word As UInt16 = input_data
+            ServerSettings.put_modbus_commands(REGISTER_AFC_HOME_POSITION_DOSE_1, program_word, 0, 0)
+        End If
+    End Sub
+
+    Private Sub btnAfcHomePosSetDose0_Click(sender As Object, e As EventArgs) Handles btnAfcHomePosSetDose0.Click
+        Dim input_data As Double
+        Dim data_valid = get_set_data("Set Home Position", "AFC", 6400, 51200, "", input_data)
+
+        If data_valid Then
+            Dim program_word As UInt16 = input_data
+            ServerSettings.put_modbus_commands(REGISTER_AFC_HOME_POSITION_DOSE_1, program_word, 0, 0)
+        End If
     End Sub
 End Class

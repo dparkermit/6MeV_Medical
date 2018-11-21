@@ -276,22 +276,15 @@ Public Class ServerSettings
             ElseIf (command_id = MODBUS_COMMANDS.MODBUS_WR_EVENTS) Then
 
                 For i = 0 To CUShort((word_count * 2 - 1))
-                    '  ETMEthernetEventData(event_index, i) = recvBuffer(13 + i) ' for debug only
+                    'ETMEthernetEventData(event_index, i) = recvBuffer(13 + i) ' for debug only
                     If (i < MAX_EVENT_SIZE_DATA) Then event_data(i) = recvBuffer(12 + i)
                 Next
                 event_index = CUShort(event_index + 1)
                 If (event_index >= MAX_EVENT_SIZE_ROW) Then event_index = 0
                 Call save_event_data(event_data, CUShort(word_count * 2))
                 stream.BeginWrite(xmitBuffer, 0, 12, New AsyncCallback(AddressOf DoXmitDoneCallback), stream)   ' data are valid, then send ack
-#if false then
-            ElseIf (command_id = MODBUS_COMMANDS.MODBUS_WR_ONE_CAL_ENTRY) Then
-                If (word_count >= 3) Then
-                    i = CUShort(recvBuffer(13) * 256 + recvBuffer(14))
-                    ETMEthernetCalStructure(i).scale = CUShort(recvBuffer(15) * 256 + recvBuffer(16))
-                    ETMEthernetCalStructure(i).offset = CUShort(recvBuffer(17) * 256 + recvBuffer(18))
-                    stream.BeginWrite(xmitBuffer, 0, 12, New AsyncCallback(AddressOf DoXmitDoneCallback), stream)   ' data are valid, then send ack
-                End If
-#end if
+
+
             ElseIf (command_id = MODBUS_COMMANDS.MODBUS_WR_PULSE_LOG) Then
                 For i = 0 To CUShort((word_count * 2 - 1))
                     '    ETMEthernetPulseData(pulse_index, i) = recvBuffer(13 + i)  ' for debug only
@@ -309,7 +302,7 @@ Public Class ServerSettings
             ' Send the requested list of commands to the ECB
 
             connect_status = 5
-
+            word_count = 4
             datalen = word_count * 2
             msglen = datalen + 4
 
