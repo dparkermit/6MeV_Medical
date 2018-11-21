@@ -586,6 +586,7 @@ Public Class frmMain
                 End If
 
                 If (bBlank_disp) Then
+#If (0) Then
                     btnPulseStartMax.Text = "Beam Max Start  " & blank_string
                     btnPulseStart2_3.Text = "Beam 2/3 Start  " & blank_string
                     btnPulseStart1_3.Text = "Beam 1/3 Start  " & blank_string
@@ -599,6 +600,7 @@ Public Class frmMain
                     btnPfnDelay.Text = "PFN Delay " & blank_string
                     btnAfcDelay.Text = "AFC Delay " & blank_string
                     btnPulseSampleDelay.Text = "MagI Sample Delay " & blank_string
+#End If
 
                     For Each ctrl In TabPagePulseSync.Controls
                         If (ctrl.GetType = GetType(Button)) Then
@@ -633,6 +635,17 @@ Public Class frmMain
                             End If
                         End If
                     Next
+
+
+
+                    btnGunDrvTrigStartDose0.Text = "HE Start " & get_ref_data(REGISTER_PULSE_SYNC_GRID_START_MAX_DOSE_0) * 20 & "ns"
+                    btnGunDrvTrigStopDose0.Text = "HE Stop " & get_ref_data(REGISTER_PULSE_SYNC_GRID_STOP_MAX_DOSE_0) * 20 & "ns"
+                    btnAFCTrigDose0.Text = "HE AFC Trig " & get_ref_data(REGISTER_PULSE_SYNC_AFC_TRIGGER_DOSE_0) * 20 & "ns"
+
+                    btnGunDrvTrigStartDose1.Text = "LE Start " & get_ref_data(REGISTER_PULSE_SYNC_GRID_START_MAX_DOSE_1) * 20 & "ns"
+                    btnGunDrvTrigStopDose1.Text = "LE Stop " & get_ref_data(REGISTER_PULSE_SYNC_GRID_STOP_MAX_DOSE_1) * 20 & "ns"
+                    btnAFCTrigDose1.Text = "LE AFC Trig " & get_ref_data(REGISTER_PULSE_SYNC_AFC_TRIGGER_DOSE_1) * 20 & "ns"
+
 #If (0) Then
                     btnPulseStartMin.Text = "Beam Min Start  " & (Math.Truncate(get_ref_data(REGISTER_PULSE_SYNC_GRID_PULSE_DELAY_HIGH_ENERGY_C_D + offset) / 256) * 20) & "ns"
                     btnPulseStart1_3.Text = "Beam 1/3 Start  " & ((get_ref_data(REGISTER_PULSE_SYNC_GRID_PULSE_DELAY_HIGH_ENERGY_C_D + offset) And &HFF) * 20) & "ns"
@@ -2653,116 +2666,7 @@ Public Class frmMain
 #End If
     End Sub
 
-    Private Sub btnPulseSettings_Click(sender As Object, e As EventArgs) Handles btnPulseStartMax.Click, btnPulseStopMin.Click, btnPulseStopMax.Click, btnPulseStop2_3.Click, btnPulseStop1_3.Click, btnPulseStartMin.Click, btnPulseStart2_3.Click, btnPulseStart1_3.Click, btnPulseSampleDelay.Click, btnPfnDelay.Click, btnAfcDelay.Click
-        Dim btn As Button = CType(sender, Button)
-        Dim program_word As UInt16
-        Dim data_offset As UInt16 = IIf(show_cargo_settings, 0, 8)
-        Dim command_offset As UInt16 = IIf(show_cargo_settings, 0, 8)
-        Dim input_data As Double
-        Dim data_valid As Boolean
-        Dim title As String = IIf(show_cargo_settings, "Cargo Mode Settings", "Cab Mode Settings")
-#If (0) Then
-        Select Case btn.Tag
-            Case 0 To 1 ' start	max
-                data_valid = get_set_data(IIf(btn.Tag = 0, "Set Beam Max Start", "Set Beam 2/3 Start"), title, 0, 255 * 20, "ns", input_data)
-
-                If data_valid Then
-                    input_data = input_data / 20
-                    program_word = ServerSettings.ETMEthernetBoardLoggingData(MODBUS_COMMANDS.MODBUS_WR_PULSE_SYNC).ecb_local_data(data_offset)
-                    If (btn.Tag = 0) Then
-                        program_word = program_word And &HFF00
-                        program_word = program_word Or (input_data And &HFF)
-                    Else
-                        program_word = program_word And &HFF
-                        program_word = program_word Or ((input_data << 8) And &HFF00)
-                    End If
-                    ServerSettings.put_modbus_commands(REGISTER_PULSE_SYNC_GRID_PULSE_DELAY_HIGH_ENERGY_A_B + command_offset, program_word, 0, 0)
-                End If
-
-            Case 2 To 3 ' start min
-                data_valid = get_set_data(IIf(btn.Tag = 2, "Set Beam 1/3 Start", "Set Beam Min Start"), title, 0, 255 * 20, "ns", input_data)
-
-                If data_valid Then
-                    input_data = input_data / 20
-                    program_word = ServerSettings.ETMEthernetBoardLoggingData(MODBUS_COMMANDS.MODBUS_WR_PULSE_SYNC).ecb_local_data(data_offset + 1)
-                    If (btn.Tag = 2) Then
-                        program_word = program_word And &HFF00
-                        program_word = program_word Or (input_data And &HFF)
-                    Else
-                        program_word = program_word And &HFF
-                        program_word = program_word Or ((input_data << 8) And &HFF00)
-                    End If
-                    ServerSettings.put_modbus_commands(REGISTER_PULSE_SYNC_GRID_PULSE_DELAY_HIGH_ENERGY_C_D + command_offset, program_word, 0, 0)
-                End If
-
-            Case 4 To 5 ' stop max
-                data_valid = get_set_data(IIf(btn.Tag = 0, "Set Beam Max Stop", "Set Beam 2/3 Stop"), title, 0, 255 * 20, "ns", input_data)
-
-                If data_valid Then
-                    input_data = input_data / 20
-                    program_word = ServerSettings.ETMEthernetBoardLoggingData(MODBUS_COMMANDS.MODBUS_WR_PULSE_SYNC).ecb_local_data(data_offset + 4)
-                    If (btn.Tag = 4) Then
-                        program_word = program_word And &HFF00
-                        program_word = program_word Or (input_data And &HFF)
-                    Else
-                        program_word = program_word And &HFF
-                        program_word = program_word Or ((input_data << 8) And &HFF00)
-                    End If
-                    ServerSettings.put_modbus_commands(REGISTER_PULSE_SYNC_GRID_PULSE_WIDTH_HIGH_ENERGY_A_B + command_offset, program_word, 0, 0)
-                End If
-            Case 6 To 7 ' stop min
-                data_valid = get_set_data(IIf(btn.Tag = 6, "Set Beam 1/3 Stop", "Set Beam Min Stop"), title, 0, 255 * 20, "ns", input_data)
-
-                If data_valid Then
-                    input_data = input_data / 20
-                    program_word = ServerSettings.ETMEthernetBoardLoggingData(MODBUS_COMMANDS.MODBUS_WR_PULSE_SYNC).ecb_local_data(data_offset + 5)
-                    If (btn.Tag = 6) Then
-                        program_word = program_word And &HFF00
-                        program_word = program_word Or (input_data And &HFF)
-                    Else
-                        program_word = program_word And &HFF
-                        program_word = program_word Or ((input_data << 8) And &HFF00)
-                    End If
-                    ServerSettings.put_modbus_commands(REGISTER_PULSE_SYNC_GRID_PULSE_WIDTH_HIGH_ENERGY_C_D + command_offset, program_word, 0, 0)
-                End If
-            Case 8 ' pfn delay
-                data_valid = get_set_data("Set PFN Delay", title, 0, 255 * 20, "ns", input_data)
-
-                If data_valid Then
-                    input_data = input_data / 20
-                    program_word = ServerSettings.ETMEthernetBoardLoggingData(MODBUS_COMMANDS.MODBUS_WR_PULSE_SYNC).ecb_local_data(data_offset + 2)
-                    program_word = program_word And &HFF
-                    program_word = program_word Or ((input_data << 8) And &HFF00)
-                    ServerSettings.put_modbus_commands(REGISTER_PULSE_SYNC_RF_TRIGGER_AND_THYRATRON_PULSE_DELAY_HIGH_ENERGY + command_offset, program_word, 0, 0)
-                End If
-
-            Case 9 ' afc delay
-                data_valid = get_set_data("Set AFC Delay", title, 0, 255 * 20, "ns", input_data)
-
-                If data_valid Then
-                    input_data = input_data / 20
-                    program_word = ServerSettings.ETMEthernetBoardLoggingData(MODBUS_COMMANDS.MODBUS_WR_PULSE_SYNC).ecb_local_data(data_offset + 6)
-                    program_word = program_word And &HFF
-                    program_word = program_word Or ((input_data << 8) And &HFF00)
-                    ServerSettings.put_modbus_commands(REGISTER_PULSE_SYNC_AFC_AND_SPARE_PULSE_DELAY_HIGH_ENERGY + command_offset, program_word, 0, 0)
-                End If
-            Case 10 ' Mag I sample delay
-                data_valid = get_set_data("MagI Sample Delay", title, 0, 255 * 20, "ns", input_data)
-
-                If data_valid Then
-                    input_data = input_data / 20
-                    program_word = ServerSettings.ETMEthernetBoardLoggingData(MODBUS_COMMANDS.MODBUS_WR_PULSE_SYNC).ecb_local_data(data_offset + 6)
-                    program_word = program_word And &HFF00
-                    program_word = program_word Or (input_data And &HFF)
-                    ServerSettings.put_modbus_commands(REGISTER_PULSE_SYNC_AFC_AND_SPARE_PULSE_DELAY_HIGH_ENERGY + command_offset, program_word, 0, 0)
-                End If
-
-
-        End Select
-#End If
-
-
-    End Sub
+   
 
     Private Sub btnHVsetCargo_Click(sender As Object, e As EventArgs) Handles btnHVsetCargo.Click
         Dim input_data As Double
@@ -2930,7 +2834,7 @@ Public Class frmMain
             reset_access_level()
         Else
             'pwScreen.ShowDialog()
-            ServerSettings.put_modbus_commands(REGISTER_SET_ACCESS_MODE_ETM, 0, 0, 0)
+            ServerSettings.put_modbus_commands(REGISTER_SET_ACCESS_MODE_ETM, &H117F, 0, 0)
             access_level = 2
             If (access_level > 0) Then
                 lblIonIi2Title.Visible = True
@@ -3307,6 +3211,7 @@ Public Class frmMain
                 uRetData = ServerSettings.ETMEthernetBoardLoggingData(MODBUS_COMMANDS.MODBUS_WR_PULSE_SYNC).ecb_local_data(10)
 
 
+
 #If (0) Then
 
             Case REGISTER_PULSE_SYNC_RF_TRIGGER_AND_THYRATRON_PULSE_DELAY_HIGH_ENERGY, REGISTER_PULSE_SYNC_RF_TRIGGER_AND_THYRATRON_PULSE_DELAY_LOW_ENERGY
@@ -3491,7 +3396,80 @@ Public Class frmMain
 
         If data_valid Then
             Dim program_word As UInt16 = input_data
-            ServerSettings.put_modbus_commands(REGISTER_AFC_HOME_POSITION_DOSE_1, program_word, 0, 0)
+            ServerSettings.put_modbus_commands(REGISTER_AFC_HOME_POSITION_DOSE_0, program_word, 0, 0)
+        End If
+    End Sub
+
+
+    Private Sub btnGunDrvTrigStartDose0_Click(sender As Object, e As EventArgs) Handles btnGunDrvTrigStartDose0.Click
+        Dim input_data As Double
+        Dim data_valid As Boolean
+        data_valid = get_set_data("Set HE Beam Start", "High Energy Beam Start", 0, 255 * 20, "ns", input_data)
+
+        If data_valid Then
+            input_data = input_data / 20
+            Dim program_word As UInt16 = input_data
+            ServerSettings.put_modbus_commands(REGISTER_PULSE_SYNC_GRID_START_MAX_DOSE_0, program_word, 0, 0)
+        End If
+    End Sub
+
+    Private Sub btnGunDrvTrigStopDose0_Click(sender As Object, e As EventArgs) Handles btnGunDrvTrigStopDose0.Click
+        Dim input_data As Double
+        Dim data_valid As Boolean
+        data_valid = get_set_data("Set HE Beam Stop", "High Energy Beam Stop", 0, 255 * 20, "ns", input_data)
+
+        If data_valid Then
+            input_data = input_data / 20
+            Dim program_word As UInt16 = input_data
+            ServerSettings.put_modbus_commands(REGISTER_PULSE_SYNC_GRID_STOP_MAX_DOSE_0, program_word, 0, 0)
+        End If
+    End Sub
+
+    Private Sub btnAFCTrigDose0_Click(sender As Object, e As EventArgs) Handles btnAFCTrigDose0.Click
+        Dim input_data As Double
+        Dim data_valid As Boolean
+        data_valid = get_set_data("Set HE AFC Trig", "High Energy AFC Trigger", 0, 255 * 20, "ns", input_data)
+
+        If data_valid Then
+            input_data = input_data / 20
+            Dim program_word As UInt16 = input_data
+            ServerSettings.put_modbus_commands(REGISTER_PULSE_SYNC_AFC_TRIGGER_DOSE_0, program_word, 0, 0)
+        End If
+    End Sub
+
+    Private Sub btnGunDrvTrigStartDose1_Click(sender As Object, e As EventArgs) Handles btnGunDrvTrigStartDose1.Click
+        Dim input_data As Double
+        Dim data_valid As Boolean
+        data_valid = get_set_data("Set LE Beam Start", "Low Energy Beam Start", 0, 255 * 20, "ns", input_data)
+
+        If data_valid Then
+            input_data = input_data / 20
+            Dim program_word As UInt16 = input_data
+            ServerSettings.put_modbus_commands(REGISTER_PULSE_SYNC_GRID_START_MAX_DOSE_1, program_word, 0, 0)
+        End If
+    End Sub
+
+    Private Sub btnGunDrvTrigStopDose1_Click(sender As Object, e As EventArgs) Handles btnGunDrvTrigStopDose1.Click
+        Dim input_data As Double
+        Dim data_valid As Boolean
+        data_valid = get_set_data("Set LE Beam Stop", "Low Energy Beam Stop", 0, 255 * 20, "ns", input_data)
+
+        If data_valid Then
+            input_data = input_data / 20
+            Dim program_word As UInt16 = input_data
+            ServerSettings.put_modbus_commands(REGISTER_PULSE_SYNC_GRID_STOP_MAX_DOSE_1, program_word, 0, 0)
+        End If
+    End Sub
+
+    Private Sub btnAFCTrigDose1_Click(sender As Object, e As EventArgs) Handles btnAFCTrigDose1.Click
+        Dim input_data As Double
+        Dim data_valid As Boolean
+        data_valid = get_set_data("Set LE AFC Trig", "Low Energy AFC Trigger", 0, 255 * 20, "ns", input_data)
+
+        If data_valid Then
+            input_data = input_data / 20
+            Dim program_word As UInt16 = input_data
+            ServerSettings.put_modbus_commands(REGISTER_PULSE_SYNC_AFC_TRIGGER_DOSE_1, program_word, 0, 0)
         End If
     End Sub
 End Class

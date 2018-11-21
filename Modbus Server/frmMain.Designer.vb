@@ -239,18 +239,8 @@ Partial Class frmMain
         Me.Label66 = New System.Windows.Forms.Label()
         Me.BlueRect6 = New CustomControls.BlueRect()
         Me.TabPagePulseSync = New System.Windows.Forms.TabPage()
-        Me.btnPulseSampleDelay = New System.Windows.Forms.Button()
-        Me.btnPfnDelay = New System.Windows.Forms.Button()
-        Me.btnAfcDelay = New System.Windows.Forms.Button()
-        Me.btnPulseStopMin = New System.Windows.Forms.Button()
-        Me.btnPulseStartMin = New System.Windows.Forms.Button()
-        Me.btnPulseStop1_3 = New System.Windows.Forms.Button()
-        Me.btnPulseStart1_3 = New System.Windows.Forms.Button()
-        Me.btnPulseStop2_3 = New System.Windows.Forms.Button()
-        Me.btnPulseStart2_3 = New System.Windows.Forms.Button()
-        Me.btnPulseStopMax = New System.Windows.Forms.Button()
+        Me.btnGunDrvTrigStartDose0 = New System.Windows.Forms.Button()
         Me.btnChangeSettingMode = New System.Windows.Forms.Button()
-        Me.btnPulseStartMax = New System.Windows.Forms.Button()
         Me.ledWPulseLowOverride = New CustomControls.OvalLed()
         Me.ledWPulseTrigFault = New CustomControls.OvalLed()
         Me.ledPulseCanFault = New CustomControls.OvalLed()
@@ -478,6 +468,11 @@ Partial Class frmMain
         Me.btnServiceSaveFactoryDefaults = New System.Windows.Forms.Button()
         Me.btnDumpData = New System.Windows.Forms.Button()
         Me.BlueRectMain = New CustomControls.BlueRect()
+        Me.btnGunDrvTrigStopDose0 = New System.Windows.Forms.Button()
+        Me.btnAFCTrigDose0 = New System.Windows.Forms.Button()
+        Me.btnGunDrvTrigStartDose1 = New System.Windows.Forms.Button()
+        Me.btnGunDrvTrigStopDose1 = New System.Windows.Forms.Button()
+        Me.btnAFCTrigDose1 = New System.Windows.Forms.Button()
         Me.panelDispButtons.SuspendLayout()
         CType(Me.PictureBoxLogo, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.Panel2.SuspendLayout()
@@ -3193,18 +3188,13 @@ Partial Class frmMain
         '
         Me.TabPagePulseSync.BackColor = System.Drawing.SystemColors.Control
         Me.TabPagePulseSync.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D
-        Me.TabPagePulseSync.Controls.Add(Me.btnPulseSampleDelay)
-        Me.TabPagePulseSync.Controls.Add(Me.btnPfnDelay)
-        Me.TabPagePulseSync.Controls.Add(Me.btnAfcDelay)
-        Me.TabPagePulseSync.Controls.Add(Me.btnPulseStopMin)
-        Me.TabPagePulseSync.Controls.Add(Me.btnPulseStartMin)
-        Me.TabPagePulseSync.Controls.Add(Me.btnPulseStop1_3)
-        Me.TabPagePulseSync.Controls.Add(Me.btnPulseStart1_3)
-        Me.TabPagePulseSync.Controls.Add(Me.btnPulseStop2_3)
-        Me.TabPagePulseSync.Controls.Add(Me.btnPulseStart2_3)
-        Me.TabPagePulseSync.Controls.Add(Me.btnPulseStopMax)
+        Me.TabPagePulseSync.Controls.Add(Me.btnAFCTrigDose1)
+        Me.TabPagePulseSync.Controls.Add(Me.btnGunDrvTrigStopDose1)
+        Me.TabPagePulseSync.Controls.Add(Me.btnGunDrvTrigStartDose1)
+        Me.TabPagePulseSync.Controls.Add(Me.btnAFCTrigDose0)
+        Me.TabPagePulseSync.Controls.Add(Me.btnGunDrvTrigStopDose0)
+        Me.TabPagePulseSync.Controls.Add(Me.btnGunDrvTrigStartDose0)
         Me.TabPagePulseSync.Controls.Add(Me.btnChangeSettingMode)
-        Me.TabPagePulseSync.Controls.Add(Me.btnPulseStartMax)
         Me.TabPagePulseSync.Controls.Add(Me.ledWPulseLowOverride)
         Me.TabPagePulseSync.Controls.Add(Me.ledWPulseTrigFault)
         Me.TabPagePulseSync.Controls.Add(Me.ledPulseCanFault)
@@ -3239,125 +3229,17 @@ Partial Class frmMain
         Me.TabPagePulseSync.TabIndex = 4
         Me.TabPagePulseSync.Text = "TabPage3"
         '
-        'btnPulseSampleDelay
+        'btnGunDrvTrigStartDose0
         '
-        Me.btnPulseSampleDelay.BackColor = System.Drawing.Color.Blue
-        Me.btnPulseSampleDelay.Font = New System.Drawing.Font("Segoe UI", 12.0!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.btnPulseSampleDelay.Location = New System.Drawing.Point(369, 266)
-        Me.btnPulseSampleDelay.Name = "btnPulseSampleDelay"
-        Me.btnPulseSampleDelay.Size = New System.Drawing.Size(232, 30)
-        Me.btnPulseSampleDelay.TabIndex = 135
-        Me.btnPulseSampleDelay.Tag = "10"
-        Me.btnPulseSampleDelay.Text = "Mag I Sample Delay   5"
-        Me.btnPulseSampleDelay.UseVisualStyleBackColor = True
-        '
-        'btnPfnDelay
-        '
-        Me.btnPfnDelay.BackColor = System.Drawing.Color.Blue
-        Me.btnPfnDelay.Font = New System.Drawing.Font("Segoe UI", 12.0!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.btnPfnDelay.Location = New System.Drawing.Point(84, 266)
-        Me.btnPfnDelay.Name = "btnPfnDelay"
-        Me.btnPfnDelay.Size = New System.Drawing.Size(232, 30)
-        Me.btnPfnDelay.TabIndex = 135
-        Me.btnPfnDelay.Tag = "8"
-        Me.btnPfnDelay.Text = "PFN Delay     20"
-        Me.btnPfnDelay.UseVisualStyleBackColor = True
-        '
-        'btnAfcDelay
-        '
-        Me.btnAfcDelay.BackColor = System.Drawing.Color.Blue
-        Me.btnAfcDelay.Font = New System.Drawing.Font("Segoe UI", 12.0!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.btnAfcDelay.Location = New System.Drawing.Point(84, 301)
-        Me.btnAfcDelay.Name = "btnAfcDelay"
-        Me.btnAfcDelay.Size = New System.Drawing.Size(232, 30)
-        Me.btnAfcDelay.TabIndex = 134
-        Me.btnAfcDelay.Tag = "9"
-        Me.btnAfcDelay.Text = "AFC Delay   10"
-        Me.btnAfcDelay.UseVisualStyleBackColor = True
-        '
-        'btnPulseStopMin
-        '
-        Me.btnPulseStopMin.BackColor = System.Drawing.Color.Blue
-        Me.btnPulseStopMin.Font = New System.Drawing.Font("Segoe UI", 12.0!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.btnPulseStopMin.Location = New System.Drawing.Point(369, 231)
-        Me.btnPulseStopMin.Name = "btnPulseStopMin"
-        Me.btnPulseStopMin.Size = New System.Drawing.Size(232, 30)
-        Me.btnPulseStopMin.TabIndex = 133
-        Me.btnPulseStopMin.Tag = "7"
-        Me.btnPulseStopMin.Text = "Beam Min Stop     2050"
-        Me.btnPulseStopMin.UseVisualStyleBackColor = True
-        '
-        'btnPulseStartMin
-        '
-        Me.btnPulseStartMin.BackColor = System.Drawing.Color.Blue
-        Me.btnPulseStartMin.Font = New System.Drawing.Font("Segoe UI", 12.0!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.btnPulseStartMin.Location = New System.Drawing.Point(84, 231)
-        Me.btnPulseStartMin.Name = "btnPulseStartMin"
-        Me.btnPulseStartMin.Size = New System.Drawing.Size(232, 30)
-        Me.btnPulseStartMin.TabIndex = 133
-        Me.btnPulseStartMin.Tag = "3"
-        Me.btnPulseStartMin.Text = "Beam Min Start     2025"
-        Me.btnPulseStartMin.UseVisualStyleBackColor = True
-        '
-        'btnPulseStop1_3
-        '
-        Me.btnPulseStop1_3.BackColor = System.Drawing.Color.Blue
-        Me.btnPulseStop1_3.Font = New System.Drawing.Font("Segoe UI", 12.0!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.btnPulseStop1_3.Location = New System.Drawing.Point(369, 196)
-        Me.btnPulseStop1_3.Name = "btnPulseStop1_3"
-        Me.btnPulseStop1_3.Size = New System.Drawing.Size(232, 30)
-        Me.btnPulseStop1_3.TabIndex = 133
-        Me.btnPulseStop1_3.Tag = "6"
-        Me.btnPulseStop1_3.Text = "Beam 1/3  Stop     2050"
-        Me.btnPulseStop1_3.UseVisualStyleBackColor = True
-        '
-        'btnPulseStart1_3
-        '
-        Me.btnPulseStart1_3.BackColor = System.Drawing.Color.Blue
-        Me.btnPulseStart1_3.Font = New System.Drawing.Font("Segoe UI", 12.0!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.btnPulseStart1_3.Location = New System.Drawing.Point(84, 196)
-        Me.btnPulseStart1_3.Name = "btnPulseStart1_3"
-        Me.btnPulseStart1_3.Size = New System.Drawing.Size(232, 30)
-        Me.btnPulseStart1_3.TabIndex = 133
-        Me.btnPulseStart1_3.Tag = "2"
-        Me.btnPulseStart1_3.Text = "Beam 1/3  Start     2025"
-        Me.btnPulseStart1_3.UseVisualStyleBackColor = True
-        '
-        'btnPulseStop2_3
-        '
-        Me.btnPulseStop2_3.BackColor = System.Drawing.Color.Blue
-        Me.btnPulseStop2_3.Font = New System.Drawing.Font("Segoe UI", 12.0!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.btnPulseStop2_3.Location = New System.Drawing.Point(369, 161)
-        Me.btnPulseStop2_3.Name = "btnPulseStop2_3"
-        Me.btnPulseStop2_3.Size = New System.Drawing.Size(232, 30)
-        Me.btnPulseStop2_3.TabIndex = 133
-        Me.btnPulseStop2_3.Tag = "5"
-        Me.btnPulseStop2_3.Text = "Beam 2/3  Stop      2050"
-        Me.btnPulseStop2_3.UseVisualStyleBackColor = True
-        '
-        'btnPulseStart2_3
-        '
-        Me.btnPulseStart2_3.BackColor = System.Drawing.Color.Blue
-        Me.btnPulseStart2_3.Font = New System.Drawing.Font("Segoe UI", 12.0!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.btnPulseStart2_3.Location = New System.Drawing.Point(84, 161)
-        Me.btnPulseStart2_3.Name = "btnPulseStart2_3"
-        Me.btnPulseStart2_3.Size = New System.Drawing.Size(232, 30)
-        Me.btnPulseStart2_3.TabIndex = 133
-        Me.btnPulseStart2_3.Tag = "1"
-        Me.btnPulseStart2_3.Text = "Beam 2/3  Start     2025"
-        Me.btnPulseStart2_3.UseVisualStyleBackColor = True
-        '
-        'btnPulseStopMax
-        '
-        Me.btnPulseStopMax.BackColor = System.Drawing.Color.Blue
-        Me.btnPulseStopMax.Font = New System.Drawing.Font("Segoe UI", 12.0!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.btnPulseStopMax.Location = New System.Drawing.Point(369, 126)
-        Me.btnPulseStopMax.Name = "btnPulseStopMax"
-        Me.btnPulseStopMax.Size = New System.Drawing.Size(232, 30)
-        Me.btnPulseStopMax.TabIndex = 133
-        Me.btnPulseStopMax.Tag = "4"
-        Me.btnPulseStopMax.Text = "Beam Max Stop     2050"
-        Me.btnPulseStopMax.UseVisualStyleBackColor = True
+        Me.btnGunDrvTrigStartDose0.BackColor = System.Drawing.Color.Blue
+        Me.btnGunDrvTrigStartDose0.Font = New System.Drawing.Font("Segoe UI", 12.0!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.btnGunDrvTrigStartDose0.Location = New System.Drawing.Point(87, 135)
+        Me.btnGunDrvTrigStartDose0.Name = "btnGunDrvTrigStartDose0"
+        Me.btnGunDrvTrigStartDose0.Size = New System.Drawing.Size(205, 30)
+        Me.btnGunDrvTrigStartDose0.TabIndex = 134
+        Me.btnGunDrvTrigStartDose0.Tag = "1"
+        Me.btnGunDrvTrigStartDose0.Text = "High Dose Start"
+        Me.btnGunDrvTrigStartDose0.UseVisualStyleBackColor = True
         '
         'btnChangeSettingMode
         '
@@ -3370,18 +3252,6 @@ Partial Class frmMain
         Me.btnChangeSettingMode.Tag = "1"
         Me.btnChangeSettingMode.Text = "Change"
         Me.btnChangeSettingMode.UseVisualStyleBackColor = True
-        '
-        'btnPulseStartMax
-        '
-        Me.btnPulseStartMax.BackColor = System.Drawing.Color.Blue
-        Me.btnPulseStartMax.Font = New System.Drawing.Font("Segoe UI", 12.0!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.btnPulseStartMax.Location = New System.Drawing.Point(84, 126)
-        Me.btnPulseStartMax.Name = "btnPulseStartMax"
-        Me.btnPulseStartMax.Size = New System.Drawing.Size(232, 30)
-        Me.btnPulseStartMax.TabIndex = 133
-        Me.btnPulseStartMax.Tag = "0"
-        Me.btnPulseStartMax.Text = "Beam Max Start     2025"
-        Me.btnPulseStartMax.UseVisualStyleBackColor = True
         '
         'ledWPulseLowOverride
         '
@@ -3674,7 +3544,7 @@ Partial Class frmMain
         'BlueRect5
         '
         Me.BlueRect5.Enabled = False
-        Me.BlueRect5.Location = New System.Drawing.Point(38, 60)
+        Me.BlueRect5.Location = New System.Drawing.Point(72, 78)
         Me.BlueRect5.MyBorderColor = System.Drawing.Color.Black
         Me.BlueRect5.MyBorderWidth = 0.001!
         Me.BlueRect5.Name = "BlueRect5"
@@ -6108,6 +5978,66 @@ Partial Class frmMain
         Me.BlueRectMain.Size = New System.Drawing.Size(296, 184)
         Me.BlueRectMain.TabIndex = 80
         '
+        'btnGunDrvTrigStopDose0
+        '
+        Me.btnGunDrvTrigStopDose0.BackColor = System.Drawing.Color.Blue
+        Me.btnGunDrvTrigStopDose0.Font = New System.Drawing.Font("Segoe UI", 12.0!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.btnGunDrvTrigStopDose0.Location = New System.Drawing.Point(87, 174)
+        Me.btnGunDrvTrigStopDose0.Name = "btnGunDrvTrigStopDose0"
+        Me.btnGunDrvTrigStopDose0.Size = New System.Drawing.Size(205, 30)
+        Me.btnGunDrvTrigStopDose0.TabIndex = 135
+        Me.btnGunDrvTrigStopDose0.Tag = "1"
+        Me.btnGunDrvTrigStopDose0.Text = "High Dose Stop"
+        Me.btnGunDrvTrigStopDose0.UseVisualStyleBackColor = True
+        '
+        'btnAFCTrigDose0
+        '
+        Me.btnAFCTrigDose0.BackColor = System.Drawing.Color.Blue
+        Me.btnAFCTrigDose0.Font = New System.Drawing.Font("Segoe UI", 12.0!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.btnAFCTrigDose0.Location = New System.Drawing.Point(87, 216)
+        Me.btnAFCTrigDose0.Name = "btnAFCTrigDose0"
+        Me.btnAFCTrigDose0.Size = New System.Drawing.Size(205, 30)
+        Me.btnAFCTrigDose0.TabIndex = 136
+        Me.btnAFCTrigDose0.Tag = "1"
+        Me.btnAFCTrigDose0.Text = "AFC TRIG"
+        Me.btnAFCTrigDose0.UseVisualStyleBackColor = True
+        '
+        'btnGunDrvTrigStartDose1
+        '
+        Me.btnGunDrvTrigStartDose1.BackColor = System.Drawing.Color.Blue
+        Me.btnGunDrvTrigStartDose1.Font = New System.Drawing.Font("Segoe UI", 12.0!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.btnGunDrvTrigStartDose1.Location = New System.Drawing.Point(394, 135)
+        Me.btnGunDrvTrigStartDose1.Name = "btnGunDrvTrigStartDose1"
+        Me.btnGunDrvTrigStartDose1.Size = New System.Drawing.Size(205, 30)
+        Me.btnGunDrvTrigStartDose1.TabIndex = 137
+        Me.btnGunDrvTrigStartDose1.Tag = "1"
+        Me.btnGunDrvTrigStartDose1.Text = "Low Dose Start"
+        Me.btnGunDrvTrigStartDose1.UseVisualStyleBackColor = True
+        '
+        'btnGunDrvTrigStopDose1
+        '
+        Me.btnGunDrvTrigStopDose1.BackColor = System.Drawing.Color.Blue
+        Me.btnGunDrvTrigStopDose1.Font = New System.Drawing.Font("Segoe UI", 12.0!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.btnGunDrvTrigStopDose1.Location = New System.Drawing.Point(394, 174)
+        Me.btnGunDrvTrigStopDose1.Name = "btnGunDrvTrigStopDose1"
+        Me.btnGunDrvTrigStopDose1.Size = New System.Drawing.Size(205, 30)
+        Me.btnGunDrvTrigStopDose1.TabIndex = 138
+        Me.btnGunDrvTrigStopDose1.Tag = "1"
+        Me.btnGunDrvTrigStopDose1.Text = "Low Dose Stop"
+        Me.btnGunDrvTrigStopDose1.UseVisualStyleBackColor = True
+        '
+        'btnAFCTrigDose1
+        '
+        Me.btnAFCTrigDose1.BackColor = System.Drawing.Color.Blue
+        Me.btnAFCTrigDose1.Font = New System.Drawing.Font("Segoe UI", 12.0!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.btnAFCTrigDose1.Location = New System.Drawing.Point(394, 216)
+        Me.btnAFCTrigDose1.Name = "btnAFCTrigDose1"
+        Me.btnAFCTrigDose1.Size = New System.Drawing.Size(205, 30)
+        Me.btnAFCTrigDose1.TabIndex = 139
+        Me.btnAFCTrigDose1.Tag = "1"
+        Me.btnAFCTrigDose1.Text = "AFC TRIG LE"
+        Me.btnAFCTrigDose1.UseVisualStyleBackColor = True
+        '
         'frmMain
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
@@ -6302,8 +6232,6 @@ Partial Class frmMain
     Friend WithEvents Label93 As System.Windows.Forms.Label
     Friend WithEvents Label90 As System.Windows.Forms.Label
     Friend WithEvents lblSN As System.Windows.Forms.Label
-    Friend WithEvents btnPfnDelay As System.Windows.Forms.Button
-    Friend WithEvents btnPulseStartMax As System.Windows.Forms.Button
     Friend WithEvents ledWPulseLowOverride As CustomControls.OvalLed
     Friend WithEvents ledWPulseTrigFault As CustomControls.OvalLed
     Friend WithEvents ledPulseCanFault As CustomControls.OvalLed
@@ -6326,7 +6254,6 @@ Partial Class frmMain
     Friend WithEvents Label174 As System.Windows.Forms.Label
     Friend WithEvents Label175 As System.Windows.Forms.Label
     Friend WithEvents Label176 As System.Windows.Forms.Label
-    Friend WithEvents btnPulseSampleDelay As System.Windows.Forms.Button
     Friend WithEvents btnHVsetCargo As System.Windows.Forms.Button
     Friend WithEvents ledWHvOT As CustomControls.OvalLed
     Friend WithEvents ledWHvLoadFault As CustomControls.OvalLed
@@ -6534,14 +6461,6 @@ Partial Class frmMain
     Friend WithEvents btnAfcHomePosSetDose0 As System.Windows.Forms.Button
     Friend WithEvents btnMagCabIset As System.Windows.Forms.Button
     Friend WithEvents btnGdEgsetCab As System.Windows.Forms.Button
-    Friend WithEvents btnPulseStartMin As System.Windows.Forms.Button
-    Friend WithEvents btnPulseStart1_3 As System.Windows.Forms.Button
-    Friend WithEvents btnPulseStart2_3 As System.Windows.Forms.Button
-    Friend WithEvents btnAfcDelay As System.Windows.Forms.Button
-    Friend WithEvents btnPulseStopMin As System.Windows.Forms.Button
-    Friend WithEvents btnPulseStop1_3 As System.Windows.Forms.Button
-    Friend WithEvents btnPulseStop2_3 As System.Windows.Forms.Button
-    Friend WithEvents btnPulseStopMax As System.Windows.Forms.Button
     Friend WithEvents Label37 As System.Windows.Forms.Label
     Friend WithEvents btnReenableAutofill2 As System.Windows.Forms.Button
     Friend WithEvents btnChangeSettingMode As System.Windows.Forms.Button
@@ -6651,4 +6570,10 @@ Partial Class frmMain
     Friend WithEvents btnDumpData As System.Windows.Forms.Button
     Friend WithEvents lblShowDumpData As System.Windows.Forms.Label
     Friend WithEvents lblGUIVersionAgile As System.Windows.Forms.Label
+    Friend WithEvents btnGunDrvTrigStartDose0 As System.Windows.Forms.Button
+    Friend WithEvents btnGunDrvTrigStopDose0 As System.Windows.Forms.Button
+    Friend WithEvents btnAFCTrigDose0 As System.Windows.Forms.Button
+    Friend WithEvents btnAFCTrigDose1 As System.Windows.Forms.Button
+    Friend WithEvents btnGunDrvTrigStopDose1 As System.Windows.Forms.Button
+    Friend WithEvents btnGunDrvTrigStartDose1 As System.Windows.Forms.Button
 End Class
