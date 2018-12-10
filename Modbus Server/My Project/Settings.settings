@@ -20,5 +20,8 @@
     <Setting Name="IonPumpLogInterval" Type="System.UInt16" Scope="User">
       <Value Profile="(Default)">1</Value>
     </Setting>
+    <Setting Name="WatchdogSerialPort" Type="System.String" Scope="User">
+      <Value Profile="(Default)">COM1</Value>
+    </Setting>
   </Settings>
 </SettingsFile>

@@ -202,7 +202,13 @@ Public Class frmMain
             Application.DoEvents()
 
             txtIonPumpLogInterval.Text = My.Settings.IonPumpLogInterval
- 
+
+
+            For Each sp As String In My.Computer.Ports.SerialPortNames
+                ComboBoxComPorts.Items.Add(sp)
+            Next
+            ComboBoxComPorts.Text = My.Settings.WatchdogSerialPort
+            OpenWatchDogSerialPort()
 
             '     TextBoxIPAddress.Text = ServerSettings.txtIPAddr.Text
             '     ModBusPort = 502      'Modbus = 502 , Explicit Ethernet/IP = 44818 (TCP) , Implicit Ethernet/IP = 2222 (UDP)
@@ -258,9 +264,15 @@ Public Class frmMain
 
     Private Sub frmMain_FormClosed(ByVal sender As System.Object, ByVal e As System.Windows.Forms.FormClosedEventArgs) Handles MyBase.FormClosed
         Try
-            TimerUpdate.Enabled = False
             My.Settings.IonPumpLogInterval = Val(txtIonPumpLogInterval.Text)
+            My.Settings.WatchdogSerialPort = ComboBoxComPorts.Text
             ServerSettings.Close()
+
+            TimerUpdate.Enabled = False
+            TimerWatchdog.Enabled = False
+            If SerialPortETM.IsOpen Then
+                SerialPortETM.Close()
+            End If
         Catch ex As Exception
             MessageBox.Show("Exception caught in FormMain.FormClosed  " + ex.ToString)
         End Try
@@ -403,6 +415,8 @@ Public Class frmMain
                     ledCpuXrayLogic.FillColor = Color.Red
                     '  ledCpuDriveup.FillColor = Color.Red
                     ledCpuReadyFault.FillColor = Color.Red
+                    ledCpuMagnetronOP.FillColor = Color.Red
+                    ledCpuWatchDog.FillColor = Color.Red
                     ledWCpuXrayDisabled.FillColor = Color.Transparent
                     ledWCpuDriveupTimeout.FillColor = Color.Transparent
 
@@ -432,6 +446,9 @@ Public Class frmMain
                     ledCpuXrayLogic.FillColor = IIf(fault_bits And &H1, Color.Red, Color.LawnGreen)
                     '   ledCpuDriveup.FillColor = IIf(fault_bits And &H2, Color.Red, Color.LawnGreen)
                     ledCpuReadyFault.FillColor = IIf(fault_bits And &H4, Color.Red, Color.LawnGreen)
+                    ledCpuMagnetronOP.FillColor = IIf(fault_bits And &H10, Color.Red, Color.LawnGreen)
+                    ledCpuWatchDog.FillColor = IIf(fault_bits And &H20, Color.Red, Color.LawnGreen)
+
                     ledWCpuXrayDisabled.FillColor = IIf(logged_bits And &H1, Color.Black, Color.Transparent)
                     ledWCpuDriveupTimeout.FillColor = IIf(logged_bits And &H4, Color.Black, Color.Transparent)
 
@@ -575,7 +592,7 @@ Public Class frmMain
                     ledWSF6RelayClosed.FillColor = IIf(logged_bits And &H1, Color.Black, Color.Transparent)
                 End If
             Case 4 ' pulse sync
-
+#If False Then
                 Dim offset As Byte
                 If (show_cargo_settings) Then
                     lblModeSettings.Text = "Cargo Mode Settings"
@@ -584,8 +601,19 @@ Public Class frmMain
                     lblModeSettings.Text = "Cab Mode Settings"
                     offset = 8
                 End If
-
+#End If
                 If (bBlank_disp) Then
+                    btnGunDrvTrigStartDose0.Text = "HE Start  " & blank_string & " ns"
+                    btnGunDrvTrigStopDose0.Text = "HE Stop  " & blank_string & " ns"
+                    btnAFCTrigDose0.Text = "HE AFC Trig  " & blank_string & " ns"
+
+                    btnGunDrvTrigStartDose1.Text = "LE Start  " & blank_string & " ns"
+                    btnGunDrvTrigStopDose1.Text = "LE Stop  " & blank_string & " ns"
+                    btnAFCTrigDose1.Text = "LE AFC Trig  " & blank_string & " ns"
+
+                    btnPfnDelay.Text = "PFN Delay  " & blank_string & " ns"
+                    btnPulseSampleDelay.Text = "MagI Sample Delay  " & blank_string & " ns"
+
 #If (0) Then
                     btnPulseStartMax.Text = "Beam Max Start  " & blank_string
                     btnPulseStart2_3.Text = "Beam 2/3 Start  " & blank_string
@@ -638,14 +666,16 @@ Public Class frmMain
 
 
 
-                    btnGunDrvTrigStartDose0.Text = "HE Start " & get_ref_data(REGISTER_PULSE_SYNC_GRID_START_MAX_DOSE_0) * 20 & "ns"
-                    btnGunDrvTrigStopDose0.Text = "HE Stop " & get_ref_data(REGISTER_PULSE_SYNC_GRID_STOP_MAX_DOSE_0) * 20 & "ns"
-                    btnAFCTrigDose0.Text = "HE AFC Trig " & get_ref_data(REGISTER_PULSE_SYNC_AFC_TRIGGER_DOSE_0) * 20 & "ns"
+                    btnGunDrvTrigStartDose0.Text = "HE Start  " & get_ref_data(REGISTER_PULSE_SYNC_GRID_START_MAX_DOSE_0) * 20 & " ns"
+                    btnGunDrvTrigStopDose0.Text = "HE Stop  " & get_ref_data(REGISTER_PULSE_SYNC_GRID_STOP_MAX_DOSE_0) * 20 & " ns"
+                    btnAFCTrigDose0.Text = "HE AFC Trig  " & get_ref_data(REGISTER_PULSE_SYNC_AFC_TRIGGER_DOSE_0) * 20 & " ns"
 
-                    btnGunDrvTrigStartDose1.Text = "LE Start " & get_ref_data(REGISTER_PULSE_SYNC_GRID_START_MAX_DOSE_1) * 20 & "ns"
-                    btnGunDrvTrigStopDose1.Text = "LE Stop " & get_ref_data(REGISTER_PULSE_SYNC_GRID_STOP_MAX_DOSE_1) * 20 & "ns"
-                    btnAFCTrigDose1.Text = "LE AFC Trig " & get_ref_data(REGISTER_PULSE_SYNC_AFC_TRIGGER_DOSE_1) * 20 & "ns"
+                    btnGunDrvTrigStartDose1.Text = "LE Start  " & get_ref_data(REGISTER_PULSE_SYNC_GRID_START_MAX_DOSE_1) * 20 & " ns"
+                    btnGunDrvTrigStopDose1.Text = "LE Stop  " & get_ref_data(REGISTER_PULSE_SYNC_GRID_STOP_MAX_DOSE_1) * 20 & " ns"
+                    btnAFCTrigDose1.Text = "LE AFC Trig  " & get_ref_data(REGISTER_PULSE_SYNC_AFC_TRIGGER_DOSE_1) * 20 & " ns"
 
+                    btnPfnDelay.Text = "PFN Delay  " & get_ref_data(REGISTER_PULSE_SYNC_PFN_TRIGGER_DOSE_ALL) * 20 & " ns"
+                    btnPulseSampleDelay.Text = "MagI Sample Delay  " & get_ref_data(REGISTER_PULSE_SYNC_MAGNETRON_AND_TARGET_CURRENT_TRIGGER_START_DOSE_ALL) * 20 & " ns"
 #If (0) Then
                     btnPulseStartMin.Text = "Beam Min Start  " & (Math.Truncate(get_ref_data(REGISTER_PULSE_SYNC_GRID_PULSE_DELAY_HIGH_ENERGY_C_D + offset) / 256) * 20) & "ns"
                     btnPulseStart1_3.Text = "Beam 1/3 Start  " & ((get_ref_data(REGISTER_PULSE_SYNC_GRID_PULSE_DELAY_HIGH_ENERGY_C_D + offset) And &HFF) * 20) & "ns"
@@ -777,9 +807,9 @@ Public Class frmMain
                     lblAfcPreBsample.Text = blank_string
                     lblAfcManualPosition.Text = blank_string
 
-                    btnAfcHomePosSetDose1.Text = "Home Pos Set  " & blank_string
-                    btnAfcCargoCtrlVSet.Text = "Cargo Ctrl V Set  " & blank_string & " V"
-                    btnAfcHomePosSetDose0.Text = "Cab Ctrl V Set  " & blank_string & " V"
+                    btnAfcHomePosSetDose0.Text = "HE Home Pos Set  " & blank_string
+                    btnAfcHomePosSetDose1.Text = "LE Home Pos Set  " & blank_string
+                    btnAfcCargoCtrlVSet.Text = "AFT Ctrl V Set  " & blank_string & " V"
                     btnAfcManualMode.Text = "Manual Mode"
                     btnAfcManualPosition.Visible = False
 
@@ -812,9 +842,9 @@ Public Class frmMain
                         End If
                     Next
 
-                    btnAfcHomePosSetDose1.Text = "Home Pos Set  " & get_ref_data(REGISTER_AFC_HOME_POSITION_DOSE_0)
-                    btnAfcCargoCtrlVSet.Text = "Cargo Ctrl V Set  " & Format(get_ref_data(REGISTER_AFC_AFT_CONTROL_VOLTAGE_DOSE_ALL) / 1000, "0.000") & " V"
-                    btnAfcHomePosSetDose0.Text = "Cab Ctrl V Set  " & Format(get_ref_data(REGISTER_AFC_AFT_CONTROL_VOLTAGE_DOSE_ALL) / 1000, "0.000") & " V"
+                    btnAfcHomePosSetDose0.Text = "HE Home Pos Set  " & get_ref_data(REGISTER_AFC_HOME_POSITION_DOSE_0)
+                    btnAfcHomePosSetDose1.Text = "LE Home Pos Set  " & get_ref_data(REGISTER_AFC_HOME_POSITION_DOSE_1)
+                    btnAfcCargoCtrlVSet.Text = "AFT Ctrl V Set  " & Format(get_ref_data(REGISTER_AFC_AFT_CONTROL_VOLTAGE_DOSE_ALL) / 1000, "0.000") & " V"
                     '     btnAfcManualPosition.Text = "Manual Pos  " & ServerSettings.ETMEthernetBoardLoggingData(MODBUS_COMMANDS.MODBUS_WR_AFC).log_data(2)
 
                     '    Dim control_bits As UInt16 = ServerSettings.ETMEthernetBoardLoggingData(board_index).control_notice_bits
@@ -1122,6 +1152,8 @@ Public Class frmMain
                             bData_dumped = True
                         End If
                     End If
+                Case &H70
+                    ECBState = "X-Ray Time Exceeded"
                 Case &H80
                     ECBState = IIf(access_level > 0, "Fault Hold", "Fault")
                     state_label_color = Color.Red
@@ -1143,6 +1175,8 @@ Public Class frmMain
                 Case &HC0
                     ECBState = IIf(access_level > 0, "Standby Fault", "Fault")
                     state_label_color = Color.Red
+                Case &HD1
+                    ECBState = "Power Cycle Test"
                 Case Else
                     ECBState = "Unknown State"
                     state_label_color = Color.Red
@@ -2555,7 +2589,7 @@ Public Class frmMain
         ServerSettings.put_modbus_commands(REGISTER_CMD_ECB_RESET_FAULTS, 0, 0, 0)
     End Sub
 
-    Private Sub btnChangeSettingMode_Click(sender As Object, e As EventArgs) Handles btnChangeSettingMode.Click
+    Private Sub btnChangeSettingMode_Click(sender As Object, e As EventArgs)
         show_cargo_settings = Not show_cargo_settings
     End Sub
 
@@ -2693,7 +2727,7 @@ Public Class frmMain
 
     Private Sub btnAfcCargoCtrlVSet_Click(sender As Object, e As EventArgs) Handles btnAfcCargoCtrlVSet.Click
         Dim input_data As Double
-        Dim data_valid = get_set_data("Set Control Voltage for Cargo Mode", "AFC", 1, 10, "V", input_data)
+        Dim data_valid = get_set_data("Set AFT Control Voltage", "AFC", 1, 10, "V", input_data)
 
         If data_valid Then
             Dim program_word As UInt16 = input_data * 1000
@@ -3303,21 +3337,32 @@ Public Class frmMain
         set_commands(SET_CMDS.SET_PULSE_SYNC_AFC_AND_SPARE_PULSE_DELAY_LOW_ENERGY) = New SET_COMMAND_STRUCTURE(REGISTER_PULSE_SYNC_AFC_AND_SPARE_PULSE_DELAY_LOW_ENERGY, 65535, 0)
 
 #End If
+        set_commands(SET_CMDS.SET_PULSE_SYNC_GRID_START_MAX_DOSE_0) = New SET_COMMAND_STRUCTURE(REGISTER_PULSE_SYNC_GRID_START_MAX_DOSE_0, 255, 0)
+        set_commands(SET_CMDS.SET_PULSE_SYNC_GRID_START_MAX_DOSE_1) = New SET_COMMAND_STRUCTURE(REGISTER_PULSE_SYNC_GRID_START_MAX_DOSE_1, 255, 0)
+        set_commands(SET_CMDS.SET_PULSE_SYNC_GRID_STOP_MAX_DOSE_0) = New SET_COMMAND_STRUCTURE(REGISTER_PULSE_SYNC_GRID_STOP_MAX_DOSE_0, 255, 0)
+        set_commands(SET_CMDS.SET_PULSE_SYNC_GRID_STOP_MAX_DOSE_1) = New SET_COMMAND_STRUCTURE(REGISTER_PULSE_SYNC_GRID_STOP_MAX_DOSE_1, 255, 0)
 
+        set_commands(SET_CMDS.SET_PULSE_SYNC_AFC_TRIGGER_DOSE_0) = New SET_COMMAND_STRUCTURE(REGISTER_PULSE_SYNC_AFC_TRIGGER_DOSE_0, 255, 0)
+        set_commands(SET_CMDS.SET_PULSE_SYNC_AFC_TRIGGER_DOSE_1) = New SET_COMMAND_STRUCTURE(REGISTER_PULSE_SYNC_AFC_TRIGGER_DOSE_1, 255, 0)
 
-        set_commands(SET_CMDS.SET_HIGH_ENERGY_SET_POINT) = New SET_COMMAND_STRUCTURE(REGISTER_HVPS_SET_POINT_DOSE_0, 17000, 6000)
-        set_commands(SET_CMDS.SET_LOW_ENERGY_SET_POINT) = New SET_COMMAND_STRUCTURE(REGISTER_HVPS_SET_POINT_DOSE_1, 17000, 6000)
+        set_commands(SET_CMDS.SET_PULSE_SYNC_HVPS_TRIGGER_START_DOSE_ALL) = New SET_COMMAND_STRUCTURE(REGISTER_PULSE_SYNC_HVPS_TRIGGER_START_DOSE_ALL, 255, 0)
+        set_commands(SET_CMDS.SET_PULSE_SYNC_PFN_TRIGGER_DOSE_ALL) = New SET_COMMAND_STRUCTURE(REGISTER_PULSE_SYNC_PFN_TRIGGER_DOSE_ALL, 255, 0)
+        set_commands(SET_CMDS.SET_PULSE_SYNC_MAGNETRON_AND_TARGET_CURRENT_TRIGGER_START_DOSE_ALL) = New SET_COMMAND_STRUCTURE(REGISTER_PULSE_SYNC_MAGNETRON_AND_TARGET_CURRENT_TRIGGER_START_DOSE_ALL, 255, 0)
 
-        set_commands(SET_CMDS.SET_HOME_POSITION) = New SET_COMMAND_STRUCTURE(REGISTER_AFC_HOME_POSITION_DOSE_0, 51200, 6400)
-        set_commands(SET_CMDS.SET_AFC_AFT_CONTROL_VOLTAGE_HIGH_ENERGY) = New SET_COMMAND_STRUCTURE(REGISTER_AFC_AFT_CONTROL_VOLTAGE_DOSE_ALL, 10000, 1000)
+        set_commands(SET_CMDS.SET_HVPS_SET_POINT_DOSE_0) = New SET_COMMAND_STRUCTURE(REGISTER_HVPS_SET_POINT_DOSE_0, 17000, 6000)
+        set_commands(SET_CMDS.SET_HVPS_SET_POINT_DOSE_1) = New SET_COMMAND_STRUCTURE(REGISTER_HVPS_SET_POINT_DOSE_1, 17000, 6000)
+
+        set_commands(SET_CMDS.SET_AFC_HOME_POSITION_DOSE_0) = New SET_COMMAND_STRUCTURE(REGISTER_AFC_HOME_POSITION_DOSE_0, 51200, 6400)
+        set_commands(SET_CMDS.SET_AFC_HOME_POSITION_DOSE_1) = New SET_COMMAND_STRUCTURE(REGISTER_AFC_HOME_POSITION_DOSE_1, 51200, 6400)
+        set_commands(SET_CMDS.SET_AFC_AFT_CONTROL_VOLTAGE) = New SET_COMMAND_STRUCTURE(REGISTER_AFC_AFT_CONTROL_VOLTAGE_DOSE_ALL, 10000, 1000)
         'set_commands(SET_CMDS.SET_AFC_AFT_CONTROL_VOLTAGE_LOW_ENERGY) = New SET_COMMAND_STRUCTURE(REGISTER_AFC_AFT_CONTROL_VOLTAGE_LOW_ENERGY, 10000, 1000)
         set_commands(SET_CMDS.SET_CMD_AFC_SELECT_AFC_MODE) = New SET_COMMAND_STRUCTURE(REGISTER_CMD_AFC_SELECT_AFC_MODE, 1, 0)
         set_commands(SET_CMDS.SET_CMD_AFC_SELECT_MANUAL_MODE) = New SET_COMMAND_STRUCTURE(REGISTER_CMD_AFC_SELECT_MANUAL_MODE, 1, 0)
         set_commands(SET_CMDS.SET_CMD_AFC_MANUAL_TARGET_POSITION) = New SET_COMMAND_STRUCTURE(REGISTER_CMD_AFC_MANUAL_TARGET_POSITION, 64000, 0)
 
-        set_commands(SET_CMDS.SET_ELECTROMAGNET_CURRENT_HIGH_ENERGY) = New SET_COMMAND_STRUCTURE(REGISTER_ELECTROMAGNET_CURRENT_DOSE_0, 21000, 8000)
-        set_commands(SET_CMDS.SET_ELECTROMAGNET_CURRENT_LOW_ENERGY) = New SET_COMMAND_STRUCTURE(REGISTER_ELECTROMAGNET_CURRENT_DOSE_1, 21000, 8000)
-        set_commands(SET_CMDS.SET_HEATER_CURRENT_AT_STANDBY) = New SET_COMMAND_STRUCTURE(REGISTER_MAGNETRON_HEATER_CURRENT_DOSE_ALL, 10000, 0)
+        set_commands(SET_CMDS.SET_ELECTROMAGNET_CURRENT_DOSE_0) = New SET_COMMAND_STRUCTURE(REGISTER_ELECTROMAGNET_CURRENT_DOSE_0, 21000, 8000)
+        set_commands(SET_CMDS.SET_ELECTROMAGNET_CURRENT_DOSE_1) = New SET_COMMAND_STRUCTURE(REGISTER_ELECTROMAGNET_CURRENT_DOSE_1, 21000, 8000)
+        set_commands(SET_CMDS.SET_MAGNETRON_HEATER_CURRENT_DOSE_ALL) = New SET_COMMAND_STRUCTURE(REGISTER_MAGNETRON_HEATER_CURRENT_DOSE_ALL, 10000, 0)
 
     End Sub
 
@@ -3382,7 +3427,7 @@ Public Class frmMain
 
     Private Sub btnAfcHomePosSetDose1_Click(sender As Object, e As EventArgs) Handles btnAfcHomePosSetDose1.Click
         Dim input_data As Double
-        Dim data_valid = get_set_data("Set Home Position", "AFC", 6400, 51200, "", input_data)
+        Dim data_valid = get_set_data("Set Home Position for Low Energy Mode", "AFC", 6400, 51200, "", input_data)
 
         If data_valid Then
             Dim program_word As UInt16 = input_data
@@ -3392,7 +3437,7 @@ Public Class frmMain
 
     Private Sub btnAfcHomePosSetDose0_Click(sender As Object, e As EventArgs) Handles btnAfcHomePosSetDose0.Click
         Dim input_data As Double
-        Dim data_valid = get_set_data("Set Home Position", "AFC", 6400, 51200, "", input_data)
+        Dim data_valid = get_set_data("Set Home Position for High Energy Mode", "AFC", 6400, 51200, "", input_data)
 
         If data_valid Then
             Dim program_word As UInt16 = input_data
@@ -3471,5 +3516,139 @@ Public Class frmMain
             Dim program_word As UInt16 = input_data
             ServerSettings.put_modbus_commands(REGISTER_PULSE_SYNC_AFC_TRIGGER_DOSE_1, program_word, 0, 0)
         End If
+    End Sub
+
+    Private Sub btnPfnDelay_Click(sender As Object, e As EventArgs) Handles btnPfnDelay.Click
+        Dim input_data As Double
+        Dim data_valid As Boolean
+        data_valid = get_set_data("Set PFN Delay", "Pulse Sync", 0, 255 * 20, "ns", input_data)
+
+        If data_valid Then
+            input_data = input_data / 20
+            Dim program_word As UInt16 = input_data
+            ServerSettings.put_modbus_commands(REGISTER_PULSE_SYNC_PFN_TRIGGER_DOSE_ALL, program_word, 0, 0)
+        End If
+    End Sub
+
+    Private Sub btnPulseSampleDelay_Click(sender As Object, e As EventArgs) Handles btnPulseSampleDelay.Click
+        Dim input_data As Double
+        Dim data_valid As Boolean
+        data_valid = get_set_data("Set MagI Sample Delay", "Pulse Sync", 0, 255 * 20, "ns", input_data)
+
+        If data_valid Then
+            input_data = input_data / 20
+            Dim program_word As UInt16 = input_data
+            ServerSettings.put_modbus_commands(REGISTER_PULSE_SYNC_MAGNETRON_AND_TARGET_CURRENT_TRIGGER_START_DOSE_ALL, program_word, 0, 0)
+        End If
+    End Sub
+
+    Private Sub TimerWatchdog_Tick(sender As Object, e As EventArgs) Handles TimerWatchdog.Tick
+        SendAndValidateWatchdog()
+    End Sub
+    Dim SerialCommandTransmitBuffer(9) As Byte
+    Dim SerialCommandReceiveBuffer(9) As Byte
+
+    Public Function SendAndValidateWatchdog() As Boolean
+        Dim valid_return As Boolean = False
+        Dim CheckSum As UInt16 = 0
+
+
+        SerialCommandTransmitBuffer(0) = &HF1
+        SerialCommandTransmitBuffer(1) = &HF2
+        SerialCommandTransmitBuffer(2) = &HF3
+        SerialCommandTransmitBuffer(3) = 0
+        SerialCommandTransmitBuffer(4) = 0
+        SerialCommandTransmitBuffer(5) = &HF4
+        SerialCommandTransmitBuffer(6) = &H1E
+        SerialCommandTransmitBuffer(7) = &H37
+
+        Try
+            SerialPortETM.Write(SerialCommandTransmitBuffer, 0, 8)
+        Catch ex As Exception
+            LabelWatchDogResponse.Text = "WD ERROR"
+            Return False
+        End Try
+
+        Try
+            SerialCommandReceiveBuffer(0) = SerialPortETM.ReadByte
+            SerialCommandReceiveBuffer(1) = SerialPortETM.ReadByte
+            SerialCommandReceiveBuffer(2) = SerialPortETM.ReadByte
+            SerialCommandReceiveBuffer(3) = SerialPortETM.ReadByte
+            SerialCommandReceiveBuffer(4) = SerialPortETM.ReadByte
+            SerialCommandReceiveBuffer(5) = SerialPortETM.ReadByte
+            SerialCommandReceiveBuffer(6) = SerialPortETM.ReadByte
+            SerialCommandReceiveBuffer(7) = SerialPortETM.ReadByte
+            LabelWatchDogResponse.Text = "WD Recieved"
+
+        Catch ex As Exception
+            LabelWatchDogResponse.Text = "WD ERROR"
+            Return False
+        End Try
+
+        LabelWatchDogResponse.Text = SerialCommandReceiveBuffer(4) + SerialCommandReceiveBuffer(3) * 256
+
+#If (0) Then
+         Try
+
+            If SerialCommandReceiveBuffer(0) = &HF1 Then
+                If SerialCommandReceiveBuffer(1) = &HF2 Then
+                    If SerialCommandReceiveBuffer(2) = &HF3 Then
+                        If CheckCRC() = True Then
+                            valid_command = True
+                            LabelComMsg.Text = "Message Sent/Received"
+                            'A valid return was recieved.  Check what the responce was
+                            If SerialCommandReceiveBuffer(3) <> SerialCommandTransmitBuffer(3) Then
+                                'The pic was not able to process the command
+                                If SerialCommandReceiveBuffer(3) = &H1 Then
+                                    LabelComMsg.Text = "ETM Controller Responds - Unknown Command"
+                                ElseIf SerialCommandReceiveBuffer(3) = &H22 Then
+                                    LabelComMsg.Text = "ETM Controller Responds - Program Value out of Valid Range"
+                                ElseIf SerialCommandReceiveBuffer(3) = &H23 Then
+                                    LabelComMsg.Text = "ETM Controller Responds - EEPROM ERROR - Unable to set value"
+                                Else
+                                    LabelComMsg.Text = "ETM Controller Responce Error - " & SerialCommandReceiveBuffer(3)
+                                End If
+                            End If
+                        End If
+                    End If
+                End If
+            End If
+            If valid_command <> True Then
+                LabelComMsg.Text = "Serial Port return data was not valid"
+                SerialPortETM.Close()
+            End If
+        Catch ex As Exception
+            LabelComMsg.Text = "Error processing Serial Port data"
+            ComError = True
+            Return 0
+        End Try
+        ReturnData = SerialCommandReceiveBuffer(4) * 256 + SerialCommandReceiveBuffer(5)
+#End If
+
+
+
+        Return True
+    End Function
+
+    Private Sub ComboBoxComPorts_SelectedIndexChanged(sender As Object, e As EventArgs) Handles ComboBoxComPorts.SelectedIndexChanged
+        OpenWatchDogSerialPort()
+    End Sub
+    Private Sub OpenWatchDogSerialPort()
+        Try
+            If SerialPortETM.IsOpen Then
+                SerialPortETM.Close()
+            End If
+        Catch ex As Exception
+
+        End Try
+
+        Try
+            SerialPortETM.PortName = ComboBoxComPorts.Text
+            SerialPortETM.ReadTimeout = 10
+            SerialPortETM.BaudRate = 113000
+            SerialPortETM.Open()
+        Catch ex As Exception
+            MsgBox("Serial Port Failed to Open")
+        End Try
     End Sub
 End Class
