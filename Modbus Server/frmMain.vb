@@ -168,7 +168,6 @@ Public Class frmMain
 
     Public access_level As Byte  ' 0: operator, 1: service, 2: developer mode
     Dim pwScreen As frmPassword
-    Private show_cargo_settings As Boolean = True  ' for pulse sync screen
 
     Public pulse_log_enabled As Boolean
     Dim blank_string As String = "----"
@@ -464,13 +463,13 @@ Public Class frmMain
 
                     btnGdEkset.Text = String.Format("{0,-19}", "Ek Set") & blank_string & " kV"
                     btnGdIfSet.Text = String.Format("{0,-22}", "If Set") & blank_string & " A"
-                    btnGdEgsetCargo.Text = String.Format("{0,-15}", "Cargo Eg Set") & blank_string & " V"
-                    btnGdEgsetCab.Text = String.Format("{0,-17}", "Cab Eg Set") & blank_string & " V"
+                    btnGdEgsetHE.Text = String.Format("{0,-15}", "HE Eg Set") & blank_string & " V"
+                    btnGdEgsetLE.Text = String.Format("{0,-17}", "LE Eg Set") & blank_string & " V"
 
                     btnGdEkset.Enabled = False
                     btnGdIfSet.Enabled = False
-                    btnGdEgsetCargo.Enabled = False
-                    btnGdEgsetCab.Enabled = False
+                    btnGdEgsetHE.Enabled = False
+                    btnGdEgsetLE.Enabled = False
 
                     ledGdFPGArev.FillColor = Color.Red
                     ledGdHVmon.FillColor = Color.Red
@@ -497,13 +496,13 @@ Public Class frmMain
 
                     btnGdEkset.Text = String.Format("{0,-19}", "Ek Set") & Format(get_ref_data(REGISTER_GUN_DRIVER_CATHODE_VOLTAGE_DOSE_0) * (-0.001), "0.00 kV")
                     btnGdIfSet.Text = String.Format("{0,-22}", "If Set") & Format(get_ref_data(REGISTER_GUN_DRIVER_HEATER_VOLTAGE_DOSE_ALL) * (0.001), "0.00 A")
-                    btnGdEgsetCargo.Text = String.Format("{0,-15}", "Cargo Eg Set") & Format(get_ref_data(REGISTER_GUN_DRIVER_PULSE_TOP_VOLTAGE_DOSE_0) * 0.01 - 80, "0.0 V")
-                    btnGdEgsetCab.Text = String.Format("{0,-17}", "Cab Eg Set") & Format(get_ref_data(REGISTER_GUN_DRIVER_PULSE_TOP_VOLTAGE_DOSE_1) * 0.01 - 80, "0.0 V")
+                    btnGdEgsetHE.Text = String.Format("{0,-15}", "HE Eg Set") & Format(get_ref_data(REGISTER_GUN_DRIVER_PULSE_TOP_VOLTAGE_DOSE_0) * 0.01 - 80, "0.0 V")
+                    btnGdEgsetLE.Text = String.Format("{0,-17}", "LE Eg Set") & Format(get_ref_data(REGISTER_GUN_DRIVER_PULSE_TOP_VOLTAGE_DOSE_1) * 0.01 - 80, "0.0 V")
 
                     btnGdEkset.Enabled = IIf(access_level > 1, True, False)
                     btnGdIfSet.Enabled = IIf(access_level > 1, True, False)
-                    btnGdEgsetCargo.Enabled = IIf(access_level > 0, True, False)
-                    btnGdEgsetCab.Enabled = IIf(access_level > 0, True, False)
+                    btnGdEgsetHE.Enabled = IIf(access_level > 0, True, False)
+                    btnGdEgsetLE.Enabled = IIf(access_level > 0, True, False)
 
 
                     Dim fault_bits As UInt16 = ServerSettings.ETMEthernetBoardLoggingData(MODBUS_COMMANDS.MODBUS_WR_GUN_DRIVER).fault_bits
@@ -592,16 +591,6 @@ Public Class frmMain
                     ledWSF6RelayClosed.FillColor = IIf(logged_bits And &H1, Color.Black, Color.Transparent)
                 End If
             Case 4 ' pulse sync
-#If False Then
-                Dim offset As Byte
-                If (show_cargo_settings) Then
-                    lblModeSettings.Text = "Cargo Mode Settings"
-                    offset = 0
-                Else
-                    lblModeSettings.Text = "Cab Mode Settings"
-                    offset = 8
-                End If
-#End If
                 If (bBlank_disp) Then
                     btnGunDrvTrigStartDose0.Text = "HE Start  " & blank_string & " ns"
                     btnGunDrvTrigStopDose0.Text = "HE Stop  " & blank_string & " ns"
@@ -717,10 +706,10 @@ Public Class frmMain
                 If (bBlank_disp) Then
                     lblHVprePulseVolt.Text = blank_string
                     lblHVcurrent.Text = blank_string
-                    btnHVsetCargo.Text = "Cargo V Set  " & blank_string & " kV"
-                    btnHVsetCab.Text = "Cab V Set  " & blank_string & " kV"
-                    btnHVsetCargo.Enabled = False
-                    btnHVsetCab.Enabled = False
+                    btnHVsetHE.Text = "HE V Set  " & blank_string & " kV"
+                    btnHVsetLE.Text = "LE V Set  " & blank_string & " kV"
+                    btnHVsetHE.Enabled = False
+                    btnHVsetLE.Enabled = False
 
                     ledHVCanFault.FillColor = Color.Red
 
@@ -737,10 +726,10 @@ Public Class frmMain
                     lblHVprePulseVolt.Text = Format(ServerSettings.ETMEthernetBoardLoggingData(MODBUS_COMMANDS.MODBUS_WR_HVLAMBDA).log_data(0) / 1000, "0.000")
                     lblHVcurrent.Text = ServerSettings.ETMEthernetBoardLoggingData(MODBUS_COMMANDS.MODBUS_WR_HVLAMBDA).log_data(5) / 1000
 
-                    btnHVsetCargo.Text = "Cargo V Set  " & Format(get_ref_data(REGISTER_HVPS_SET_POINT_DOSE_0) / 1000, "0.000") & " kV"
-                    btnHVsetCab.Text = "Cab V Set  " & Format(get_ref_data(REGISTER_HVPS_SET_POINT_DOSE_1) / 1000, "0.000") & " kV"
-                    btnHVsetCargo.Enabled = access_level > 0
-                    btnHVsetCab.Enabled = access_level > 0
+                    btnHVsetHE.Text = "HE V Set  " & Format(get_ref_data(REGISTER_HVPS_SET_POINT_DOSE_0) / 1000, "0.000") & " kV"
+                    btnHVsetLE.Text = "LE V Set  " & Format(get_ref_data(REGISTER_HVPS_SET_POINT_DOSE_1) / 1000, "0.000") & " kV"
+                    btnHVsetHE.Enabled = access_level > 0
+                    btnHVsetLE.Enabled = access_level > 0
 
                     '    Dim control_bits As UInt16 = ServerSettings.ETMEthernetBoardLoggingData(board_index).control_notice_bits
                     Dim fault_bits As UInt16 = ServerSettings.ETMEthernetBoardLoggingData(MODBUS_COMMANDS.MODBUS_WR_HVLAMBDA).fault_bits
@@ -762,8 +751,8 @@ Public Class frmMain
             Case 6 ' Magnetron current
 
                 If (bBlank_disp) Then
-                    lblCurrCargoScan.Text = blank_string
-                    lblCurrCabScan.Text = blank_string
+                    lblCurrHEScan.Text = blank_string
+                    lblCurrLEScan.Text = blank_string
                     lblCurrPulsesPwrOn.Text = blank_string
                     lblCurrArcsPwrOn.Text = blank_string
                     lblCurrPulsesTotal.Text = blank_string
@@ -777,8 +766,8 @@ Public Class frmMain
                     ledCurrFalseTrig.FillColor = Color.Red
                     ledCurrLowPulseCurr.FillColor = Color.Red
                 Else
-                    lblCurrCargoScan.Text = Format(ServerSettings.ETMEthernetBoardLoggingData(MODBUS_COMMANDS.MODBUS_WR_MAGNETRON_CURRENT).log_data(0) / 100, "0.00")
-                    lblCurrCabScan.Text = Format(ServerSettings.ETMEthernetBoardLoggingData(MODBUS_COMMANDS.MODBUS_WR_MAGNETRON_CURRENT).log_data(2) / 100, "0.00")
+                    lblCurrHEScan.Text = Format(ServerSettings.ETMEthernetBoardLoggingData(MODBUS_COMMANDS.MODBUS_WR_MAGNETRON_CURRENT).log_data(0) / 100, "0.00")
+                    lblCurrLEScan.Text = Format(ServerSettings.ETMEthernetBoardLoggingData(MODBUS_COMMANDS.MODBUS_WR_MAGNETRON_CURRENT).log_data(2) / 100, "0.00")
                     lblCurrPulsesPwrOn.Text = Format(ServerSettings.ETMEthernetBoardLoggingData(MODBUS_COMMANDS.MODBUS_WR_MAGNETRON_CURRENT).log_data(5) * 2 ^ 16 + ServerSettings.ETMEthernetBoardLoggingData(MODBUS_COMMANDS.MODBUS_WR_MAGNETRON_CURRENT).log_data(4), "###,###,###,##0")
                     lblCurrArcsPwrOn.Text = Format(ServerSettings.ETMEthernetBoardLoggingData(MODBUS_COMMANDS.MODBUS_WR_MAGNETRON_CURRENT).log_data(12), "###,###,###,##0") ' need info #12 only?
                     lblCurrPulsesTotal.Text = Format(ServerSettings.ETMEthernetBoardLoggingData(MODBUS_COMMANDS.MODBUS_WR_MAGNETRON_CURRENT).log_data(11) * 2 ^ 48 + ServerSettings.ETMEthernetBoardLoggingData(MODBUS_COMMANDS.MODBUS_WR_MAGNETRON_CURRENT).log_data(10) * 2 ^ 32 + ServerSettings.ETMEthernetBoardLoggingData(MODBUS_COMMANDS.MODBUS_WR_MAGNETRON_CURRENT).log_data(9) * 2 ^ 16 + ServerSettings.ETMEthernetBoardLoggingData(MODBUS_COMMANDS.MODBUS_WR_MAGNETRON_CURRENT).log_data(8), "###,###,###,##0")
@@ -809,7 +798,7 @@ Public Class frmMain
 
                     btnAfcHomePosSetDose0.Text = "HE Home Pos Set  " & blank_string
                     btnAfcHomePosSetDose1.Text = "LE Home Pos Set  " & blank_string
-                    btnAfcCargoCtrlVSet.Text = "AFT Ctrl V Set  " & blank_string & " V"
+                    btnAfcHECtrlVSet.Text = "AFT Ctrl V Set  " & blank_string & " V"
                     btnAfcManualMode.Text = "Manual Mode"
                     btnAfcManualPosition.Visible = False
 
@@ -844,7 +833,7 @@ Public Class frmMain
 
                     btnAfcHomePosSetDose0.Text = "HE Home Pos Set  " & get_ref_data(REGISTER_AFC_HOME_POSITION_DOSE_0)
                     btnAfcHomePosSetDose1.Text = "LE Home Pos Set  " & get_ref_data(REGISTER_AFC_HOME_POSITION_DOSE_1)
-                    btnAfcCargoCtrlVSet.Text = "AFT Ctrl V Set  " & Format(get_ref_data(REGISTER_AFC_AFT_CONTROL_VOLTAGE_DOSE_ALL) / 1000, "0.000") & " V"
+                    btnAfcHECtrlVSet.Text = "AFT Ctrl V Set  " & Format(get_ref_data(REGISTER_AFC_AFT_CONTROL_VOLTAGE_DOSE_ALL) / 1000, "0.000") & " V"
                     '     btnAfcManualPosition.Text = "Manual Pos  " & ServerSettings.ETMEthernetBoardLoggingData(MODBUS_COMMANDS.MODBUS_WR_AFC).log_data(2)
 
                     '    Dim control_bits As UInt16 = ServerSettings.ETMEthernetBoardLoggingData(board_index).control_notice_bits
@@ -865,11 +854,11 @@ Public Class frmMain
                     lblMagEf.Text = blank_string
                     lblMagIf.Text = blank_string
 
-                    btnMagCargoIset.Enabled = False
-                    btnMagCabIset.Enabled = False
+                    btnMagHEIset.Enabled = False
+                    btnMagLEIset.Enabled = False
                     btnMagIfSet.Enabled = False
-                    btnMagCargoIset.Text = "Cargo Mag I Set  " & blank_string & " A"
-                    btnMagCabIset.Text = "Cab Mag I Set  " & blank_string & " A"
+                    btnMagHEIset.Text = "HE Mag I Set  " & blank_string & " A"
+                    btnMagLEIset.Text = "LE Mag I Set  " & blank_string & " A"
                     btnMagIfSet.Text = "Heater I Set  " & blank_string & " A"
 
                     ledMagIfOCAbs.FillColor = Color.Red
@@ -895,11 +884,11 @@ Public Class frmMain
                     lblMagEf.Text = Format(ServerSettings.ETMEthernetBoardLoggingData(MODBUS_COMMANDS.MODBUS_WR_HTR_MAGNET).log_data(2) / 1000, "0.00")
                     lblMagIf.Text = Format(ServerSettings.ETMEthernetBoardLoggingData(MODBUS_COMMANDS.MODBUS_WR_HTR_MAGNET).log_data(3) / 1000, "0.00")
 
-                    btnMagCargoIset.Enabled = access_level > 0
-                    btnMagCabIset.Enabled = access_level > 0
+                    btnMagHEIset.Enabled = access_level > 0
+                    btnMagLEIset.Enabled = access_level > 0
                     btnMagIfSet.Enabled = access_level > 0
-                    btnMagCargoIset.Text = "Cargo Mag I Set  " & Format(get_ref_data(REGISTER_ELECTROMAGNET_CURRENT_DOSE_0) / 1000, "0.00") & " A"
-                    btnMagCabIset.Text = "Cab Mag I Set  " & Format(get_ref_data(REGISTER_ELECTROMAGNET_CURRENT_DOSE_1) / 1000, "0.00") & " A"
+                    btnMagHEIset.Text = "HE Mag I Set  " & Format(get_ref_data(REGISTER_ELECTROMAGNET_CURRENT_DOSE_0) / 1000, "0.00") & " A"
+                    btnMagLEIset.Text = "LE Mag I Set  " & Format(get_ref_data(REGISTER_ELECTROMAGNET_CURRENT_DOSE_1) / 1000, "0.00") & " A"
                     btnMagIfSet.Text = "Heater I Set  " & Format(get_ref_data(REGISTER_MAGNETRON_HEATER_CURRENT_DOSE_ALL) / 1000, "0.00") & " A"
 
                     '    Dim control_bits As UInt16 = ServerSettings.ETMEthernetBoardLoggingData(board_index).control_notice_bits
@@ -1094,7 +1083,6 @@ Public Class frmMain
 
             lblScanMode.Text = "Mode: " & blank_string & blank_string
             btnResetFault.Visible = False
-            lblDoseRate.Text = blank_string
             lblPulseFreq.Text = blank_string
             lblDoseCommand.Text = blank_string
             lblBeamDuration.Text = blank_string
@@ -1196,7 +1184,7 @@ Public Class frmMain
             Dim high_mode As Boolean = (logged_bits And &H8) > 0
 
             If (low_mode Xor high_mode) Then
-                ECBMode = IIf(low_mode, "Cab Scan", "Cargo Scan")
+                ECBMode = IIf(low_mode, "Low Energy Scan", "High Energy Scan")
             Else
                 ECBMode = "X-Ray Inhibit"
             End If
@@ -1234,8 +1222,8 @@ Public Class frmMain
             End Try
 #End If
 
-            Dim dose_rate As UInt16 = ServerSettings.ETMEthernetBoardLoggingData(MODBUS_COMMANDS.MODBUS_WR_ETHERNET).log_data(17)
-            lblDoseRate.Text = dose_rate
+            '          Dim dose_rate As UInt16 = ServerSettings.ETMEthernetBoardLoggingData(MODBUS_COMMANDS.MODBUS_WR_ETHERNET).log_data(17)
+            '          lblDoseRate.Text = dose_rate
             Dim dose_command As UInt16 = ServerSettings.ETMEthernetBoardLoggingData(MODBUS_COMMANDS.MODBUS_WR_PULSE_SYNC).log_data(7)
             lblDoseCommand.Text = Math.Truncate(dose_command / 256)
             lblBeamDuration.Text = grid_width
@@ -2589,9 +2577,6 @@ Public Class frmMain
         ServerSettings.put_modbus_commands(REGISTER_CMD_ECB_RESET_FAULTS, 0, 0, 0)
     End Sub
 
-    Private Sub btnChangeSettingMode_Click(sender As Object, e As EventArgs)
-        show_cargo_settings = Not show_cargo_settings
-    End Sub
 
     Private Sub btnGdEkset_Click(sender As Object, e As EventArgs) Handles btnGdEkset.Click
         Dim input_data As Double
@@ -2633,9 +2618,9 @@ Public Class frmMain
         End Try
 
     End Function
-    Private Sub btnGdEgsetCargo_Click(sender As Object, e As EventArgs) Handles btnGdEgsetCargo.Click
+    Private Sub btnGdEgsetHE_Click(sender As Object, e As EventArgs) Handles btnGdEgsetHE.Click
         Dim input_data As Double
-        Dim data_valid = get_set_data("Set Eg for Cargo Mode", "Gun Driver", -80, 140, "V", input_data)
+        Dim data_valid = get_set_data("Set Eg for High Energy Mode", "Gun Driver", -80, 250, "V", input_data)
 
         If data_valid Then
             Dim program_word As UInt16 = (input_data + 80) * 100
@@ -2643,9 +2628,9 @@ Public Class frmMain
         End If
     End Sub
 
-    Private Sub btnGdEgsetCab_Click(sender As Object, e As EventArgs) Handles btnGdEgsetCab.Click
+    Private Sub btnGdEgsetLE_Click(sender As Object, e As EventArgs) Handles btnGdEgsetLE.Click
         Dim input_data As Double
-        Dim data_valid = get_set_data("Set Eg for Cab Mode", "Gun Driver", -80, 140, "V", input_data)
+        Dim data_valid = get_set_data("Set Eg for Low Energy Mode", "Gun Driver", -80, 250, "V", input_data)
 
         If data_valid Then
             Dim program_word As UInt16 = (input_data + 80) * 100
@@ -2700,11 +2685,11 @@ Public Class frmMain
 #End If
     End Sub
 
-   
 
-    Private Sub btnHVsetCargo_Click(sender As Object, e As EventArgs) Handles btnHVsetCargo.Click
+
+    Private Sub btnHVsetHE_Click(sender As Object, e As EventArgs) Handles btnHVsetHE.Click
         Dim input_data As Double
-        Dim data_valid = get_set_data("Set Voltage for Cargo Mode", "HV Power Supply", 6, 20, "kV", input_data)
+        Dim data_valid = get_set_data("Set Voltage for High Energy Mode", "HV Power Supply", 6, 22, "kV", input_data)
 
         If data_valid Then
             Dim program_word As UInt16 = input_data * 1000
@@ -2713,9 +2698,9 @@ Public Class frmMain
 
     End Sub
 
-    Private Sub btnHVsetCab_Click(sender As Object, e As EventArgs) Handles btnHVsetCab.Click
+    Private Sub btnHVsetLE_Click(sender As Object, e As EventArgs) Handles btnHVsetLE.Click
         Dim input_data As Double
-        Dim data_valid = get_set_data("Set Voltage for Cab Mode", "HV Power Supply", 6, 20, "kV", input_data)
+        Dim data_valid = get_set_data("Set Voltage for Low Energy Mode", "HV Power Supply", 6, 22, "kV", input_data)
 
         If data_valid Then
             Dim program_word As UInt16 = input_data * 1000
@@ -2725,7 +2710,7 @@ Public Class frmMain
     End Sub
 
 
-    Private Sub btnAfcCargoCtrlVSet_Click(sender As Object, e As EventArgs) Handles btnAfcCargoCtrlVSet.Click
+    Private Sub btnAfcHECtrlVSet_Click(sender As Object, e As EventArgs) Handles btnAfcHECtrlVSet.Click
         Dim input_data As Double
         Dim data_valid = get_set_data("Set AFT Control Voltage", "AFC", 1, 10, "V", input_data)
 
@@ -2757,9 +2742,9 @@ Public Class frmMain
 
     End Sub
 
-    Private Sub btnMagCargoIset_Click(sender As Object, e As EventArgs) Handles btnMagCargoIset.Click
+    Private Sub btnMagHEIset_Click(sender As Object, e As EventArgs) Handles btnMagHEIset.Click
         Dim input_data As Double
-        Dim data_valid = get_set_data("Set Magnet Current for Cargo Mode", "Magnet and Heater", 8, 21, "A", input_data)
+        Dim data_valid = get_set_data("Set Magnet Current for High Energy Mode", "Magnet and Heater", 8, 25, "A", input_data)
 
         If data_valid Then
             Dim program_word As UInt16 = input_data * 1000
@@ -2768,9 +2753,9 @@ Public Class frmMain
 
     End Sub
 
-    Private Sub btnMagCabIset_Click(sender As Object, e As EventArgs) Handles btnMagCabIset.Click
+    Private Sub btnMagLEIset_Click(sender As Object, e As EventArgs) Handles btnMagLEIset.Click
         Dim input_data As Double
-        Dim data_valid = get_set_data("Set Magnet Current for Cab Mode", "Magnet and Heater", 8, 21, "A", input_data)
+        Dim data_valid = get_set_data("Set Magnet Current for Low Energy Mode", "Magnet and Heater", 8, 25, "A", input_data)
 
         If data_valid Then
             Dim program_word As UInt16 = input_data * 1000
@@ -2842,10 +2827,6 @@ Public Class frmMain
         LabelAgileInfo.Visible = False
         LabelFirmwareVersion.Visible = False
 
-        lblDoseRate.Visible = False
-        lblDoseRateTitle.Visible = False
-        lblDoseRateUnit.Visible = False
-
         PanelArcCounts.Visible = False
         BlueRectMagnetron.Height = 180 '168
         PanelMagnetronLeds.Location = New Point(PanelMagnetronLeds.Location.X, 280)
@@ -2889,11 +2870,7 @@ Public Class frmMain
                 Next
 
                 If (access_level > 1) Then
-                    lblDoseRate.Visible = True
-                    lblDoseRateTitle.Visible = True
-                    lblDoseRateUnit.Visible = True
-
-                    panelIonPumpLogger.Visible = True
+                     panelIonPumpLogger.Visible = True
                 End If
             End If
         End If
