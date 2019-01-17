@@ -529,8 +529,11 @@ Public Class frmMain
                 If (bBlank_disp) Then
                     lblCoolMagFlow.Text = blank_string
                     lblCoolLinacFlow.Text = blank_string
+                    lblCoolCabHXFlow.Text = blank_string
+                    lblCoolHVPSFlow.Text = blank_string
                     lblCoolCirFlow.Text = blank_string
                     lblCoolCoolTemp.Text = blank_string
+                    lblCoolLinacTemp.Text = blank_string
                     lblCoolCabTemp.Text = blank_string
                     lblCoolSF6Press.Text = blank_string
 
@@ -557,9 +560,12 @@ Public Class frmMain
                 Else
                     lblCoolMagFlow.Text = Format(ServerSettings.ETMEthernetBoardLoggingData(MODBUS_COMMANDS.MODBUS_WR_COOLING).log_data(0) / 1000, "0.000")
                     lblCoolLinacFlow.Text = Format(ServerSettings.ETMEthernetBoardLoggingData(MODBUS_COMMANDS.MODBUS_WR_COOLING).log_data(1) / 1000, "0.000")
-                    lblCoolCirFlow.Text = Format(ServerSettings.ETMEthernetBoardLoggingData(MODBUS_COMMANDS.MODBUS_WR_COOLING).log_data(2) / 1000, "0.000")
+                    lblCoolCabHXFlow.Text = Format(ServerSettings.ETMEthernetBoardLoggingData(MODBUS_COMMANDS.MODBUS_WR_COOLING).log_data(2) / 1000, "0.000")
+                    lblCoolHVPSFlow.Text = Format(ServerSettings.ETMEthernetBoardLoggingData(MODBUS_COMMANDS.MODBUS_WR_COOLING).log_data(3) / 1000, "0.000")
+                    lblCoolCirFlow.Text = Format(ServerSettings.ETMEthernetBoardLoggingData(MODBUS_COMMANDS.MODBUS_WR_COOLING).log_data(4) / 1000, "0.000")
                     lblCoolCoolTemp.Text = ServerSettings.ETMEthernetBoardLoggingData(MODBUS_COMMANDS.MODBUS_WR_COOLING).log_data(9) / 10 - 272
                     lblCoolCabTemp.Text = ServerSettings.ETMEthernetBoardLoggingData(MODBUS_COMMANDS.MODBUS_WR_COOLING).log_data(10) / 10 - 272
+                    lblCoolLinacTemp.Text = ServerSettings.ETMEthernetBoardLoggingData(MODBUS_COMMANDS.MODBUS_WR_COOLING).log_data(8) / 10 - 272
                     lblCoolSF6Press.Text = Format(ServerSettings.ETMEthernetBoardLoggingData(MODBUS_COMMANDS.MODBUS_WR_COOLING).log_data(11) / 100, "00.00")
 
                     btnCoolNewSF6bottle.Enabled = (access_level > 0)
@@ -790,7 +796,6 @@ Public Class frmMain
 
                 If (bBlank_disp) Then
                     lblAfcHomePosition.Text = blank_string
-                    lblAfcPhaseCtrlV.Text = blank_string
                     lblAfcFilteredError.Text = blank_string
                     lblAfcPreAsample.Text = blank_string
                     lblAfcPreBsample.Text = blank_string
@@ -798,7 +803,6 @@ Public Class frmMain
 
                     btnAfcHomePosSetDose0.Text = "HE Home Pos Set  " & blank_string
                     btnAfcHomePosSetDose1.Text = "LE Home Pos Set  " & blank_string
-                    btnAfcHECtrlVSet.Text = "AFT Ctrl V Set  " & blank_string & " V"
                     btnAfcManualMode.Text = "Manual Mode"
                     btnAfcManualPosition.Visible = False
 
@@ -818,8 +822,7 @@ Public Class frmMain
                         filtered_error = -filtered_error
                     End If
                     lblAfcHomePosition.Text = ServerSettings.ETMEthernetBoardLoggingData(MODBUS_COMMANDS.MODBUS_WR_AFC).log_data(11)
-                    lblAfcPhaseCtrlV.Text = Format(ServerSettings.ETMEthernetBoardLoggingData(MODBUS_COMMANDS.MODBUS_WR_AFC).log_data(8) / 1000, "0.000")
-                    lblAfcFilteredError.Text = filtered_error
+                     lblAfcFilteredError.Text = filtered_error
                     lblAfcPreAsample.Text = ServerSettings.ETMEthernetBoardLoggingData(MODBUS_COMMANDS.MODBUS_WR_AFC).log_data(6)
                     lblAfcPreBsample.Text = ServerSettings.ETMEthernetBoardLoggingData(MODBUS_COMMANDS.MODBUS_WR_AFC).log_data(5)
                     lblAfcManualPosition.Text = get_ref_data(REGISTER_CMD_AFC_MANUAL_TARGET_POSITION)
@@ -833,7 +836,6 @@ Public Class frmMain
 
                     btnAfcHomePosSetDose0.Text = "HE Home Pos Set  " & get_ref_data(REGISTER_AFC_HOME_POSITION_DOSE_0)
                     btnAfcHomePosSetDose1.Text = "LE Home Pos Set  " & get_ref_data(REGISTER_AFC_HOME_POSITION_DOSE_1)
-                    btnAfcHECtrlVSet.Text = "AFT Ctrl V Set  " & Format(get_ref_data(REGISTER_AFC_AFT_CONTROL_VOLTAGE_DOSE_ALL) / 1000, "0.000") & " V"
                     '     btnAfcManualPosition.Text = "Manual Pos  " & ServerSettings.ETMEthernetBoardLoggingData(MODBUS_COMMANDS.MODBUS_WR_AFC).log_data(2)
 
                     '    Dim control_bits As UInt16 = ServerSettings.ETMEthernetBoardLoggingData(board_index).control_notice_bits
@@ -2710,7 +2712,7 @@ Public Class frmMain
     End Sub
 
 
-    Private Sub btnAfcHECtrlVSet_Click(sender As Object, e As EventArgs) Handles btnAfcHECtrlVSet.Click
+    Private Sub btnAfcHECtrlVSet_Click(sender As Object, e As EventArgs)
         Dim input_data As Double
         Dim data_valid = get_set_data("Set AFT Control Voltage", "AFC", 1, 10, "V", input_data)
 
@@ -3295,8 +3297,8 @@ Public Class frmMain
     Sub init_set_commands()
         set_commands(SET_CMDS.SET_GUN_DRIVER_CATHODE_VOLTAGE) = New SET_COMMAND_STRUCTURE(REGISTER_GUN_DRIVER_CATHODE_VOLTAGE_DOSE_0, 20000, 6000)
         set_commands(SET_CMDS.SET_GUN_DRIVER_HEATER_VOLTAGE) = New SET_COMMAND_STRUCTURE(REGISTER_GUN_DRIVER_HEATER_VOLTAGE_DOSE_ALL, 1600, 0)
-        set_commands(SET_CMDS.SET_GUN_DRIVER_HIGH_ENERGY_PULSE_TOP_VOLTAGE) = New SET_COMMAND_STRUCTURE(REGISTER_GUN_DRIVER_PULSE_TOP_VOLTAGE_DOSE_0, 22000, 0)
-        set_commands(SET_CMDS.SET_GUN_DRIVER_LOW_ENERGY_PULSE_TOP_VOLTAGE) = New SET_COMMAND_STRUCTURE(REGISTER_GUN_DRIVER_PULSE_TOP_VOLTAGE_DOSE_1, 22000, 0)
+        set_commands(SET_CMDS.SET_GUN_DRIVER_HIGH_ENERGY_PULSE_TOP_VOLTAGE) = New SET_COMMAND_STRUCTURE(REGISTER_GUN_DRIVER_PULSE_TOP_VOLTAGE_DOSE_0, 33000, 0)
+        set_commands(SET_CMDS.SET_GUN_DRIVER_LOW_ENERGY_PULSE_TOP_VOLTAGE) = New SET_COMMAND_STRUCTURE(REGISTER_GUN_DRIVER_PULSE_TOP_VOLTAGE_DOSE_1, 33000, 0)
 
 #If (0) Then
 
@@ -3326,8 +3328,8 @@ Public Class frmMain
         set_commands(SET_CMDS.SET_PULSE_SYNC_PFN_TRIGGER_DOSE_ALL) = New SET_COMMAND_STRUCTURE(REGISTER_PULSE_SYNC_PFN_TRIGGER_DOSE_ALL, 255, 0)
         set_commands(SET_CMDS.SET_PULSE_SYNC_MAGNETRON_AND_TARGET_CURRENT_TRIGGER_START_DOSE_ALL) = New SET_COMMAND_STRUCTURE(REGISTER_PULSE_SYNC_MAGNETRON_AND_TARGET_CURRENT_TRIGGER_START_DOSE_ALL, 255, 0)
 
-        set_commands(SET_CMDS.SET_HVPS_SET_POINT_DOSE_0) = New SET_COMMAND_STRUCTURE(REGISTER_HVPS_SET_POINT_DOSE_0, 17000, 6000)
-        set_commands(SET_CMDS.SET_HVPS_SET_POINT_DOSE_1) = New SET_COMMAND_STRUCTURE(REGISTER_HVPS_SET_POINT_DOSE_1, 17000, 6000)
+        set_commands(SET_CMDS.SET_HVPS_SET_POINT_DOSE_0) = New SET_COMMAND_STRUCTURE(REGISTER_HVPS_SET_POINT_DOSE_0, 22000, 6000)
+        set_commands(SET_CMDS.SET_HVPS_SET_POINT_DOSE_1) = New SET_COMMAND_STRUCTURE(REGISTER_HVPS_SET_POINT_DOSE_1, 22000, 6000)
 
         set_commands(SET_CMDS.SET_AFC_HOME_POSITION_DOSE_0) = New SET_COMMAND_STRUCTURE(REGISTER_AFC_HOME_POSITION_DOSE_0, 51200, 6400)
         set_commands(SET_CMDS.SET_AFC_HOME_POSITION_DOSE_1) = New SET_COMMAND_STRUCTURE(REGISTER_AFC_HOME_POSITION_DOSE_1, 51200, 6400)
@@ -3337,8 +3339,8 @@ Public Class frmMain
         set_commands(SET_CMDS.SET_CMD_AFC_SELECT_MANUAL_MODE) = New SET_COMMAND_STRUCTURE(REGISTER_CMD_AFC_SELECT_MANUAL_MODE, 1, 0)
         set_commands(SET_CMDS.SET_CMD_AFC_MANUAL_TARGET_POSITION) = New SET_COMMAND_STRUCTURE(REGISTER_CMD_AFC_MANUAL_TARGET_POSITION, 64000, 0)
 
-        set_commands(SET_CMDS.SET_ELECTROMAGNET_CURRENT_DOSE_0) = New SET_COMMAND_STRUCTURE(REGISTER_ELECTROMAGNET_CURRENT_DOSE_0, 21000, 8000)
-        set_commands(SET_CMDS.SET_ELECTROMAGNET_CURRENT_DOSE_1) = New SET_COMMAND_STRUCTURE(REGISTER_ELECTROMAGNET_CURRENT_DOSE_1, 21000, 8000)
+        set_commands(SET_CMDS.SET_ELECTROMAGNET_CURRENT_DOSE_0) = New SET_COMMAND_STRUCTURE(REGISTER_ELECTROMAGNET_CURRENT_DOSE_0, 25000, 8000)
+        set_commands(SET_CMDS.SET_ELECTROMAGNET_CURRENT_DOSE_1) = New SET_COMMAND_STRUCTURE(REGISTER_ELECTROMAGNET_CURRENT_DOSE_1, 25000, 8000)
         set_commands(SET_CMDS.SET_MAGNETRON_HEATER_CURRENT_DOSE_ALL) = New SET_COMMAND_STRUCTURE(REGISTER_MAGNETRON_HEATER_CURRENT_DOSE_ALL, 10000, 0)
 
     End Sub
