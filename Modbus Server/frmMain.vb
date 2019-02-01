@@ -25,105 +25,44 @@ Public Class frmMain
     Public Const ETM_CAN_ADDR_COOLING_INTERFACE_BOARD = 6
     Public Const ETM_CAN_ADDR_HEATER_MAGNET_BOARD = 7
     Public Const ETM_CAN_ADDR_GUN_DRIVER_BOARD = 8
-#If False Then
-    Public Const REGISTER_HEATER_CURRENT_AT_STANDBY As UInt16 = &H0
-    Public Const REGISTER_ELECTROMAGNET_CURRENT_HIGH_ENERGY As UInt16 = &H1
-    Public Const REGISTER_ELECTROMAGNET_CURRENT_LOW_ENERGY As UInt16 = &HC
-    Public Const REGISTER_HOME_POSITION As UInt16 = &H5
-    Public Const REGISTER_AFC_OFFSET As UInt16 = &H9
-    Public Const REGISTER_AFC_AFT_CONTROL_VOLTAGE_HIGH_ENERGY As UInt16 = &HA
-    Public Const REGISTER_AFC_AFT_CONTROL_VOLTAGE_LOW_ENERGY As UInt16 = &HB
-
-    Public Const REGISTER_HIGH_ENERGY_SET_POINT As UInt16 = &H10
-    Public Const REGISTER_LOW_ENERGY_SET_POINT As UInt16 = &H11
-    Public Const REGISTER_ECB_SYSTEM_SERIAL_NUMBER As UInt16 = &H1F
-
-    Public Const REGISTER_GUN_DRIVER_HEATER_VOLTAGE As UInt16 = &H20
-    Public Const REGISTER_GUN_DRIVER_HIGH_ENERGY_PULSE_TOP_VOLTAGE As UInt16 = &H21
-    Public Const REGISTER_GUN_DRIVER_LOW_ENERGY_PULSE_TOP_VOLTAGE As UInt16 = &H22
-    Public Const REGISTER_GUN_DRIVER_CATHODE_VOLTAGE As UInt16 = &H23
-
-    Public Const REGISTER_PULSE_SYNC_GRID_PULSE_DELAY_HIGH_ENERGY_A_B As UInt16 = &H30
-    Public Const REGISTER_PULSE_SYNC_GRID_PULSE_DELAY_HIGH_ENERGY_C_D As UInt16 = &H31
-    Public Const REGISTER_PULSE_SYNC_RF_TRIGGER_AND_THYRATRON_PULSE_DELAY_HIGH_ENERGY As UInt16 = &H32
-    Public Const REGISTER_PULSE_SYNC_GRID_PULSE_WIDTH_HIGH_ENERGY_A_B As UInt16 = &H34
-    Public Const REGISTER_PULSE_SYNC_GRID_PULSE_WIDTH_HIGH_ENERGY_C_D As UInt16 = &H35
-    Public Const REGISTER_PULSE_SYNC_AFC_AND_SPARE_PULSE_DELAY_HIGH_ENERGY As UInt16 = &H36
-    Public Const REGISTER_PULSE_SYNC_GRID_PULSE_DELAY_LOW_ENERGY_A_B As UInt16 = &H38
-    Public Const REGISTER_PULSE_SYNC_GRID_PULSE_DELAY_LOW_ENERGY_C_D As UInt16 = &H39
-    Public Const REGISTER_PULSE_SYNC_RF_TRIGGER_AND_THYRATRON_PULSE_DELAY_LOW_ENERGY As UInt16 = &H3A
-    Public Const REGISTER_PULSE_SYNC_GRID_PULSE_WIDTH_LOW_ENERGY_A_B As UInt16 = &H3C
-    Public Const REGISTER_PULSE_SYNC_GRID_PULSE_WIDTH_LOW_ENERGY_C_D As UInt16 = &H3D
-    Public Const REGISTER_PULSE_SYNC_AFC_AND_SPARE_PULSE_DELAY_LOW_ENERGY As UInt16 = &H3E
-    Public Const REGISTER_CMD_AFC_SELECT_AFC_MODE As UInt16 = &H5202
-    Public Const REGISTER_CMD_AFC_SELECT_MANUAL_MODE As UInt16 = &H5203
-    Public Const REGISTER_CMD_AFC_MANUAL_TARGET_POSITION As UInt16 = &H5204
-
-    Public Const REGISTER_CMD_COOLANT_INTERFACE_ALLOW_25_MORE_SF6_PULSES As UInt16 = &H6200
-    Public Const REGISTER_CMD_COOLANT_INTERFACE_ALLOW_SF6_PULSES_WHEN_PRESSURE_BELOW_LIMIT As UInt16 = &H6201
-    Public Const REGISTER_CMD_COOLANT_INTERFACE_SET_SF6_PULSES_IN_BOTTLE As UInt16 = &H6202
-
-    Public Const REGISTER_CMD_ECB_RESET_FAULTS As UInt16 = &HE200
-
-    Public Const REGISTER_SYSTEM_SET_TIME As UInt16 = &HE300
-    Public Const REGISTER_SYSTEM_ENABLE_HIGH_SPEED_LOGGING As UInt16 = &HE301
-    Public Const REGISTER_SYSTEM_DISABLE_HIGH_SPEED_LOGGING As UInt16 = &HE302
-    Public Const REGISTER_SYSTEM_ECB_LOAD_FACTORY_SETTINGS_FROM_EEPROM_MIRROR_AND_REBOOT As UInt16 = &HE303
-    ' reserved for future changes
-    Public Const REGISTER_SYSTEM_ECB_MAGNETRON_CONDITIONING As UInt16 = &HE304
 
 
-    Public Const REGISTER_ETM_ECB_RESET_ARC_AND_PULSE_COUNT As UInt16 = &HE400
-    Public Const REGISTER_ETM_ECB_RESET_SECONDS_POWERED_HV_ON_XRAY_ON As UInt16 = &HE401
-    Public Const REGISTER_ETM_ECB_SEND_SLAVE_RELOAD_EEPROM_WITH_DEFAULTS As UInt16 = &HE402
-    Public Const REGISTER_ETM_ECB_LOAD_DEFAULT_SYSTEM_SETTINGS_AND_REBOOT As UInt16 = &HE403
-    Public Const REGISTER_ETM_ECB_SAVE_FACTORY_SETTINGS_TO_EEPROM_MIRROR As UInt16 = &HE404
 
-
-    Public Const REGISTER_DEBUG_TOGGLE_RESET_DEBUG As UInt16 = &HE500
-    Public Const REGISTER_DEBUG_GUN_DRIVER_RESET_FPGA As UInt16 = &HE501
-    Public Const REGISTER_DEBUG_RESET_MCU As UInt16 = &HE502
-    Public Const REGISTER_DEBUG_TEST_PULSE_FAULT As UInt16 = &HE503
-#End If
     Public Const REGISTER_HVPS_SET_POINT_DOSE_0 As UInt16 = &H400
     Public Const REGISTER_ELECTROMAGNET_CURRENT_DOSE_0 As UInt16 = &H401
     Public Const REGISTER_GUN_DRIVER_PULSE_TOP_VOLTAGE_DOSE_0 As UInt16 = &H402
     Public Const REGISTER_GUN_DRIVER_CATHODE_VOLTAGE_DOSE_0 As UInt16 = &H403
-    'Public Const REGISTER_PULSE_SYNC_SPARE_TRIG_DOSE_0 As UInt16 = &H404
+    Public Const REGISTER_PULSE_SYNC_SPARE_TRIG_DOSE_0 As UInt16 = &H404
     Public Const REGISTER_PULSE_SYNC_AFC_TRIGGER_DOSE_0 As UInt16 = &H405
-    'Public Const REGISTER_PULSE_SYNC_GRID_START_MIN_DOSE_0 As UInt16 = &H406
+    Public Const REGISTER_PULSE_SYNC_GRID_START_MIN_DOSE_0 As UInt16 = &H406
     Public Const REGISTER_PULSE_SYNC_GRID_START_MAX_DOSE_0 As UInt16 = &H407
-    ' Public Const REGISTER_PULSE_SYNC_GRID_STOP_MIN_DOSE_0 As UInt16 = &H408
+    Public Const REGISTER_PULSE_SYNC_GRID_STOP_MIN_DOSE_0 As UInt16 = &H408
     Public Const REGISTER_PULSE_SYNC_GRID_STOP_MAX_DOSE_0 As UInt16 = &H409
     Public Const REGISTER_AFC_HOME_POSITION_DOSE_0 As UInt16 = &H40A
-    ' Public Const REGISTER_PULSE_SYNC_PRF_DOSE_0 As UInt16 = &H40B
-
-
-
-
+    Public Const REGISTER_PULSE_SYNC_PRF_DOSE_0 As UInt16 = &H40B
 
     Public Const REGISTER_HVPS_SET_POINT_DOSE_1 As UInt16 = &H410
     Public Const REGISTER_ELECTROMAGNET_CURRENT_DOSE_1 As UInt16 = &H411
     Public Const REGISTER_GUN_DRIVER_PULSE_TOP_VOLTAGE_DOSE_1 As UInt16 = &H412
-    ' Public Const REGISTER_GUN_DRIVER_CATHODE_VOLTAGE_DOSE_1 As UInt16 = &H413
-    ' Public Const REGISTER_PULSE_SYNC_SPARE_TRIG_DOSE_1 As UInt16 = &H414
+    Public Const REGISTER_GUN_DRIVER_CATHODE_VOLTAGE_DOSE_1 As UInt16 = &H413
+    Public Const REGISTER_PULSE_SYNC_SPARE_TRIG_DOSE_1 As UInt16 = &H414
     Public Const REGISTER_PULSE_SYNC_AFC_TRIGGER_DOSE_1 As UInt16 = &H415
-    ' Public Const REGISTER_PULSE_SYNC_GRID_START_MIN_DOSE_1 As UInt16 = &H416
+    Public Const REGISTER_PULSE_SYNC_GRID_START_MIN_DOSE_1 As UInt16 = &H416
     Public Const REGISTER_PULSE_SYNC_GRID_START_MAX_DOSE_1 As UInt16 = &H417
-    ' Public Const REGISTER_PULSE_SYNC_GRID_STOP_MIN_DOSE_1 As UInt16 = &H418
+    Public Const REGISTER_PULSE_SYNC_GRID_STOP_MIN_DOSE_1 As UInt16 = &H418
     Public Const REGISTER_PULSE_SYNC_GRID_STOP_MAX_DOSE_1 As UInt16 = &H419
     Public Const REGISTER_AFC_HOME_POSITION_DOSE_1 As UInt16 = &H41A
-    ' Public Const REGISTER_PULSE_SYNC_PRF_DOSE_1 As UInt16 = &H41B
+    Public Const REGISTER_PULSE_SYNC_PRF_DOSE_1 As UInt16 = &H41B
 
     Public Const REGISTER_MAGNETRON_HEATER_CURRENT_DOSE_ALL As UInt16 = &H500
     Public Const REGISTER_GUN_DRIVER_HEATER_VOLTAGE_DOSE_ALL As UInt16 = &H501
     Public Const REGISTER_PULSE_SYNC_HVPS_TRIGGER_START_DOSE_ALL As UInt16 = &H502
-    '  Public Const REGISTER_PULSE_SYNC_HVPS_TRIGGER_STOP_DOSE_ALL As UInt16 = &H503
+    Public Const REGISTER_PULSE_SYNC_HVPS_TRIGGER_STOP_DOSE_ALL As UInt16 = &H503
     Public Const REGISTER_PULSE_SYNC_PFN_TRIGGER_DOSE_ALL As UInt16 = &H504
     Public Const REGISTER_PULSE_SYNC_MAGNETRON_AND_TARGET_CURRENT_TRIGGER_START_DOSE_ALL As UInt16 = &H505
-    '  Public Const REGISTER_PULSE_SYNC_MAGNETRON_AND_TARGET_CURRENT_TRIGGER_STOP_DOSE_ALL As UInt16 = &H506
-    '  Public Const REGISTER_X_RAY_ON_TIME_DOSE_ALL As UInt16 = &H507
-    ' Public Const REGISTER_GUN_BIAS_VOLTAGE_DOSE_ALL As UInt16 = &H508
+    Public Const REGISTER_PULSE_SYNC_MAGNETRON_AND_TARGET_CURRENT_TRIGGER_STOP_DOSE_ALL As UInt16 = &H506
+    Public Const REGISTER_X_RAY_ON_TIME_DOSE_ALL As UInt16 = &H507
+    Public Const REGISTER_GUN_BIAS_VOLTAGE_DOSE_ALL As UInt16 = &H508
     Public Const REGISTER_AFC_AFT_CONTROL_VOLTAGE_DOSE_ALL As UInt16 = &H509
 
     Public Const REGISTER_CMD_ECB_RESET_FAULTS As UInt16 = &H1000
@@ -141,7 +80,7 @@ Public Class frmMain
     Public Const REGISTER_SYSTEM_SET_TIME As UInt16 = &H1105
     Public Const REGISTER_SYSTEM_ENABLE_HIGH_SPEED_LOGGING As UInt16 = &H1106
     Public Const REGISTER_SYSTEM_DISABLE_HIGH_SPEED_LOGGING As UInt16 = &H1107
-    Public Const REGISTER_SYSTEM_ECB_LOAD_FACTORY_SETTINGS_FROM_EEPROM_MIRROR_AND_REBOOT As UInt16 = &H1108
+    Public Const REGISTER_SYSTEM_LOAD_FACTORY_DEFAULTS_AND_REBOOT As UInt16 = &H1108
     Public Const REGISTER_SYSTEM_SAVE_CURRENT_SETTINGS_TO_CUSTOMER_SAVE As UInt16 = &H1109
     Public Const REGISTER_SYSTEM_LOAD_CUSTOMER_SETTINGS_SAVE_AND_REBOOT As UInt16 = &H110A
     Public Const REGISTER_REMOTE_IP_ADDRESS As UInt16 = &H110B
@@ -149,11 +88,13 @@ Public Class frmMain
 
     Public Const REGISTER_DEBUG_TOGGLE_RESET_DEBUG As UInt16 = &H1200
     Public Const REGISTER_DEBUG_RESET_MCU As UInt16 = &H1201
-    Public Const REGISTER_ECB_SYSTEM_SERIAL_NUMBER As UInt16 = &H1202
+    Public Const REGISTER_ETM_SYSTEM_SERIAL_NUMBER As UInt16 = &H1202
     Public Const REGISTER_DEBUG_GUN_DRIVER_RESET_FPGA As UInt16 = &H1203
     Public Const REGISTER_ETM_ECB_RESET_ARC_AND_PULSE_COUNT As UInt16 = &H1204
     Public Const REGISTER_ETM_ECB_RESET_SECONDS_POWERED_HV_ON_XRAY_ON As UInt16 = &H1205
     Public Const REGISTER_ETM_ECB_LOAD_DEFAULT_SYSTEM_SETTINGS_AND_REBOOT As UInt16 = &H1206
+    Public Const REGISTER_ETM_SET_REVISION_AND_SERIAL_NUMBER As UInt16 = &H1207
+    Public Const REGISTER_ETM_SAVE_CURRENT_SETTINGS_TO_FACTORY_DEFAULT As UInt16 = &H1208
 
 
     Dim dispButtons() As CustomControls.ButtonSelected
@@ -203,11 +144,6 @@ Public Class frmMain
             txtIonPumpLogInterval.Text = My.Settings.IonPumpLogInterval
 
 
-            For Each sp As String In My.Computer.Ports.SerialPortNames
-                ComboBoxComPorts.Items.Add(sp)
-            Next
-            ComboBoxComPorts.Text = My.Settings.WatchdogSerialPort
-            OpenWatchDogSerialPort()
 
             '     TextBoxIPAddress.Text = ServerSettings.txtIPAddr.Text
             '     ModBusPort = 502      'Modbus = 502 , Explicit Ethernet/IP = 44818 (TCP) , Implicit Ethernet/IP = 2222 (UDP)
@@ -264,14 +200,9 @@ Public Class frmMain
     Private Sub frmMain_FormClosed(ByVal sender As System.Object, ByVal e As System.Windows.Forms.FormClosedEventArgs) Handles MyBase.FormClosed
         Try
             My.Settings.IonPumpLogInterval = Val(txtIonPumpLogInterval.Text)
-            My.Settings.WatchdogSerialPort = ComboBoxComPorts.Text
             ServerSettings.Close()
 
             TimerUpdate.Enabled = False
-            TimerWatchdog.Enabled = False
-            If SerialPortETM.IsOpen Then
-                SerialPortETM.Close()
-            End If
         Catch ex As Exception
             MessageBox.Show("Exception caught in FormMain.FormClosed  " + ex.ToString)
         End Try
@@ -2548,7 +2479,7 @@ Public Class frmMain
             TabBoards.SelectedIndex = btn_select.Tag
             If (btn_select.Tag <= 9) Then
                 board_index = board_indexes(btn_select.Tag)
-                EEProm_index = (command_indexes(btn_select.Tag) << 12) + &H100
+                EEProm_index = command_indexes(btn_select.Tag)
             Else
                 board_index = 0
                 EEProm_index = 0
@@ -2782,7 +2713,7 @@ Public Class frmMain
         Dim response As MsgBoxResult = MsgBox("Restore Factory Default Settings?", MsgBoxStyle.OkCancel)
 
         If (response = MsgBoxResult.Ok) Then
-            ServerSettings.put_modbus_commands(REGISTER_SYSTEM_ECB_LOAD_FACTORY_SETTINGS_FROM_EEPROM_MIRROR_AND_REBOOT, 0, 0, 0)
+            ServerSettings.put_modbus_commands(REGISTER_SYSTEM_LOAD_FACTORY_DEFAULTS_AND_REBOOT, 0, 0, 0)
         End If
 
     End Sub
@@ -2916,7 +2847,7 @@ Public Class frmMain
 
             If data_valid Then
                 Dim serial_num As UInt16 = input_data
-                ServerSettings.put_modbus_commands(REGISTER_ECB_SYSTEM_SERIAL_NUMBER, serial_num, serial_num, serial_num)
+                ServerSettings.put_modbus_commands(REGISTER_ETM_SYSTEM_SERIAL_NUMBER, serial_num, serial_num, serial_num)
             End If
         End If
     End Sub
@@ -2961,8 +2892,8 @@ Public Class frmMain
                 If data_valid Then
                     rev_num = input_data
                     '      ServerSettings.put_modbus_commands(index, 0, rev, serial_num)
-                    Dim index As UInt16 = (EEProm_index And &HFF00) + &H80
-                    ServerSettings.put_modbus_commands(index, 0, rev_num, serial_num)
+                    'Dim index As UInt16 = (EEProm_index And &HFF00) + &H80
+                    ServerSettings.put_modbus_commands(REGISTER_ETM_SET_REVISION_AND_SERIAL_NUMBER, EEProm_index, rev_num, serial_num)
                 End If
             End If
         End If
@@ -3245,9 +3176,9 @@ Public Class frmMain
             Case REGISTER_AFC_HOME_POSITION_DOSE_0
                 uRetData = ServerSettings.ETMEthernetBoardLoggingData(MODBUS_COMMANDS.MODBUS_WR_AFC).ecb_local_data(0)
             Case REGISTER_AFC_HOME_POSITION_DOSE_1
-                uRetData = ServerSettings.ETMEthernetBoardLoggingData(MODBUS_COMMANDS.MODBUS_WR_AFC).ecb_local_data(1)
+                uRetData = ServerSettings.ETMEthernetBoardLoggingData(MODBUS_COMMANDS.MODBUS_WR_AFC).ecb_local_data(3)
             Case REGISTER_AFC_AFT_CONTROL_VOLTAGE_DOSE_ALL
-                uRetData = ServerSettings.ETMEthernetBoardLoggingData(MODBUS_COMMANDS.MODBUS_WR_AFC).ecb_local_data(2)
+                uRetData = ServerSettings.ETMEthernetBoardLoggingData(MODBUS_COMMANDS.MODBUS_WR_AFC).ecb_local_data(1)
             Case REGISTER_CMD_AFC_SELECT_AFC_MODE
                 uRetData = IIF((ServerSettings.ETMEthernetBoardLoggingData(MODBUS_COMMANDS.MODBUS_WR_AFC).logged_bits And &H1) > 0, 0, 1)
             Case REGISTER_CMD_AFC_SELECT_MANUAL_MODE
@@ -3521,113 +3452,11 @@ Public Class frmMain
         End If
     End Sub
 
-    Private Sub TimerWatchdog_Tick(sender As Object, e As EventArgs) Handles TimerWatchdog.Tick
-        SendAndValidateWatchdog()
-    End Sub
+
     Dim SerialCommandTransmitBuffer(9) As Byte
     Dim SerialCommandReceiveBuffer(9) As Byte
 
-    Public Function SendAndValidateWatchdog() As Boolean
-        Dim valid_return As Boolean = False
-        Dim CheckSum As UInt16 = 0
+  
 
 
-        SerialCommandTransmitBuffer(0) = &HF1
-        SerialCommandTransmitBuffer(1) = &HF2
-        SerialCommandTransmitBuffer(2) = &HF3
-        SerialCommandTransmitBuffer(3) = 0
-        SerialCommandTransmitBuffer(4) = 0
-        SerialCommandTransmitBuffer(5) = &HF4
-        SerialCommandTransmitBuffer(6) = &H1E
-        SerialCommandTransmitBuffer(7) = &H37
-
-        Try
-            SerialPortETM.Write(SerialCommandTransmitBuffer, 0, 8)
-        Catch ex As Exception
-            LabelWatchDogResponse.Text = "WD ERROR"
-            Return False
-        End Try
-
-        Try
-            SerialCommandReceiveBuffer(0) = SerialPortETM.ReadByte
-            SerialCommandReceiveBuffer(1) = SerialPortETM.ReadByte
-            SerialCommandReceiveBuffer(2) = SerialPortETM.ReadByte
-            SerialCommandReceiveBuffer(3) = SerialPortETM.ReadByte
-            SerialCommandReceiveBuffer(4) = SerialPortETM.ReadByte
-            SerialCommandReceiveBuffer(5) = SerialPortETM.ReadByte
-            SerialCommandReceiveBuffer(6) = SerialPortETM.ReadByte
-            SerialCommandReceiveBuffer(7) = SerialPortETM.ReadByte
-            LabelWatchDogResponse.Text = "WD Recieved"
-
-        Catch ex As Exception
-            LabelWatchDogResponse.Text = "WD ERROR"
-            Return False
-        End Try
-
-        LabelWatchDogResponse.Text = SerialCommandReceiveBuffer(4) + SerialCommandReceiveBuffer(3) * 256
-
-#If (0) Then
-         Try
-
-            If SerialCommandReceiveBuffer(0) = &HF1 Then
-                If SerialCommandReceiveBuffer(1) = &HF2 Then
-                    If SerialCommandReceiveBuffer(2) = &HF3 Then
-                        If CheckCRC() = True Then
-                            valid_command = True
-                            LabelComMsg.Text = "Message Sent/Received"
-                            'A valid return was recieved.  Check what the responce was
-                            If SerialCommandReceiveBuffer(3) <> SerialCommandTransmitBuffer(3) Then
-                                'The pic was not able to process the command
-                                If SerialCommandReceiveBuffer(3) = &H1 Then
-                                    LabelComMsg.Text = "ETM Controller Responds - Unknown Command"
-                                ElseIf SerialCommandReceiveBuffer(3) = &H22 Then
-                                    LabelComMsg.Text = "ETM Controller Responds - Program Value out of Valid Range"
-                                ElseIf SerialCommandReceiveBuffer(3) = &H23 Then
-                                    LabelComMsg.Text = "ETM Controller Responds - EEPROM ERROR - Unable to set value"
-                                Else
-                                    LabelComMsg.Text = "ETM Controller Responce Error - " & SerialCommandReceiveBuffer(3)
-                                End If
-                            End If
-                        End If
-                    End If
-                End If
-            End If
-            If valid_command <> True Then
-                LabelComMsg.Text = "Serial Port return data was not valid"
-                SerialPortETM.Close()
-            End If
-        Catch ex As Exception
-            LabelComMsg.Text = "Error processing Serial Port data"
-            ComError = True
-            Return 0
-        End Try
-        ReturnData = SerialCommandReceiveBuffer(4) * 256 + SerialCommandReceiveBuffer(5)
-#End If
-
-
-
-        Return True
-    End Function
-
-    Private Sub ComboBoxComPorts_SelectedIndexChanged(sender As Object, e As EventArgs) Handles ComboBoxComPorts.SelectedIndexChanged
-        OpenWatchDogSerialPort()
-    End Sub
-    Private Sub OpenWatchDogSerialPort()
-        Try
-            If SerialPortETM.IsOpen Then
-                SerialPortETM.Close()
-            End If
-        Catch ex As Exception
-
-        End Try
-
-        Try
-            SerialPortETM.PortName = ComboBoxComPorts.Text
-            SerialPortETM.ReadTimeout = 10
-            SerialPortETM.BaudRate = 113000
-            SerialPortETM.Open()
-        Catch ex As Exception
-            MsgBox("Serial Port Failed to Open")
-        End Try
-    End Sub
 End Class
