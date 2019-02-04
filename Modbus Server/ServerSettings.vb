@@ -547,12 +547,12 @@ Public Class ServerSettings
             OpenEventLogFile()
             For index = 0 To (event_count - 1)
                 head = index * 8
-                event_number = CUShort(bytes(head + 0)) << 8
-                event_number += CUShort(bytes(head + 1))
-                time = CUInt(bytes(head + 2)) << 24
-                time += CUInt(bytes(head + 3)) << 16
-                time += CUInt(bytes(head + 4)) << 8
-                time += CUInt(bytes(head + 5))
+                event_number = CUShort(bytes(head + 1)) << 8
+                event_number += CUShort(bytes(head + 0))
+                time = CUInt(bytes(head + 5)) << 24
+                time += CUInt(bytes(head + 4)) << 16
+                time += CUInt(bytes(head + 3)) << 8
+                time += CUInt(bytes(head + 2))
 
                 year = CInt(Math.Truncate(time / Constants.YEAR_MULT))
 
@@ -570,8 +570,8 @@ Public Class ServerSettings
 
                 second = CInt(time Mod Constants.MIN_MULT)
                 time_log = "20" & Format(year, "00") & "/" & Format(month, "00") & "/" & Format(day, "00") & " " & Format(hour, "00") & ":" & Format(minute, "00") & ":" & Format(second, "00")
-                event_id = CUShort(bytes(head + 6)) << 8
-                event_id += CUShort(bytes(head + 7))
+                event_id = CUShort(bytes(head + 7)) << 8
+                event_id += CUShort(bytes(head + 6))
                 If EventLogMessages.TryGetValue(event_id, Log_Message) Then
                     event_log_file.WriteLine(event_number & "," & time_log & "," & Log_Message.Trim())
                 Else

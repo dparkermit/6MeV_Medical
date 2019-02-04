@@ -479,6 +479,8 @@ Partial Class frmMain
         Me.btnDumpData = New System.Windows.Forms.Button()
         Me.BlueRectMain = New CustomControls.BlueRect()
         Me.PictureBox1 = New System.Windows.Forms.PictureBox()
+        Me.btnServiceSaveSettings = New System.Windows.Forms.Button()
+        Me.btnServiceRestoreServiceSave = New System.Windows.Forms.Button()
         Me.panelDispButtons.SuspendLayout()
         Me.Panel2.SuspendLayout()
         Me.PanelRadLeft.SuspendLayout()
@@ -5806,6 +5808,8 @@ Partial Class frmMain
         'TabPageServicePanel
         '
         Me.TabPageServicePanel.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D
+        Me.TabPageServicePanel.Controls.Add(Me.btnServiceRestoreServiceSave)
+        Me.TabPageServicePanel.Controls.Add(Me.btnServiceSaveSettings)
         Me.TabPageServicePanel.Controls.Add(Me.Label2)
         Me.TabPageServicePanel.Controls.Add(Me.Label3)
         Me.TabPageServicePanel.Controls.Add(Me.Label9)
@@ -5862,7 +5866,7 @@ Partial Class frmMain
         Me.btnLoadParameters.BackColor = System.Drawing.Color.Blue
         Me.btnLoadParameters.Font = New System.Drawing.Font("Segoe UI", 12.0!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.btnLoadParameters.ForeColor = System.Drawing.Color.Blue
-        Me.btnLoadParameters.Location = New System.Drawing.Point(52, 471)
+        Me.btnLoadParameters.Location = New System.Drawing.Point(377, 519)
         Me.btnLoadParameters.Name = "btnLoadParameters"
         Me.btnLoadParameters.Size = New System.Drawing.Size(253, 33)
         Me.btnLoadParameters.TabIndex = 409
@@ -5885,7 +5889,7 @@ Partial Class frmMain
         Me.btnSaveAllParams.BackColor = System.Drawing.Color.Blue
         Me.btnSaveAllParams.Font = New System.Drawing.Font("Segoe UI", 12.0!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.btnSaveAllParams.ForeColor = System.Drawing.Color.Blue
-        Me.btnSaveAllParams.Location = New System.Drawing.Point(52, 415)
+        Me.btnSaveAllParams.Location = New System.Drawing.Point(52, 519)
         Me.btnSaveAllParams.Name = "btnSaveAllParams"
         Me.btnSaveAllParams.Size = New System.Drawing.Size(253, 33)
         Me.btnSaveAllParams.TabIndex = 409
@@ -5898,7 +5902,7 @@ Partial Class frmMain
         Me.btnServiceRestoreFactoryDefaults.BackColor = System.Drawing.Color.Blue
         Me.btnServiceRestoreFactoryDefaults.Font = New System.Drawing.Font("Segoe UI", 12.0!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.btnServiceRestoreFactoryDefaults.ForeColor = System.Drawing.Color.Blue
-        Me.btnServiceRestoreFactoryDefaults.Location = New System.Drawing.Point(52, 300)
+        Me.btnServiceRestoreFactoryDefaults.Location = New System.Drawing.Point(379, 449)
         Me.btnServiceRestoreFactoryDefaults.Name = "btnServiceRestoreFactoryDefaults"
         Me.btnServiceRestoreFactoryDefaults.Size = New System.Drawing.Size(253, 33)
         Me.btnServiceRestoreFactoryDefaults.TabIndex = 409
@@ -6110,6 +6114,32 @@ Partial Class frmMain
         Me.PictureBox1.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom
         Me.PictureBox1.TabIndex = 171
         Me.PictureBox1.TabStop = False
+        '
+        'btnServiceSaveSettings
+        '
+        Me.btnServiceSaveSettings.BackColor = System.Drawing.Color.Blue
+        Me.btnServiceSaveSettings.Font = New System.Drawing.Font("Segoe UI", 12.0!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.btnServiceSaveSettings.ForeColor = System.Drawing.Color.Blue
+        Me.btnServiceSaveSettings.Location = New System.Drawing.Point(52, 387)
+        Me.btnServiceSaveSettings.Name = "btnServiceSaveSettings"
+        Me.btnServiceSaveSettings.Size = New System.Drawing.Size(253, 33)
+        Me.btnServiceSaveSettings.TabIndex = 418
+        Me.btnServiceSaveSettings.Tag = "1"
+        Me.btnServiceSaveSettings.Text = "Backup Settings to EEProm"
+        Me.btnServiceSaveSettings.UseVisualStyleBackColor = True
+        '
+        'btnServiceRestoreServiceSave
+        '
+        Me.btnServiceRestoreServiceSave.BackColor = System.Drawing.Color.Blue
+        Me.btnServiceRestoreServiceSave.Font = New System.Drawing.Font("Segoe UI", 12.0!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.btnServiceRestoreServiceSave.ForeColor = System.Drawing.Color.Blue
+        Me.btnServiceRestoreServiceSave.Location = New System.Drawing.Point(377, 387)
+        Me.btnServiceRestoreServiceSave.Name = "btnServiceRestoreServiceSave"
+        Me.btnServiceRestoreServiceSave.Size = New System.Drawing.Size(253, 33)
+        Me.btnServiceRestoreServiceSave.TabIndex = 419
+        Me.btnServiceRestoreServiceSave.Tag = "1"
+        Me.btnServiceRestoreServiceSave.Text = "Restore EEProm Backup"
+        Me.btnServiceRestoreServiceSave.UseVisualStyleBackColor = True
         '
         'frmMain
         '
@@ -6652,4 +6682,6 @@ Partial Class frmMain
     Friend WithEvents lblCoolLinacTemp As System.Windows.Forms.Label
     Friend WithEvents Label18 As System.Windows.Forms.Label
     Friend WithEvents Label15 As System.Windows.Forms.Label
+    Friend WithEvents btnServiceRestoreServiceSave As System.Windows.Forms.Button
+    Friend WithEvents btnServiceSaveSettings As System.Windows.Forms.Button
 End Class

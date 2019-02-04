@@ -1132,11 +1132,11 @@ Public Class frmMain
 
             ' Calculate the PRF
             Dim prf As UInt16
-            prf = ServerSettings.ETMEthernetBoardLoggingData(MODBUS_COMMANDS.MODBUS_WR_PULSE_SYNC).log_data(3)
+            prf = ServerSettings.ETMEthernetBoardLoggingData(MODBUS_COMMANDS.MODBUS_WR_PULSE_SYNC).log_data(15)
             If prf <> 0 Then
                 ' If the PRF is 0, then no trigger data is sent from the pulse sync board, so the "more accurate value" will store the last trigger sent
                 ' If the PRF is not Zero, then triggers are being sent so use the most recent value
-                prf = ServerSettings.ETMEthernetBoardLoggingData(MODBUS_COMMANDS.MODBUS_WR_ETHERNET).log_data(3)
+                prf = ServerSettings.ETMEthernetBoardLoggingData(MODBUS_COMMANDS.MODBUS_WR_PULSE_SYNC).log_data(15)
             End If
 
             Dim grid_width As UInt16 = ServerSettings.ETMEthernetBoardLoggingData(MODBUS_COMMANDS.MODBUS_WR_PULSE_SYNC).log_data(11)
@@ -3459,4 +3459,19 @@ Public Class frmMain
   
 
 
+    Private Sub btnServiceRestoreServiceSave_Click(sender As Object, e As EventArgs) Handles btnServiceRestoreServiceSave.Click
+        Dim response As MsgBoxResult = MsgBox("Restore Settings From EEProm?", MsgBoxStyle.OkCancel)
+
+        If (response = MsgBoxResult.Ok) Then
+            ServerSettings.put_modbus_commands(REGISTER_SYSTEM_LOAD_CUSTOMER_SETTINGS_SAVE_AND_REBOOT, 0, 0, 0)
+        End If
+    End Sub
+
+    Private Sub btnServiceSaveSettings_Click(sender As Object, e As EventArgs) Handles btnServiceSaveSettings.Click
+        Dim response As MsgBoxResult = MsgBox("Save Current Settings TO EEProm?", MsgBoxStyle.OkCancel)
+
+        If (response = MsgBoxResult.Ok) Then
+            ServerSettings.put_modbus_commands(REGISTER_SYSTEM_SAVE_CURRENT_SETTINGS_TO_CUSTOMER_SAVE, 0, 0, 0)
+        End If
+    End Sub
 End Class
