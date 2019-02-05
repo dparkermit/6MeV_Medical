@@ -96,6 +96,14 @@ Public Class frmMain
     Public Const REGISTER_ETM_SET_REVISION_AND_SERIAL_NUMBER As UInt16 = &H1207
     Public Const REGISTER_ETM_SAVE_CURRENT_SETTINGS_TO_FACTORY_DEFAULT As UInt16 = &H1208
 
+    Public Const ACCESS_MODE_SERVICE_PW_FIXED As UInt16 = &HF1A7
+    Public Const ACCESS_MODE_ETM_PW_FIXED As UInt16 = &H117F
+
+    Public Const ACCESS_MODE_DEFAULT As UInt16 = 100
+    Public Const ACCESS_MODE_SERVICE As UInt16 = 200
+    Public Const ACCESS_MODE_ETM As UInt16 = 300
+
+
 
     Dim dispButtons() As CustomControls.ButtonSelected
     Dim dispLeds() As OvalLed
@@ -107,8 +115,11 @@ Public Class frmMain
 
     Public board_index As Byte
 
-    Public access_level As Byte  ' 0: operator, 1: service, 2: developer mode
+    Public access_level As UShort  ' 100: operator, 200: service, 300: developer mode
+    Public last_access_level As UShort ' remember the last access level
     Dim pwScreen As frmPassword
+
+    Private ECB_state_msg As String
 
     Public pulse_log_enabled As Boolean
     Dim blank_string As String = "----"
@@ -276,7 +287,7 @@ Public Class frmMain
         '       DisplayDebugData()
 
         ' check ion pump logging
-        If (access_level > 1) Then
+        If (access_level = ACCESS_MODE_ETM) Then
             If (ion_pump_log_enabled) Then
                 If (Now - last_log_time).TotalSeconds > Val(txtIonPumpLogInterval.Text) Then
                     lblIonEi.Text = Format(ServerSettings.ETMEthernetBoardLoggingData(MODBUS_COMMANDS.MODBUS_WR_ION_PUMP).log_data(2) / 1000, "0.000")
@@ -430,10 +441,10 @@ Public Class frmMain
                     btnGdEgsetHE.Text = String.Format("{0,-15}", "HE Eg Set") & Format(get_ref_data(REGISTER_GUN_DRIVER_PULSE_TOP_VOLTAGE_DOSE_0) * 0.01 - 80, "0.0 V")
                     btnGdEgsetLE.Text = String.Format("{0,-17}", "LE Eg Set") & Format(get_ref_data(REGISTER_GUN_DRIVER_PULSE_TOP_VOLTAGE_DOSE_1) * 0.01 - 80, "0.0 V")
 
-                    btnGdEkset.Enabled = IIf(access_level > 1, True, False)
-                    btnGdIfSet.Enabled = IIf(access_level > 1, True, False)
-                    btnGdEgsetHE.Enabled = IIf(access_level > 0, True, False)
-                    btnGdEgsetLE.Enabled = IIf(access_level > 0, True, False)
+                    btnGdEkset.Enabled = IIf(access_level = ACCESS_MODE_ETM, True, False)
+                    btnGdIfSet.Enabled = IIf(access_level = ACCESS_MODE_ETM, True, False)
+                    btnGdEgsetHE.Enabled = IIf(((access_level = ACCESS_MODE_ETM) Or (access_level = ACCESS_MODE_SERVICE)), True, False)
+                    btnGdEgsetLE.Enabled = IIf(((access_level = ACCESS_MODE_ETM) Or (access_level = ACCESS_MODE_SERVICE)), True, False)
 
 
                     Dim fault_bits As UInt16 = ServerSettings.ETMEthernetBoardLoggingData(MODBUS_COMMANDS.MODBUS_WR_GUN_DRIVER).fault_bits
@@ -499,7 +510,7 @@ Public Class frmMain
                     lblCoolLinacTemp.Text = ServerSettings.ETMEthernetBoardLoggingData(MODBUS_COMMANDS.MODBUS_WR_COOLING).log_data(8) / 10 - 272
                     lblCoolSF6Press.Text = Format(ServerSettings.ETMEthernetBoardLoggingData(MODBUS_COMMANDS.MODBUS_WR_COOLING).log_data(11) / 100, "00.00")
 
-                    btnCoolNewSF6bottle.Enabled = (access_level > 0)
+                    btnCoolNewSF6bottle.Enabled = (access_level = ACCESS_MODE_ETM) Or (access_level = ACCESS_MODE_SERVICE)
                     uTemp = ServerSettings.ETMEthernetBoardLoggingData(MODBUS_COMMANDS.MODBUS_WR_COOLING).log_data(12)
                     lblAutofillRemain2.Text = uTemp
                     btnReenableAutofill2.Enabled = IIf(uTemp = 0, True, False)
@@ -509,7 +520,7 @@ Public Class frmMain
                     Dim logged_bits As UInt16 = ServerSettings.ETMEthernetBoardLoggingData(MODBUS_COMMANDS.MODBUS_WR_COOLING).logged_bits
 
                     ' only enable override when sf6 is too low to fill
-                    btnCoolSF6Override.Enabled = IIf((access_level > 0) And (logged_bits And &H4), True, False)
+                    btnCoolSF6Override.Enabled = IIf(((access_level = ACCESS_MODE_ETM) Or (access_level = ACCESS_MODE_SERVICE)) And (logged_bits And &H4), True, False)
 
                     ledCoolCAN.FillColor = IIf(fault_bits And &H1, Color.Red, Color.LawnGreen)
                     ledCoolMagFlow.FillColor = IIf(fault_bits And &H2, Color.Red, Color.LawnGreen)
@@ -580,7 +591,7 @@ Public Class frmMain
                     ledWPulseTrigFault.FillColor = Color.Transparent
 
                 Else
-                    Dim enble_button As Boolean = access_level > 0
+                    Dim enble_button As Boolean = (access_level = ACCESS_MODE_ETM) Or (access_level = ACCESS_MODE_SERVICE)
                     For Each ctrl In TabPagePulseSync.Controls
                         If (ctrl.GetType = GetType(Button)) Then
                             Dim btn As Button = CType(ctrl, Button)
@@ -665,8 +676,8 @@ Public Class frmMain
 
                     btnHVsetHE.Text = "HE V Set  " & Format(get_ref_data(REGISTER_HVPS_SET_POINT_DOSE_0) / 1000, "0.000") & " kV"
                     btnHVsetLE.Text = "LE V Set  " & Format(get_ref_data(REGISTER_HVPS_SET_POINT_DOSE_1) / 1000, "0.000") & " kV"
-                    btnHVsetHE.Enabled = access_level > 0
-                    btnHVsetLE.Enabled = access_level > 0
+                    btnHVsetHE.Enabled = (access_level = ACCESS_MODE_ETM) Or (access_level = ACCESS_MODE_SERVICE)
+                    btnHVsetLE.Enabled = (access_level = ACCESS_MODE_ETM) Or (access_level = ACCESS_MODE_SERVICE)
 
                     '    Dim control_bits As UInt16 = ServerSettings.ETMEthernetBoardLoggingData(board_index).control_notice_bits
                     Dim fault_bits As UInt16 = ServerSettings.ETMEthernetBoardLoggingData(MODBUS_COMMANDS.MODBUS_WR_HVLAMBDA).fault_bits
@@ -758,7 +769,7 @@ Public Class frmMain
                     lblAfcPreBsample.Text = ServerSettings.ETMEthernetBoardLoggingData(MODBUS_COMMANDS.MODBUS_WR_AFC).log_data(5)
                     lblAfcManualPosition.Text = get_ref_data(REGISTER_CMD_AFC_MANUAL_TARGET_POSITION)
 
-                    Dim enble_button As Boolean = access_level > 0
+                    Dim enble_button As Boolean = (access_level = ACCESS_MODE_ETM) Or (access_level = ACCESS_MODE_SERVICE)
                     For Each ctrl In TabPageAFC.Controls
                         If (ctrl.GetType = GetType(Button)) Then
                             ctrl.Enabled = enble_button
@@ -817,9 +828,9 @@ Public Class frmMain
                     lblMagEf.Text = Format(ServerSettings.ETMEthernetBoardLoggingData(MODBUS_COMMANDS.MODBUS_WR_HTR_MAGNET).log_data(2) / 1000, "0.00")
                     lblMagIf.Text = Format(ServerSettings.ETMEthernetBoardLoggingData(MODBUS_COMMANDS.MODBUS_WR_HTR_MAGNET).log_data(3) / 1000, "0.00")
 
-                    btnMagHEIset.Enabled = access_level > 0
-                    btnMagLEIset.Enabled = access_level > 0
-                    btnMagIfSet.Enabled = access_level > 0
+                    btnMagHEIset.Enabled = (access_level = ACCESS_MODE_ETM) Or (access_level = ACCESS_MODE_SERVICE)
+                    btnMagLEIset.Enabled = (access_level = ACCESS_MODE_ETM) Or (access_level = ACCESS_MODE_SERVICE)
+                    btnMagIfSet.Enabled = (access_level = ACCESS_MODE_ETM) Or (access_level = ACCESS_MODE_SERVICE)
                     btnMagHEIset.Text = "HE Mag I Set  " & Format(get_ref_data(REGISTER_ELECTROMAGNET_CURRENT_DOSE_0) / 1000, "0.00") & " A"
                     btnMagLEIset.Text = "LE Mag I Set  " & Format(get_ref_data(REGISTER_ELECTROMAGNET_CURRENT_DOSE_1) / 1000, "0.00") & " A"
                     btnMagIfSet.Text = "Heater I Set  " & Format(get_ref_data(REGISTER_MAGNETRON_HEATER_CURRENT_DOSE_ALL) / 1000, "0.00") & " A"
@@ -882,27 +893,27 @@ Public Class frmMain
                     btnServiceRestoreFactoryDefaults.Enabled = False
                     btnServiceResetLinacTime.Enabled = False
 
-                    btnServiceModeChange.Text = IIf(access_level > 0, "Logout", "Change Mode")
-                    btnServiceStartLog.Text = "Start Pulse Logging"
+                     btnServiceStartLog.Text = "Start Pulse Logging"
 
                     LabelECBTime.Text = "Linac UTC = --------"
 
 
                 Else
-                    ledServiceNormalMode.FillColor = IIf(access_level = 0, Color.Black, Color.Transparent)
-                    ledServiceServMode.FillColor = IIf(access_level = 1, Color.Black, Color.Transparent)
-                    ledServiceDevMode.FillColor = IIf(access_level = 2, Color.Black, Color.Transparent)
+
+                    ledServiceNormalMode.FillColor = IIf(access_level = ACCESS_MODE_DEFAULT, Color.Black, Color.Transparent)
+                    ledServiceServMode.FillColor = IIf(access_level = ACCESS_MODE_SERVICE, Color.Black, Color.Transparent)
+                    ledServiceDevMode.FillColor = IIf(access_level = ACCESS_MODE_ETM, Color.Black, Color.Transparent)
 
                     '   ledServicePulseLogActive.FillColor = Color.Transparent
                     '        ledServiceRestoreDefaults.FillColor = Color.Transparent
 
 
-                    btnServiceModeChange.Enabled = True
+
                     btnServiceStartLog.Enabled = True
-                    btnServiceSaveFactoryDefaults.Enabled = access_level > 0
-                    btnServiceReloadInitialDefaults.Enabled = access_level > 0
-                    btnServiceRestoreFactoryDefaults.Enabled = access_level > 0
-                    btnServiceResetLinacTime.Enabled = access_level > 0
+                    btnServiceSaveFactoryDefaults.Enabled = (access_level = ACCESS_MODE_ETM) Or (access_level = ACCESS_MODE_SERVICE)
+                    btnServiceReloadInitialDefaults.Enabled = (access_level = ACCESS_MODE_ETM) Or (access_level = ACCESS_MODE_SERVICE)
+                    btnServiceRestoreFactoryDefaults.Enabled = (access_level = ACCESS_MODE_ETM) Or (access_level = ACCESS_MODE_SERVICE)
+                    btnServiceResetLinacTime.Enabled = (access_level = ACCESS_MODE_ETM) Or (access_level = ACCESS_MODE_SERVICE)
 
                     Dim time As UInt32
                     Dim year As Integer
@@ -929,9 +940,6 @@ Public Class frmMain
                     LabelECBTime.Text = "Linac UTC = 20" & Format(year, "00") & "/" & Format(month, "00") & "/" & Format(day, "00") & " " & Format(hour, "00") & ":" & Format(minute, "00") & ":" & Format(second, "00")
 
 
-
-
-                    btnServiceModeChange.Text = IIf(access_level > 0, "Logout", "Change Mode")
 #If DEMO_MODE = 0 Then
                     Dim Sync_data As UInt16 = ServerSettings.ETMEthernetBoardLoggingData(MODBUS_COMMANDS.MODBUS_WR_ETHERNET).log_data(7)
                     If (Sync_data And &H2) > 0 Then
@@ -967,7 +975,7 @@ Public Class frmMain
 
         End Select
 
-        If (TabBoards.SelectedIndex >= 1 And TabBoards.SelectedIndex <= 9) And (access_level > 0) Then
+        If (TabBoards.SelectedIndex >= 1 And TabBoards.SelectedIndex <= 9) And ((access_level = ACCESS_MODE_ETM) Or (access_level = ACCESS_MODE_SERVICE)) Then
             LabelAgileInfo.Text = "A" & ServerSettings.ETMEthernetBoardLoggingData(board_index).agile_number & "-" &
                 Format(ServerSettings.ETMEthernetBoardLoggingData(board_index).agile_dash, "000") & "  Rev-" &
                 Convert.ToChar(ServerSettings.ETMEthernetBoardLoggingData(board_index).agile_rev_ascii) & "  SN-" &
@@ -1017,8 +1025,8 @@ Public Class frmMain
             lblScanMode.Text = "Mode: " & blank_string & blank_string
             btnResetFault.Visible = False
             lblPulseFreq.Text = blank_string
-            lblDoseCommand.Text = blank_string
-            lblBeamDuration.Text = blank_string
+            '   lblDoseCommand.Text = blank_string
+            '   lblBeamDuration.Text = blank_string
 
             lblIonIi2.Text = blank_string
 
@@ -1039,6 +1047,8 @@ Public Class frmMain
             Else
                 lblShowDumpData.Visible = False
             End If
+
+            access_level = ServerSettings.ETMEthernetBoardLoggingData(MODBUS_COMMANDS.MODBUS_WR_ETHERNET).ecb_local_data(4)
 
             Select Case ServerSettings.ETMEthernetBoardLoggingData(MODBUS_COMMANDS.MODBUS_WR_ETHERNET).log_data(0)
                 Case &H10
@@ -1076,14 +1086,14 @@ Public Class frmMain
                 Case &H70
                     ECBState = "X-Ray Time Exceeded"
                 Case &H80
-                    ECBState = IIf(access_level > 0, "Fault Hold", "Fault")
+                    ECBState = IIf(((access_level = ACCESS_MODE_ETM) Or (access_level = ACCESS_MODE_SERVICE)), "Fault Hold", "Fault")
                     state_label_color = Color.Red
                     show_reset_button = True
                 Case &H86
-                    ECBState = IIf(access_level > 0, "Fault Reset Hold", "Fault")
+                    ECBState = IIf(((access_level = ACCESS_MODE_ETM) Or (access_level = ACCESS_MODE_SERVICE)), "Fault Reset Hold", "Fault")
                     state_label_color = Color.Red
                 Case &H8A
-                    ECBState = IIf(access_level > 0, "Fault Latch Decision", "Fault")
+                    ECBState = IIf(((access_level = ACCESS_MODE_ETM) Or (access_level = ACCESS_MODE_SERVICE)), "Fault Latch Decision", "Fault")
                     state_label_color = Color.Red
                 Case &H90
                     ECBState = "Fault Reset"
@@ -1094,7 +1104,7 @@ Public Class frmMain
                     ECBState = "Warmup Fault"
                     state_label_color = Color.Red
                 Case &HC0
-                    ECBState = IIf(access_level > 0, "Standby Fault", "Fault")
+                    ECBState = IIf(((access_level = ACCESS_MODE_ETM) Or (access_level = ACCESS_MODE_SERVICE)), "Standby Fault", "Fault")
                     state_label_color = Color.Red
                 Case &HD1
                     ECBState = "Power Cycle Test"
@@ -1103,6 +1113,7 @@ Public Class frmMain
                     state_label_color = Color.Red
             End Select
 
+            ECB_state_msg = ECBState
             btnResetFault.Visible = show_reset_button
             LabelECBState.Visible = True
             LabelECBState.ForeColor = state_label_color
@@ -1158,8 +1169,8 @@ Public Class frmMain
             '          Dim dose_rate As UInt16 = ServerSettings.ETMEthernetBoardLoggingData(MODBUS_COMMANDS.MODBUS_WR_ETHERNET).log_data(17)
             '          lblDoseRate.Text = dose_rate
             Dim dose_command As UInt16 = ServerSettings.ETMEthernetBoardLoggingData(MODBUS_COMMANDS.MODBUS_WR_PULSE_SYNC).log_data(7)
-            lblDoseCommand.Text = Math.Truncate(dose_command / 256)
-            lblBeamDuration.Text = grid_width
+            '   lblDoseCommand.Text = Math.Truncate(dose_command / 256)
+            '   lblBeamDuration.Text = grid_width
 
             If ((ServerSettings.ETMEthernetBoardLoggingData(MODBUS_COMMANDS.MODBUS_WR_PULSE_SYNC).logged_bits And &H80) > 0) Then
                 lblNoTrigger.Location = lblPulseFreq.Location
@@ -1201,15 +1212,17 @@ Public Class frmMain
         End If ' blanking
 
         Select Case access_level
-            Case 0
+            Case ACCESS_MODE_DEFAULT
                 lblAccessLevel.Text = "Access Level: Normal"
-            Case 1
+            Case ACCESS_MODE_SERVICE
                 lblAccessLevel.Text = "Access Level: Service"
-            Case 2
+            Case ACCESS_MODE_ETM
                 lblAccessLevel.Text = "Access Level: Developer"
             Case Else
 
         End Select
+
+        If (last_access_level <> access_level) Then Call access_level_changed()
 
     End Sub
 
@@ -2710,6 +2723,11 @@ Public Class frmMain
     End Sub
 
     Private Sub btnServiceRestoreFactoryDefaults_Click(sender As Object, e As EventArgs) Handles btnServiceRestoreFactoryDefaults.Click
+        If ((ECB_state_msg = "Ready") Or (ECB_state_msg = "X-Ray On") Or (ECB_state_msg = "Drive Up")) Then
+            MsgBox("Can not restore Factory Settings at state " + ECB_state_msg, MsgBoxStyle.Exclamation)
+            Exit Sub
+        End If
+
         Dim response As MsgBoxResult = MsgBox("Restore Factory Default Settings?", MsgBoxStyle.OkCancel)
 
         If (response = MsgBoxResult.Ok) Then
@@ -2750,7 +2768,8 @@ Public Class frmMain
     End Sub
 
     Private Sub reset_access_level()
-        access_level = 0 ' logout
+        access_level = ACCESS_MODE_DEFAULT ' logout
+        last_access_level = ACCESS_MODE_DEFAULT
         lblIonIi2Title.Visible = False
         lblIonIi2.Visible = False
         lblIonIi2Unit.Visible = False
@@ -2777,20 +2796,17 @@ Public Class frmMain
         lblShowDumpData.Visible = False
 
     End Sub
-    Private Sub btnServiceModeChange_Click(sender As Object, e As EventArgs) Handles btnServiceModeChange.Click
-        If (access_level > 0) Then
+    Private Sub access_level_changed()
+        If (access_level = ACCESS_MODE_DEFAULT) Then
             reset_access_level()
         Else
-            'pwScreen.ShowDialog()
-            ServerSettings.put_modbus_commands(REGISTER_SET_ACCESS_MODE_ETM, &H117F, 0, 0)
-            access_level = 2
-            If (access_level > 0) Then
+            If ((access_level = ACCESS_MODE_ETM) Or (access_level = ACCESS_MODE_SERVICE)) Then
                 lblIonIi2Title.Visible = True
                 lblIonIi2.Visible = True
                 lblIonIi2Unit.Visible = True
                 BlueRectMain.Location = New Point(28, 410)
                 btnDispServicePanel.Visible = True
-                btnDispDeveloperPanel.Visible = IIf(access_level > 1, True, False)
+                btnDispDeveloperPanel.Visible = IIf(access_level = ACCESS_MODE_ETM, True, False)
 
                 LabelAgileInfo.Visible = True
                 LabelFirmwareVersion.Visible = True
@@ -2802,12 +2818,12 @@ Public Class frmMain
                     dispLeds(i - 1).Visible = True
                 Next
 
-                If (access_level > 1) Then
-                     panelIonPumpLogger.Visible = True
+                If (access_level = ACCESS_MODE_ETM) Then
+                    panelIonPumpLogger.Visible = True
                 End If
             End If
         End If
-
+        last_access_level = access_level
 
     End Sub
 
@@ -2841,7 +2857,7 @@ Public Class frmMain
     End Sub
 
     Private Sub lblSN_Click(sender As Object, e As EventArgs) Handles lblSN.Click
-        If (access_level > 1) Then
+        If (access_level = ACCESS_MODE_ETM) Then
             Dim input_data As Double
             Dim data_valid = get_set_data("Set System Serial Number", lblSystem.Text, 1, 65535, "", input_data)
 
@@ -2884,7 +2900,7 @@ Public Class frmMain
         Dim buttons() As CustomControls.ButtonSelected = {btnDispOverview, btnDispSysCPU, btnDispGunDriver, btnDispCoolSF6, btnDispPulseSync, btnDispHV,
                                                           btnDispMagnetron, btnDispAFC, btnDispMagHtr, btnDispIonPump}
 
-        If (access_level > 1) Then
+        If (access_level = ACCESS_MODE_ETM) Then
             data_valid = get_set_data("Input Serial Number", buttons(TabBoards.SelectedIndex).Text, 1, 65535, "", input_data)
             If data_valid Then
                 serial_num = input_data
@@ -3272,7 +3288,7 @@ Public Class frmMain
 
         set_commands(SET_CMDS.SET_ELECTROMAGNET_CURRENT_DOSE_0) = New SET_COMMAND_STRUCTURE(REGISTER_ELECTROMAGNET_CURRENT_DOSE_0, 25000, 8000)
         set_commands(SET_CMDS.SET_ELECTROMAGNET_CURRENT_DOSE_1) = New SET_COMMAND_STRUCTURE(REGISTER_ELECTROMAGNET_CURRENT_DOSE_1, 25000, 8000)
-        set_commands(SET_CMDS.SET_MAGNETRON_HEATER_CURRENT_DOSE_ALL) = New SET_COMMAND_STRUCTURE(REGISTER_MAGNETRON_HEATER_CURRENT_DOSE_ALL, 10000, 0)
+        set_commands(SET_CMDS.SET_MAGNETRON_HEATER_CURRENT_DOSE_ALL) = New SET_COMMAND_STRUCTURE(REGISTER_MAGNETRON_HEATER_CURRENT_DOSE_ALL, 12000, 0)
 
     End Sub
 
@@ -3460,6 +3476,10 @@ Public Class frmMain
 
 
     Private Sub btnServiceRestoreServiceSave_Click(sender As Object, e As EventArgs) Handles btnServiceRestoreServiceSave.Click
+        If ((ECB_state_msg = "Ready") Or (ECB_state_msg = "X-Ray On") Or (ECB_state_msg = "Drive Up")) Then
+            MsgBox("Can not restore EEProm Backup at state " + ECB_state_msg, MsgBoxStyle.Exclamation)
+            Exit Sub
+        End If
         Dim response As MsgBoxResult = MsgBox("Restore Settings From EEProm?", MsgBoxStyle.OkCancel)
 
         If (response = MsgBoxResult.Ok) Then
@@ -3474,4 +3494,23 @@ Public Class frmMain
             ServerSettings.put_modbus_commands(REGISTER_SYSTEM_SAVE_CURRENT_SETTINGS_TO_CUSTOMER_SAVE, 0, 0, 0)
         End If
     End Sub
+
+
+    Private Sub ledServiceNormalMode_DoubleClick(sender As Object, e As EventArgs) Handles ledServiceNormalMode.DoubleClick, lblServiceNormalMode.DoubleClick
+        ServerSettings.put_modbus_commands(REGISTER_SET_ACCESS_MODE_DEFAULT, 0, 0, 0)
+
+    End Sub
+
+    
+
+    Private Sub ledServiceServMode_DoubleClick(sender As Object, e As EventArgs) Handles ledServiceServMode.DoubleClick, lblServiceServMode.DoubleClick
+        ServerSettings.put_modbus_commands(REGISTER_SET_ACCESS_MODE_SERVICE, ACCESS_MODE_SERVICE_PW_FIXED, 0, 0)
+    End Sub
+
+    Private Sub ledServiceDevMode_DoubleClick(sender As Object, e As EventArgs) Handles ledServiceDevMode.DoubleClick, lblServiceDevMode.DoubleClick
+        ServerSettings.put_modbus_commands(REGISTER_SET_ACCESS_MODE_ETM, ACCESS_MODE_ETM_PW_FIXED, 0, 0)
+    End Sub
+
+
+
 End Class
