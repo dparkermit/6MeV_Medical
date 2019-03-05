@@ -640,6 +640,7 @@ Public Class frmMain
                     ledPulseTriggerStayedOn.FillColor = IIf(fault_bits And &H10, Color.Red, Color.LawnGreen)
                     ledPulsePanel.FillColor = IIf(fault_bits And &H20, Color.Red, Color.LawnGreen)
                     ledPulseKeylock.FillColor = IIf(fault_bits And &H40, Color.Red, Color.LawnGreen)
+                    LedPulseTrig.FillColor = IIf(fault_bits And &H100, Color.Red, Color.LawnGreen)
 
                     ledWPulseCustomHVon.FillColor = IIf((logged_bits And &H1) = 0, Color.Black, Color.Transparent)
                     ledWPulseCustomXrayOn.FillColor = IIf((logged_bits And &H2) = 0, Color.Black, Color.Transparent)
