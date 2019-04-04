@@ -501,10 +501,10 @@ Public Class frmMain
                     ledWSF6RelayClosed.FillColor = Color.Transparent
                 Else
                     lblCoolMagFlow.Text = Format(ServerSettings.ETMEthernetBoardLoggingData(MODBUS_COMMANDS.MODBUS_WR_COOLING).log_data(0) / 1000, "0.000")
-                    lblCoolLinacFlow.Text = Format(ServerSettings.ETMEthernetBoardLoggingData(MODBUS_COMMANDS.MODBUS_WR_COOLING).log_data(1) / 1000, "0.000")
-                    lblCoolCabHXFlow.Text = Format(ServerSettings.ETMEthernetBoardLoggingData(MODBUS_COMMANDS.MODBUS_WR_COOLING).log_data(2) / 1000, "0.000")
-                    lblCoolHVPSFlow.Text = Format(ServerSettings.ETMEthernetBoardLoggingData(MODBUS_COMMANDS.MODBUS_WR_COOLING).log_data(3) / 1000, "0.000")
-                    lblCoolCirFlow.Text = Format(ServerSettings.ETMEthernetBoardLoggingData(MODBUS_COMMANDS.MODBUS_WR_COOLING).log_data(4) / 1000, "0.000")
+                    lblCoolLinacFlow.Text = Format(ServerSettings.ETMEthernetBoardLoggingData(MODBUS_COMMANDS.MODBUS_WR_COOLING).log_data(3) / 1000, "0.000")
+                    lblCoolCabHXFlow.Text = Format(ServerSettings.ETMEthernetBoardLoggingData(MODBUS_COMMANDS.MODBUS_WR_COOLING).log_data(4) / 1000, "0.000")
+                    lblCoolHVPSFlow.Text = Format(ServerSettings.ETMEthernetBoardLoggingData(MODBUS_COMMANDS.MODBUS_WR_COOLING).log_data(1) / 1000, "0.000")
+                    lblCoolCirFlow.Text = Format(ServerSettings.ETMEthernetBoardLoggingData(MODBUS_COMMANDS.MODBUS_WR_COOLING).log_data(2) / 1000, "0.000")
                     lblCoolCoolTemp.Text = ServerSettings.ETMEthernetBoardLoggingData(MODBUS_COMMANDS.MODBUS_WR_COOLING).log_data(9) / 10 - 272
                     lblCoolCabTemp.Text = ServerSettings.ETMEthernetBoardLoggingData(MODBUS_COMMANDS.MODBUS_WR_COOLING).log_data(10) / 10 - 272
                     lblCoolLinacTemp.Text = ServerSettings.ETMEthernetBoardLoggingData(MODBUS_COMMANDS.MODBUS_WR_COOLING).log_data(8) / 10 - 272
@@ -583,6 +583,7 @@ Public Class frmMain
                     ledPulseTriggerStayedOn.FillColor = Color.Red
                     ledPulsePanel.FillColor = Color.Red
                     ledPulseKeylock.FillColor = Color.Red
+                    LedPulseTrig.FillColor = Color.Red
 
                     ledWPulseCustomHVon.FillColor = Color.Transparent
                     ledWPulseCustomXrayOn.FillColor = Color.Transparent
@@ -640,7 +641,7 @@ Public Class frmMain
                     ledPulseTriggerStayedOn.FillColor = IIf(fault_bits And &H10, Color.Red, Color.LawnGreen)
                     ledPulsePanel.FillColor = IIf(fault_bits And &H20, Color.Red, Color.LawnGreen)
                     ledPulseKeylock.FillColor = IIf(fault_bits And &H40, Color.Red, Color.LawnGreen)
-                    LedPulseTrig.FillColor = IIf(fault_bits And &H100, Color.Red, Color.LawnGreen)
+                    LedPulseTrig.FillColor = IIf(fault_bits And &H200, Color.Red, Color.LawnGreen)
 
                     ledWPulseCustomHVon.FillColor = IIf((logged_bits And &H1) = 0, Color.Black, Color.Transparent)
                     ledWPulseCustomXrayOn.FillColor = IIf((logged_bits And &H2) = 0, Color.Black, Color.Transparent)
