@@ -186,6 +186,8 @@ Partial Class frmMain
         Me.lblGdEk = New System.Windows.Forms.Label()
         Me.BlueRect4 = New CustomControls.BlueRect()
         Me.TabPageCooling = New System.Windows.Forms.TabPage()
+        Me.LedCoolHXFlow = New CustomControls.OvalLed()
+        Me.LedCoolHVPSFlow = New CustomControls.OvalLed()
         Me.Label10 = New System.Windows.Forms.Label()
         Me.Label13 = New System.Windows.Forms.Label()
         Me.Label14 = New System.Windows.Forms.Label()
@@ -478,6 +480,9 @@ Partial Class frmMain
         Me.btnDumpData = New System.Windows.Forms.Button()
         Me.BlueRectMain = New CustomControls.BlueRect()
         Me.PictureBox1 = New System.Windows.Forms.PictureBox()
+        Me.lblMeterTest = New System.Windows.Forms.Label()
+        Me.Label20 = New System.Windows.Forms.Label()
+        Me.Label21 = New System.Windows.Forms.Label()
         Me.panelDispButtons.SuspendLayout()
         Me.Panel2.SuspendLayout()
         Me.PanelRadLeft.SuspendLayout()
@@ -1275,6 +1280,7 @@ Partial Class frmMain
         '
         Me.TabPageOverview.BackColor = System.Drawing.SystemColors.Control
         Me.TabPageOverview.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D
+        Me.TabPageOverview.Controls.Add(Me.lblMeterTest)
         Me.TabPageOverview.Controls.Add(Me.Label283)
         Me.TabPageOverview.Controls.Add(Me.Label4)
         Me.TabPageOverview.Controls.Add(Me.Label277)
@@ -1496,6 +1502,7 @@ Partial Class frmMain
         Me.btnReenableAutofill1.Tag = "1"
         Me.btnReenableAutofill1.Text = "Re-enable Autofill"
         Me.btnReenableAutofill1.UseVisualStyleBackColor = True
+        Me.btnReenableAutofill1.Visible = False
         '
         'Label134
         '
@@ -1655,6 +1662,7 @@ Partial Class frmMain
         Me.ledWCpuXrayDisabled.Name = "ledWCpuXrayDisabled"
         Me.ledWCpuXrayDisabled.Size = New System.Drawing.Size(18, 20)
         Me.ledWCpuXrayDisabled.TabIndex = 33
+        Me.ledWCpuXrayDisabled.Visible = False
         '
         'ledWCpuDriveupTimeout
         '
@@ -1666,6 +1674,7 @@ Partial Class frmMain
         Me.ledWCpuDriveupTimeout.Name = "ledWCpuDriveupTimeout"
         Me.ledWCpuDriveupTimeout.Size = New System.Drawing.Size(18, 20)
         Me.ledWCpuDriveupTimeout.TabIndex = 33
+        Me.ledWCpuDriveupTimeout.Visible = False
         '
         'ledCpuReadyFault
         '
@@ -1699,6 +1708,7 @@ Partial Class frmMain
         Me.Label35.Size = New System.Drawing.Size(124, 21)
         Me.Label35.TabIndex = 32
         Me.Label35.Text = "Beam Disabled"
+        Me.Label35.Visible = False
         '
         'ledCpuXrayLogic
         '
@@ -1721,6 +1731,7 @@ Partial Class frmMain
         Me.Label38.Size = New System.Drawing.Size(145, 21)
         Me.Label38.TabIndex = 32
         Me.Label38.Text = "Drive Up Timeout"
+        Me.Label38.Visible = False
         '
         'Label119
         '
@@ -2545,6 +2556,10 @@ Partial Class frmMain
         '
         Me.TabPageCooling.BackColor = System.Drawing.SystemColors.Control
         Me.TabPageCooling.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D
+        Me.TabPageCooling.Controls.Add(Me.Label21)
+        Me.TabPageCooling.Controls.Add(Me.Label20)
+        Me.TabPageCooling.Controls.Add(Me.LedCoolHXFlow)
+        Me.TabPageCooling.Controls.Add(Me.LedCoolHVPSFlow)
         Me.TabPageCooling.Controls.Add(Me.Label10)
         Me.TabPageCooling.Controls.Add(Me.Label13)
         Me.TabPageCooling.Controls.Add(Me.Label14)
@@ -2613,6 +2628,28 @@ Partial Class frmMain
         Me.TabPageCooling.Size = New System.Drawing.Size(680, 580)
         Me.TabPageCooling.TabIndex = 3
         Me.TabPageCooling.Text = "TabPage2"
+        '
+        'LedCoolHXFlow
+        '
+        Me.LedCoolHXFlow.FillColor = System.Drawing.Color.LawnGreen
+        Me.LedCoolHXFlow.ForeColor = System.Drawing.Color.White
+        Me.LedCoolHXFlow.Location = New System.Drawing.Point(102, 356)
+        Me.LedCoolHXFlow.MyBorderColor = System.Drawing.Color.Black
+        Me.LedCoolHXFlow.MyBorderWidth = 2
+        Me.LedCoolHXFlow.Name = "LedCoolHXFlow"
+        Me.LedCoolHXFlow.Size = New System.Drawing.Size(18, 20)
+        Me.LedCoolHXFlow.TabIndex = 146
+        '
+        'LedCoolHVPSFlow
+        '
+        Me.LedCoolHVPSFlow.FillColor = System.Drawing.Color.LawnGreen
+        Me.LedCoolHVPSFlow.ForeColor = System.Drawing.Color.Black
+        Me.LedCoolHVPSFlow.Location = New System.Drawing.Point(102, 382)
+        Me.LedCoolHVPSFlow.MyBorderColor = System.Drawing.Color.Black
+        Me.LedCoolHVPSFlow.MyBorderWidth = 2
+        Me.LedCoolHVPSFlow.Name = "LedCoolHVPSFlow"
+        Me.LedCoolHVPSFlow.Size = New System.Drawing.Size(18, 20)
+        Me.LedCoolHVPSFlow.TabIndex = 145
         '
         'Label10
         '
@@ -2715,6 +2752,7 @@ Partial Class frmMain
         Me.btnReenableAutofill2.Tag = "1"
         Me.btnReenableAutofill2.Text = "Re-enable Autofill"
         Me.btnReenableAutofill2.UseVisualStyleBackColor = True
+        Me.btnReenableAutofill2.Visible = False
         '
         'btnCoolNewSF6bottle
         '
@@ -2736,19 +2774,20 @@ Partial Class frmMain
         Me.btnCoolSF6Override.Enabled = False
         Me.btnCoolSF6Override.Font = New System.Drawing.Font("Segoe UI", 12.0!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.btnCoolSF6Override.ForeColor = System.Drawing.Color.Blue
-        Me.btnCoolSF6Override.Location = New System.Drawing.Point(562, 342)
+        Me.btnCoolSF6Override.Location = New System.Drawing.Point(393, 461)
         Me.btnCoolSF6Override.Name = "btnCoolSF6Override"
         Me.btnCoolSF6Override.Size = New System.Drawing.Size(92, 33)
         Me.btnCoolSF6Override.TabIndex = 134
         Me.btnCoolSF6Override.Tag = "1"
         Me.btnCoolSF6Override.Text = "Override"
         Me.btnCoolSF6Override.UseVisualStyleBackColor = True
+        Me.btnCoolSF6Override.Visible = False
         '
         'ledWSF6RelayClosed
         '
         Me.ledWSF6RelayClosed.FillColor = System.Drawing.SystemColors.Control
         Me.ledWSF6RelayClosed.ForeColor = System.Drawing.Color.Black
-        Me.ledWSF6RelayClosed.Location = New System.Drawing.Point(373, 452)
+        Me.ledWSF6RelayClosed.Location = New System.Drawing.Point(373, 408)
         Me.ledWSF6RelayClosed.MyBorderColor = System.Drawing.Color.Black
         Me.ledWSF6RelayClosed.MyBorderWidth = 2
         Me.ledWSF6RelayClosed.Name = "ledWSF6RelayClosed"
@@ -2759,7 +2798,7 @@ Partial Class frmMain
         '
         Me.ledWNoSF6Pulses.FillColor = System.Drawing.SystemColors.Control
         Me.ledWNoSF6Pulses.ForeColor = System.Drawing.Color.Black
-        Me.ledWNoSF6Pulses.Location = New System.Drawing.Point(373, 400)
+        Me.ledWNoSF6Pulses.Location = New System.Drawing.Point(373, 356)
         Me.ledWNoSF6Pulses.MyBorderColor = System.Drawing.Color.Black
         Me.ledWNoSF6Pulses.MyBorderWidth = 2
         Me.ledWNoSF6Pulses.Name = "ledWNoSF6Pulses"
@@ -2770,7 +2809,7 @@ Partial Class frmMain
         '
         Me.ledCoolCabTemp.FillColor = System.Drawing.Color.LawnGreen
         Me.ledCoolCabTemp.ForeColor = System.Drawing.Color.White
-        Me.ledCoolCabTemp.Location = New System.Drawing.Point(112, 452)
+        Me.ledCoolCabTemp.Location = New System.Drawing.Point(102, 460)
         Me.ledCoolCabTemp.MyBorderColor = System.Drawing.Color.Black
         Me.ledCoolCabTemp.MyBorderWidth = 2
         Me.ledCoolCabTemp.Name = "ledCoolCabTemp"
@@ -2781,7 +2820,7 @@ Partial Class frmMain
         '
         Me.ledCoolCabTempSwitch.FillColor = System.Drawing.Color.LawnGreen
         Me.ledCoolCabTempSwitch.ForeColor = System.Drawing.Color.White
-        Me.ledCoolCabTempSwitch.Location = New System.Drawing.Point(112, 426)
+        Me.ledCoolCabTempSwitch.Location = New System.Drawing.Point(102, 538)
         Me.ledCoolCabTempSwitch.MyBorderColor = System.Drawing.Color.Black
         Me.ledCoolCabTempSwitch.MyBorderWidth = 2
         Me.ledCoolCabTempSwitch.Name = "ledCoolCabTempSwitch"
@@ -2792,7 +2831,7 @@ Partial Class frmMain
         '
         Me.ledCoolCirFlow.FillColor = System.Drawing.Color.LawnGreen
         Me.ledCoolCirFlow.ForeColor = System.Drawing.Color.White
-        Me.ledCoolCirFlow.Location = New System.Drawing.Point(112, 400)
+        Me.ledCoolCirFlow.Location = New System.Drawing.Point(102, 408)
         Me.ledCoolCirFlow.MyBorderColor = System.Drawing.Color.Black
         Me.ledCoolCirFlow.MyBorderWidth = 2
         Me.ledCoolCirFlow.Name = "ledCoolCirFlow"
@@ -2803,18 +2842,19 @@ Partial Class frmMain
         '
         Me.ledWSF6TooLowToFill.FillColor = System.Drawing.SystemColors.Control
         Me.ledWSF6TooLowToFill.ForeColor = System.Drawing.Color.Black
-        Me.ledWSF6TooLowToFill.Location = New System.Drawing.Point(373, 348)
+        Me.ledWSF6TooLowToFill.Location = New System.Drawing.Point(373, 434)
         Me.ledWSF6TooLowToFill.MyBorderColor = System.Drawing.Color.Black
         Me.ledWSF6TooLowToFill.MyBorderWidth = 2
         Me.ledWSF6TooLowToFill.Name = "ledWSF6TooLowToFill"
         Me.ledWSF6TooLowToFill.Size = New System.Drawing.Size(18, 20)
         Me.ledWSF6TooLowToFill.TabIndex = 106
+        Me.ledWSF6TooLowToFill.Visible = False
         '
         'ledCoolMagFlow
         '
         Me.ledCoolMagFlow.FillColor = System.Drawing.Color.LawnGreen
         Me.ledCoolMagFlow.ForeColor = System.Drawing.Color.White
-        Me.ledCoolMagFlow.Location = New System.Drawing.Point(112, 348)
+        Me.ledCoolMagFlow.Location = New System.Drawing.Point(102, 304)
         Me.ledCoolMagFlow.MyBorderColor = System.Drawing.Color.Black
         Me.ledCoolMagFlow.MyBorderWidth = 2
         Me.ledCoolMagFlow.Name = "ledCoolMagFlow"
@@ -2825,7 +2865,7 @@ Partial Class frmMain
         '
         Me.ledWSF6Filling.FillColor = System.Drawing.SystemColors.Control
         Me.ledWSF6Filling.ForeColor = System.Drawing.Color.Black
-        Me.ledWSF6Filling.Location = New System.Drawing.Point(373, 426)
+        Me.ledWSF6Filling.Location = New System.Drawing.Point(373, 382)
         Me.ledWSF6Filling.MyBorderColor = System.Drawing.Color.Black
         Me.ledWSF6Filling.MyBorderWidth = 2
         Me.ledWSF6Filling.Name = "ledWSF6Filling"
@@ -2836,7 +2876,7 @@ Partial Class frmMain
         '
         Me.ledWSF6FillReq.FillColor = System.Drawing.SystemColors.Control
         Me.ledWSF6FillReq.ForeColor = System.Drawing.Color.Black
-        Me.ledWSF6FillReq.Location = New System.Drawing.Point(373, 374)
+        Me.ledWSF6FillReq.Location = New System.Drawing.Point(373, 330)
         Me.ledWSF6FillReq.MyBorderColor = System.Drawing.Color.Black
         Me.ledWSF6FillReq.MyBorderWidth = 2
         Me.ledWSF6FillReq.Name = "ledWSF6FillReq"
@@ -2847,7 +2887,7 @@ Partial Class frmMain
         '
         Me.ledCoolSF6press.FillColor = System.Drawing.Color.LawnGreen
         Me.ledCoolSF6press.ForeColor = System.Drawing.Color.White
-        Me.ledCoolSF6press.Location = New System.Drawing.Point(112, 504)
+        Me.ledCoolSF6press.Location = New System.Drawing.Point(102, 512)
         Me.ledCoolSF6press.MyBorderColor = System.Drawing.Color.Black
         Me.ledCoolSF6press.MyBorderWidth = 2
         Me.ledCoolSF6press.Name = "ledCoolSF6press"
@@ -2858,7 +2898,7 @@ Partial Class frmMain
         '
         Me.ledCoolLinacFlow.FillColor = System.Drawing.Color.Red
         Me.ledCoolLinacFlow.ForeColor = System.Drawing.Color.White
-        Me.ledCoolLinacFlow.Location = New System.Drawing.Point(112, 374)
+        Me.ledCoolLinacFlow.Location = New System.Drawing.Point(102, 330)
         Me.ledCoolLinacFlow.MyBorderColor = System.Drawing.Color.Black
         Me.ledCoolLinacFlow.MyBorderWidth = 2
         Me.ledCoolLinacFlow.Name = "ledCoolLinacFlow"
@@ -2869,7 +2909,7 @@ Partial Class frmMain
         '
         Me.ledWCoolTooCold.FillColor = System.Drawing.Color.Black
         Me.ledWCoolTooCold.ForeColor = System.Drawing.Color.Black
-        Me.ledWCoolTooCold.Location = New System.Drawing.Point(373, 322)
+        Me.ledWCoolTooCold.Location = New System.Drawing.Point(373, 304)
         Me.ledWCoolTooCold.MyBorderColor = System.Drawing.Color.Black
         Me.ledWCoolTooCold.MyBorderWidth = 2
         Me.ledWCoolTooCold.Name = "ledWCoolTooCold"
@@ -2880,7 +2920,7 @@ Partial Class frmMain
         '
         Me.ledCoolCoolTemp.FillColor = System.Drawing.Color.LawnGreen
         Me.ledCoolCoolTemp.ForeColor = System.Drawing.Color.White
-        Me.ledCoolCoolTemp.Location = New System.Drawing.Point(112, 478)
+        Me.ledCoolCoolTemp.Location = New System.Drawing.Point(102, 486)
         Me.ledCoolCoolTemp.MyBorderColor = System.Drawing.Color.Black
         Me.ledCoolCoolTemp.MyBorderWidth = 2
         Me.ledCoolCoolTemp.Name = "ledCoolCoolTemp"
@@ -2892,7 +2932,7 @@ Partial Class frmMain
         Me.Label145.AutoSize = True
         Me.Label145.Font = New System.Drawing.Font("Segoe UI", 12.0!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.Label145.ForeColor = System.Drawing.Color.Black
-        Me.Label145.Location = New System.Drawing.Point(397, 426)
+        Me.Label145.Location = New System.Drawing.Point(397, 381)
         Me.Label145.Name = "Label145"
         Me.Label145.Size = New System.Drawing.Size(88, 21)
         Me.Label145.TabIndex = 92
@@ -2902,7 +2942,7 @@ Partial Class frmMain
         '
         Me.lblCoolCabTemp.Font = New System.Drawing.Font("Segoe UI", 12.0!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.lblCoolCabTemp.ForeColor = System.Drawing.Color.Black
-        Me.lblCoolCabTemp.Location = New System.Drawing.Point(514, 145)
+        Me.lblCoolCabTemp.Location = New System.Drawing.Point(515, 115)
         Me.lblCoolCabTemp.Name = "lblCoolCabTemp"
         Me.lblCoolCabTemp.Size = New System.Drawing.Size(60, 20)
         Me.lblCoolCabTemp.TabIndex = 124
@@ -2957,7 +2997,7 @@ Partial Class frmMain
         '
         Me.lblCoolSF6Press.Font = New System.Drawing.Font("Segoe UI", 12.0!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.lblCoolSF6Press.ForeColor = System.Drawing.Color.Black
-        Me.lblCoolSF6Press.Location = New System.Drawing.Point(514, 175)
+        Me.lblCoolSF6Press.Location = New System.Drawing.Point(515, 145)
         Me.lblCoolSF6Press.Name = "lblCoolSF6Press"
         Me.lblCoolSF6Press.Size = New System.Drawing.Size(60, 20)
         Me.lblCoolSF6Press.TabIndex = 122
@@ -2969,7 +3009,7 @@ Partial Class frmMain
         Me.Label111.AutoSize = True
         Me.Label111.Font = New System.Drawing.Font("Segoe UI", 12.0!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.Label111.ForeColor = System.Drawing.Color.Black
-        Me.Label111.Location = New System.Drawing.Point(397, 374)
+        Me.Label111.Location = New System.Drawing.Point(397, 330)
         Me.Label111.Name = "Label111"
         Me.Label111.Size = New System.Drawing.Size(136, 21)
         Me.Label111.TabIndex = 92
@@ -2990,7 +3030,7 @@ Partial Class frmMain
         '
         Me.ledCoolCAN.FillColor = System.Drawing.Color.LawnGreen
         Me.ledCoolCAN.ForeColor = System.Drawing.Color.Black
-        Me.ledCoolCAN.Location = New System.Drawing.Point(112, 322)
+        Me.ledCoolCAN.Location = New System.Drawing.Point(102, 434)
         Me.ledCoolCAN.MyBorderColor = System.Drawing.Color.Black
         Me.ledCoolCAN.MyBorderWidth = 2
         Me.ledCoolCAN.Name = "ledCoolCAN"
@@ -3001,19 +3041,20 @@ Partial Class frmMain
         '
         Me.lblCoolLinacTemp.Font = New System.Drawing.Font("Segoe UI", 12.0!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.lblCoolLinacTemp.ForeColor = System.Drawing.Color.Black
-        Me.lblCoolLinacTemp.Location = New System.Drawing.Point(514, 115)
+        Me.lblCoolLinacTemp.Location = New System.Drawing.Point(514, 175)
         Me.lblCoolLinacTemp.Name = "lblCoolLinacTemp"
         Me.lblCoolLinacTemp.Size = New System.Drawing.Size(60, 20)
         Me.lblCoolLinacTemp.TabIndex = 124
         Me.lblCoolLinacTemp.Text = "0"
         Me.lblCoolLinacTemp.TextAlign = System.Drawing.ContentAlignment.MiddleRight
+        Me.lblCoolLinacTemp.Visible = False
         '
         'Label110
         '
         Me.Label110.AutoSize = True
         Me.Label110.Font = New System.Drawing.Font("Segoe UI", 12.0!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.Label110.ForeColor = System.Drawing.Color.Black
-        Me.Label110.Location = New System.Drawing.Point(136, 452)
+        Me.Label110.Location = New System.Drawing.Point(126, 460)
         Me.Label110.Name = "Label110"
         Me.Label110.Size = New System.Drawing.Size(155, 21)
         Me.Label110.TabIndex = 85
@@ -3024,7 +3065,7 @@ Partial Class frmMain
         Me.Label146.AutoSize = True
         Me.Label146.Font = New System.Drawing.Font("Segoe UI", 12.0!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.Label146.ForeColor = System.Drawing.Color.Black
-        Me.Label146.Location = New System.Drawing.Point(373, 175)
+        Me.Label146.Location = New System.Drawing.Point(374, 145)
         Me.Label146.Name = "Label146"
         Me.Label146.Size = New System.Drawing.Size(104, 21)
         Me.Label146.TabIndex = 128
@@ -3035,7 +3076,7 @@ Partial Class frmMain
         Me.Label113.AutoSize = True
         Me.Label113.Font = New System.Drawing.Font("Segoe UI", 12.0!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.Label113.ForeColor = System.Drawing.Color.Black
-        Me.Label113.Location = New System.Drawing.Point(136, 426)
+        Me.Label113.Location = New System.Drawing.Point(126, 537)
         Me.Label113.Name = "Label113"
         Me.Label113.Size = New System.Drawing.Size(170, 21)
         Me.Label113.TabIndex = 85
@@ -3046,7 +3087,7 @@ Partial Class frmMain
         Me.Label18.AutoSize = True
         Me.Label18.Font = New System.Drawing.Font("Segoe UI", 12.0!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.Label18.ForeColor = System.Drawing.Color.Black
-        Me.Label18.Location = New System.Drawing.Point(373, 145)
+        Me.Label18.Location = New System.Drawing.Point(374, 115)
         Me.Label18.Name = "Label18"
         Me.Label18.Size = New System.Drawing.Size(115, 21)
         Me.Label18.TabIndex = 128
@@ -3057,18 +3098,19 @@ Partial Class frmMain
         Me.Label148.AutoSize = True
         Me.Label148.Font = New System.Drawing.Font("Segoe UI", 12.0!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.Label148.ForeColor = System.Drawing.Color.Black
-        Me.Label148.Location = New System.Drawing.Point(373, 115)
+        Me.Label148.Location = New System.Drawing.Point(373, 175)
         Me.Label148.Name = "Label148"
         Me.Label148.Size = New System.Drawing.Size(96, 21)
         Me.Label148.TabIndex = 128
         Me.Label148.Text = "Linac Temp"
+        Me.Label148.Visible = False
         '
         'Label109
         '
         Me.Label109.AutoSize = True
         Me.Label109.Font = New System.Drawing.Font("Segoe UI", 12.0!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.Label109.ForeColor = System.Drawing.Color.Black
-        Me.Label109.Location = New System.Drawing.Point(397, 400)
+        Me.Label109.Location = New System.Drawing.Point(397, 356)
         Me.Label109.Name = "Label109"
         Me.Label109.Size = New System.Drawing.Size(191, 21)
         Me.Label109.TabIndex = 86
@@ -3079,7 +3121,7 @@ Partial Class frmMain
         Me.Label154.AutoSize = True
         Me.Label154.Font = New System.Drawing.Font("Segoe UI", 12.0!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.Label154.ForeColor = System.Drawing.Color.Black
-        Me.Label154.Location = New System.Drawing.Point(580, 175)
+        Me.Label154.Location = New System.Drawing.Point(581, 145)
         Me.Label154.Name = "Label154"
         Me.Label154.Size = New System.Drawing.Size(34, 21)
         Me.Label154.TabIndex = 119
@@ -3090,11 +3132,12 @@ Partial Class frmMain
         Me.Label114.AutoSize = True
         Me.Label114.Font = New System.Drawing.Font("Segoe UI", 12.0!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.Label114.ForeColor = System.Drawing.Color.Black
-        Me.Label114.Location = New System.Drawing.Point(397, 348)
+        Me.Label114.Location = New System.Drawing.Point(397, 433)
         Me.Label114.Name = "Label114"
         Me.Label114.Size = New System.Drawing.Size(152, 21)
         Me.Label114.TabIndex = 86
         Me.Label114.Text = "SF6 Too Low To Fill"
+        Me.Label114.Visible = False
         '
         'Label155
         '
@@ -3112,7 +3155,7 @@ Partial Class frmMain
         Me.Label15.AutoSize = True
         Me.Label15.Font = New System.Drawing.Font("Segoe UI", 12.0!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.Label15.ForeColor = System.Drawing.Color.Black
-        Me.Label15.Location = New System.Drawing.Point(580, 145)
+        Me.Label15.Location = New System.Drawing.Point(581, 115)
         Me.Label15.Name = "Label15"
         Me.Label15.Size = New System.Drawing.Size(26, 21)
         Me.Label15.TabIndex = 117
@@ -3123,7 +3166,7 @@ Partial Class frmMain
         Me.Label115.AutoSize = True
         Me.Label115.Font = New System.Drawing.Font("Segoe UI", 12.0!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.Label115.ForeColor = System.Drawing.Color.Black
-        Me.Label115.Location = New System.Drawing.Point(134, 400)
+        Me.Label115.Location = New System.Drawing.Point(126, 408)
         Me.Label115.Name = "Label115"
         Me.Label115.Size = New System.Drawing.Size(125, 21)
         Me.Label115.TabIndex = 87
@@ -3134,18 +3177,19 @@ Partial Class frmMain
         Me.Label156.AutoSize = True
         Me.Label156.Font = New System.Drawing.Font("Segoe UI", 12.0!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.Label156.ForeColor = System.Drawing.Color.Black
-        Me.Label156.Location = New System.Drawing.Point(580, 115)
+        Me.Label156.Location = New System.Drawing.Point(580, 175)
         Me.Label156.Name = "Label156"
         Me.Label156.Size = New System.Drawing.Size(26, 21)
         Me.Label156.TabIndex = 117
         Me.Label156.Text = "°C"
+        Me.Label156.Visible = False
         '
         'Label116
         '
         Me.Label116.AutoSize = True
         Me.Label116.Font = New System.Drawing.Font("Segoe UI", 12.0!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.Label116.ForeColor = System.Drawing.Color.Black
-        Me.Label116.Location = New System.Drawing.Point(398, 322)
+        Me.Label116.Location = New System.Drawing.Point(397, 304)
         Me.Label116.Name = "Label116"
         Me.Label116.Size = New System.Drawing.Size(141, 21)
         Me.Label116.TabIndex = 83
@@ -3156,7 +3200,7 @@ Partial Class frmMain
         Me.Label118.AutoSize = True
         Me.Label118.Font = New System.Drawing.Font("Segoe UI", 12.0!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.Label118.ForeColor = System.Drawing.Color.Black
-        Me.Label118.Location = New System.Drawing.Point(136, 504)
+        Me.Label118.Location = New System.Drawing.Point(126, 512)
         Me.Label118.Name = "Label118"
         Me.Label118.Size = New System.Drawing.Size(104, 21)
         Me.Label118.TabIndex = 89
@@ -3167,7 +3211,7 @@ Partial Class frmMain
         Me.Label120.AutoSize = True
         Me.Label120.Font = New System.Drawing.Font("Segoe UI", 12.0!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.Label120.ForeColor = System.Drawing.Color.Black
-        Me.Label120.Location = New System.Drawing.Point(398, 452)
+        Me.Label120.Location = New System.Drawing.Point(397, 407)
         Me.Label120.Name = "Label120"
         Me.Label120.Size = New System.Drawing.Size(135, 21)
         Me.Label120.TabIndex = 98
@@ -3178,7 +3222,7 @@ Partial Class frmMain
         Me.LabelCoolLinacFlo.AutoSize = True
         Me.LabelCoolLinacFlo.Font = New System.Drawing.Font("Segoe UI", 12.0!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.LabelCoolLinacFlo.ForeColor = System.Drawing.Color.Black
-        Me.LabelCoolLinacFlo.Location = New System.Drawing.Point(134, 374)
+        Me.LabelCoolLinacFlo.Location = New System.Drawing.Point(126, 330)
         Me.LabelCoolLinacFlo.Name = "LabelCoolLinacFlo"
         Me.LabelCoolLinacFlo.Size = New System.Drawing.Size(90, 21)
         Me.LabelCoolLinacFlo.TabIndex = 91
@@ -3189,7 +3233,7 @@ Partial Class frmMain
         Me.Label124.AutoSize = True
         Me.Label124.Font = New System.Drawing.Font("Segoe UI", 12.0!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.Label124.ForeColor = System.Drawing.Color.Black
-        Me.Label124.Location = New System.Drawing.Point(136, 478)
+        Me.Label124.Location = New System.Drawing.Point(126, 487)
         Me.Label124.Name = "Label124"
         Me.Label124.Size = New System.Drawing.Size(156, 21)
         Me.Label124.TabIndex = 95
@@ -3200,7 +3244,7 @@ Partial Class frmMain
         Me.Label125.AutoSize = True
         Me.Label125.Font = New System.Drawing.Font("Segoe UI", 12.0!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.Label125.ForeColor = System.Drawing.Color.Black
-        Me.Label125.Location = New System.Drawing.Point(134, 348)
+        Me.Label125.Location = New System.Drawing.Point(126, 304)
         Me.Label125.Name = "Label125"
         Me.Label125.Size = New System.Drawing.Size(135, 21)
         Me.Label125.TabIndex = 96
@@ -3211,7 +3255,7 @@ Partial Class frmMain
         Me.Label126.AutoSize = True
         Me.Label126.Font = New System.Drawing.Font("Segoe UI", 12.0!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.Label126.ForeColor = System.Drawing.Color.Black
-        Me.Label126.Location = New System.Drawing.Point(134, 322)
+        Me.Label126.Location = New System.Drawing.Point(126, 434)
         Me.Label126.Name = "Label126"
         Me.Label126.Size = New System.Drawing.Size(86, 21)
         Me.Label126.TabIndex = 97
@@ -4563,6 +4607,7 @@ Partial Class frmMain
         Me.btnAfcHomePosSetDose1.Tag = "1"
         Me.btnAfcHomePosSetDose1.Text = "LE Home Pos Set  6500"
         Me.btnAfcHomePosSetDose1.UseVisualStyleBackColor = True
+        Me.btnAfcHomePosSetDose1.Visible = False
         '
         'btnAfcHomePosSetDose0
         '
@@ -4574,7 +4619,7 @@ Partial Class frmMain
         Me.btnAfcHomePosSetDose0.Size = New System.Drawing.Size(236, 33)
         Me.btnAfcHomePosSetDose0.TabIndex = 122
         Me.btnAfcHomePosSetDose0.Tag = "1"
-        Me.btnAfcHomePosSetDose0.Text = "HE Home Pos Set  6600"
+        Me.btnAfcHomePosSetDose0.Text = "Home Pos Set  6600"
         Me.btnAfcHomePosSetDose0.UseVisualStyleBackColor = True
         '
         'ledWAfcManualMode
@@ -6110,6 +6155,40 @@ Partial Class frmMain
         Me.PictureBox1.TabIndex = 171
         Me.PictureBox1.TabStop = False
         '
+        'lblMeterTest
+        '
+        Me.lblMeterTest.AutoSize = True
+        Me.lblMeterTest.BackColor = System.Drawing.SystemColors.Control
+        Me.lblMeterTest.Font = New System.Drawing.Font("Segoe UI", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.lblMeterTest.ForeColor = System.Drawing.Color.Black
+        Me.lblMeterTest.Location = New System.Drawing.Point(107, 512)
+        Me.lblMeterTest.Name = "lblMeterTest"
+        Me.lblMeterTest.Size = New System.Drawing.Size(101, 17)
+        Me.lblMeterTest.TabIndex = 114
+        Me.lblMeterTest.Text = "Meter Test Data"
+        '
+        'Label20
+        '
+        Me.Label20.AutoSize = True
+        Me.Label20.Font = New System.Drawing.Font("Segoe UI", 12.0!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.Label20.ForeColor = System.Drawing.Color.Black
+        Me.Label20.Location = New System.Drawing.Point(126, 381)
+        Me.Label20.Name = "Label20"
+        Me.Label20.Size = New System.Drawing.Size(92, 21)
+        Me.Label20.TabIndex = 147
+        Me.Label20.Text = "HVPS Flow"
+        '
+        'Label21
+        '
+        Me.Label21.AutoSize = True
+        Me.Label21.Font = New System.Drawing.Font("Segoe UI", 12.0!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.Label21.ForeColor = System.Drawing.Color.Black
+        Me.Label21.Location = New System.Drawing.Point(126, 356)
+        Me.Label21.Name = "Label21"
+        Me.Label21.Size = New System.Drawing.Size(135, 21)
+        Me.Label21.TabIndex = 148
+        Me.Label21.Text = "Cabinet HX Flow"
+        '
         'frmMain
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
@@ -6645,4 +6724,9 @@ Partial Class frmMain
     Friend WithEvents RadioButton1 As System.Windows.Forms.RadioButton
     Friend WithEvents Label19 As System.Windows.Forms.Label
     Friend WithEvents LedPulseTrig As CustomControls.OvalLed
+    Friend WithEvents LedCoolHXFlow As CustomControls.OvalLed
+    Friend WithEvents LedCoolHVPSFlow As CustomControls.OvalLed
+    Friend WithEvents lblMeterTest As System.Windows.Forms.Label
+    Friend WithEvents Label21 As System.Windows.Forms.Label
+    Friend WithEvents Label20 As System.Windows.Forms.Label
 End Class

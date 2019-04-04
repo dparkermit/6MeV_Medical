@@ -341,6 +341,7 @@ Public Class frmMain
                     uTemp = ServerSettings.ETMEthernetBoardLoggingData(MODBUS_COMMANDS.MODBUS_WR_COOLING).log_data(12)
                     lblAutofillRemain1.Text = uTemp
                     btnReenableAutofill1.Enabled = IIf(uTemp = 0, True, False)
+                    lblMeterTest.Text = "Bottle Total SF6 Pulses = " & Meter.MaxValue & Environment.NewLine & "Remaining SF6 Pulses = " & Meter.Value
 
                 End If
             Case 1 ' cpu
@@ -492,6 +493,8 @@ Public Class frmMain
                     ledCoolCabTemp.FillColor = Color.Red
                     ledCoolCoolTemp.FillColor = Color.Red
                     ledCoolSF6press.FillColor = Color.Red
+                    LedCoolHVPSFlow.FillColor = Color.Red
+                    LedCoolHXFlow.FillColor = Color.Red
 
                     ledWCoolTooCold.FillColor = Color.Transparent
                     ledWSF6TooLowToFill.FillColor = Color.Transparent
@@ -524,8 +527,10 @@ Public Class frmMain
 
                     ledCoolCAN.FillColor = IIf(fault_bits And &H1, Color.Red, Color.LawnGreen)
                     ledCoolMagFlow.FillColor = IIf(fault_bits And &H2, Color.Red, Color.LawnGreen)
-                    ledCoolLinacFlow.FillColor = IIf(fault_bits And &H4, Color.Red, Color.LawnGreen)
+                    ledCoolLinacFlow.FillColor = IIf(fault_bits And &H10, Color.Red, Color.LawnGreen)
                     ledCoolCirFlow.FillColor = IIf(fault_bits And &H8, Color.Red, Color.LawnGreen)
+                    LedCoolHVPSFlow.FillColor = IIf(fault_bits And &H4, Color.Red, Color.LawnGreen)
+                    LedCoolHXFlow.FillColor = IIf(fault_bits And &H20, Color.Red, Color.LawnGreen)
                     ledCoolCabTempSwitch.FillColor = IIf(fault_bits And &H80, Color.Red, Color.LawnGreen)
                     ledCoolCabTemp.FillColor = IIf(fault_bits And &H200, Color.Red, Color.LawnGreen)
                     ledCoolCoolTemp.FillColor = IIf(fault_bits And &H400, Color.Red, Color.LawnGreen)
@@ -745,7 +750,7 @@ Public Class frmMain
                     lblAfcPreBsample.Text = blank_string
                     lblAfcManualPosition.Text = blank_string
 
-                    btnAfcHomePosSetDose0.Text = "HE Home Pos Set  " & blank_string
+                    btnAfcHomePosSetDose0.Text = "Home Pos Set  " & blank_string
                     btnAfcHomePosSetDose1.Text = "LE Home Pos Set  " & blank_string
                     btnAfcManualMode.Text = "Manual Mode"
                     btnAfcManualPosition.Visible = False
@@ -778,7 +783,7 @@ Public Class frmMain
                         End If
                     Next
 
-                    btnAfcHomePosSetDose0.Text = "HE Home Pos Set  " & get_ref_data(REGISTER_AFC_HOME_POSITION_DOSE_0)
+                    btnAfcHomePosSetDose0.Text = "Home Pos Set  " & get_ref_data(REGISTER_AFC_HOME_POSITION_DOSE_0)
                     btnAfcHomePosSetDose1.Text = "LE Home Pos Set  " & get_ref_data(REGISTER_AFC_HOME_POSITION_DOSE_1)
                     '     btnAfcManualPosition.Text = "Manual Pos  " & ServerSettings.ETMEthernetBoardLoggingData(MODBUS_COMMANDS.MODBUS_WR_AFC).log_data(2)
 
@@ -3365,7 +3370,7 @@ Public Class frmMain
 
     Private Sub btnAfcHomePosSetDose0_Click(sender As Object, e As EventArgs) Handles btnAfcHomePosSetDose0.Click
         Dim input_data As Double
-        Dim data_valid = get_set_data("Set Home Position for High Energy Mode", "AFC", 6400, 51200, "", input_data)
+        Dim data_valid = get_set_data("Set Home Position", "AFC", 6400, 51200, "", input_data)
 
         If data_valid Then
             Dim program_word As UInt16 = input_data
