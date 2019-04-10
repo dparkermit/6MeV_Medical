@@ -2848,7 +2848,7 @@ Public Class frmMain
         Dim response As MsgBoxResult = MsgBox("Save Factory Default Settings?", MsgBoxStyle.OkCancel)
 
         If (response = MsgBoxResult.Ok) Then
-            ServerSettings.put_modbus_commands(REGISTER_ETM_ECB_LOAD_DEFAULT_SYSTEM_SETTINGS_AND_REBOOT, 0, 0, 0)
+            ServerSettings.put_modbus_commands(REGISTER_ETM_SAVE_CURRENT_SETTINGS_TO_FACTORY_DEFAULT, 0, 0, 0)
         End If
 
     End Sub

@@ -26,9 +26,9 @@
     <UpdatePeriodically>false</UpdatePeriodically>
     <UpdateRequired>false</UpdateRequired>
     <MapFileExtensions>true</MapFileExtensions>
-    <ProductName>Linac 2.5MeV Remote GUI</ProductName>
-    <PublisherName>Rapiscan</PublisherName>
-    <ApplicationRevision>8</ApplicationRevision>
+    <ProductName>6MeV Medical Linac GUI</ProductName>
+    <PublisherName>ETM Electromatic Inc</PublisherName>
+    <ApplicationRevision>9</ApplicationRevision>
     <ApplicationVersion>1.0.0.%2a</ApplicationVersion>
     <UseApplicationTrust>false</UseApplicationTrust>
     <PublishWizardCompleted>true</PublishWizardCompleted>

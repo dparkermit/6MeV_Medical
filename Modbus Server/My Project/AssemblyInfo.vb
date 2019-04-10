@@ -8,11 +8,11 @@ Imports System.Runtime.InteropServices
 
 ' Review the values of the assembly attributes
 
-<Assembly: AssemblyTitle("Linac Remote GUI")> 
+<Assembly: AssemblyTitle("6MeV Medical Linac")> 
 <Assembly: AssemblyDescription("")> 
-<Assembly: AssemblyCompany("Rapiscan")> 
-<Assembly: AssemblyProduct("Linac Remote GUI")> 
-<Assembly: AssemblyCopyright("Copyright ©ETM October 2014")> 
+<Assembly: AssemblyCompany("ETM Electromatic Inc")> 
+<Assembly: AssemblyProduct("6MeV Medical Linac GUI")> 
+<Assembly: AssemblyCopyright("Copyright ©ETM April 2019")> 
 <Assembly: AssemblyTrademark("")> 
 
 <Assembly: ComVisible(False)>
