@@ -961,7 +961,7 @@ Partial Class frmMain
         Me.lblGUIVersionAgile.Name = "lblGUIVersionAgile"
         Me.lblGUIVersionAgile.Size = New System.Drawing.Size(123, 21)
         Me.lblGUIVersionAgile.TabIndex = 101
-        Me.lblGUIVersionAgile.Text = "GUI Version 001"
+        Me.lblGUIVersionAgile.Text = "GUI Version 003"
         '
         'lblAccessLevel
         '

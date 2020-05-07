@@ -81,7 +81,7 @@ Public Class ServerSettings
 
     Private Sub ServerSettings_Load(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles MyBase.Load
 
-        txtIPAddr.Text = "192.168.1.11" ' fixed IP, My.Settings.ServerIP
+        txtIPAddr.Text = "192.168.25.61" ' fixed IP, My.Settings.ServerIP
 
         Try
             Dim instances() As Process = Process.GetProcessesByName(Process.GetCurrentProcess.ProcessName)

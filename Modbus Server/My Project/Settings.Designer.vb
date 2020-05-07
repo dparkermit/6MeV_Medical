@@ -54,14 +54,14 @@ Namespace My
             End Get
         End Property
         
-        <Global.System.Configuration.UserScopedSettingAttribute(),  _
-         Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
-         Global.System.Configuration.DefaultSettingValueAttribute("192.168.1.11")>  _
+        <Global.System.Configuration.UserScopedSettingAttribute(), _
+         Global.System.Diagnostics.DebuggerNonUserCodeAttribute(), _
+         Global.System.Configuration.DefaultSettingValueAttribute("192.168.25.61")> _
         Public Property ServerIP() As String
             Get
-                Return CType(Me("ServerIP"),String)
+                Return CType(Me("ServerIP"), String)
             End Get
-            Set
+            Set(value As String)
                 Me("ServerIP") = value
             End Set
         End Property
